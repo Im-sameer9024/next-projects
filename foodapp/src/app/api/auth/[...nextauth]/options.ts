@@ -1,9 +1,9 @@
 import { NextAuthOptions } from "next-auth";
-import { prisma } from "./prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { comparePassword } from "./hash";
+import { prisma } from "@/shared/lib/prisma";
+import { comparePassword } from "@/shared/lib/hash";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -27,10 +27,11 @@ export const authOptions: NextAuthOptions = {
     // credentials (Email + Password)
 
     CredentialsProvider({
+      id: "credentials",
       name: "credentials",
       credentials: {
-        email: {},
-        password: {},
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {

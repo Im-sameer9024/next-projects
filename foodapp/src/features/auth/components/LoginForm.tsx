@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
@@ -12,9 +11,15 @@ import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-const LoginForm = () => {
+const LoginForm = ({
+  loading,
+  setLoading,
+}: {
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+}) => {
+  const router = useRouter();
 
-    const router = useRouter()
   const {
     control,
     handleSubmit,
@@ -28,34 +33,39 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
+    setLoading(true);
     try {
       const res = await signIn("credentials", {
-        redirect:false,
+        redirect: false,
         email: data.email,
         password: data.password,
+        callbackUrl: "/",
       });
 
-      if(res?.ok){
-        toast.success("Login successful");
-         router.push("/")
-      }
+      console.log(res)
 
-    } catch (error: any) {
+      if (res?.ok) {
+        toast.success("Login successful");
+        router.push("/");
+      } else {
+        toast.error("Invalid credentials");
+      }
+    } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 min-w-md max-w-lg mx-auto"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 w-full">
       {/* Email */}
       <InputField
         name="email"
         control={control}
         error={errors.email}
+        loading={loading}
         label="Email"
         placeholder="Enter your email"
         type="email"
@@ -66,22 +76,19 @@ const LoginForm = () => {
         name="password"
         control={control}
         error={errors.password}
+        loading={loading}
         label="Password"
         placeholder="Enter your password"
         type="password"
       />
 
-      {/* Error Example */}
-      {errors.root && (
-        <p className="text-red-500 text-sm">{errors.root.message}</p>
-      )}
-
-      {/* Submit Button */}
+      {/* Submit */}
       <CustomButton
-        fullWidth={true}
+        disabled={loading}
+        active
+        fullWidth
         type="submit"
-        active={true}
-        loading={false}
+        loading={isSubmitting}
       >
         {isSubmitting ? "Logging in..." : "Login"}
       </CustomButton>

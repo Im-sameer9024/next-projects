@@ -60,11 +60,11 @@ export const authOptions: NextAuthOptions = {
         }
 
         return  {
-          id: user?.id,
-          email: user?.email,
-          username: user?.username,
-          isVerified: user?.isVerified,
-          isAcceptingMessage: user?.isAcceptingMessage,
+          id: user.id,
+          email: user.email,
+          username: user.username || "",
+          isVerified: user.isVerified,
+          isAcceptingMessage: user.isAcceptingMessage,
         };
       },
     }),
@@ -77,6 +77,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user?.id;
         token.email = user?.email;
+        token.username = user?.username;
         token.isVerified = user?.isVerified;
         token.isAcceptingMessage = user?.isAcceptingMessage;
       }
@@ -89,6 +90,7 @@ export const authOptions: NextAuthOptions = {
       if (token && session.user) {
         session.user.id = token?.id;
         session.user.email = token?.email;
+        session.user.username = token?.username;
         session.user.isVerified = token?.isVerified;
         session.user.isAcceptingMessage = token?.isAcceptingMessage;
       }

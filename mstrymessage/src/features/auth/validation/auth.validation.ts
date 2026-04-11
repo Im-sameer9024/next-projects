@@ -30,16 +30,16 @@ export const emailValidation = z
   })
   .trim();
 
-export const signupValidation = z.object({
+export const signupValidationSchema = z.object({
   username: usernameValidation,
   email: emailValidation,
   password: passwordValidation,
 });
 
-export const signinValidation = z.object({
+export const signinValidationSchema = z.object({
   email: emailValidation,
   password: passwordValidation,
 });
 
-export type SignUpSchemaProps = z.infer<typeof signupValidation>;
-export type SignInSchemaProps = z.infer<typeof signinValidation>;
+export type SignUpSchemaProps = z.infer<typeof signupValidationSchema>;
+export type SignInSchemaProps = z.infer<typeof signinValidationSchema>;

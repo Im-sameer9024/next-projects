@@ -5,13 +5,14 @@ import Img from "../../../public/auth-layout.webp";
 
 export default function AuthLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <section className="h-screen grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+    <section className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+      
       {/* 🔐 Left Side (Form) */}
-      <div className="flex items-center justify-center px-6 py-12 bg-white">
+      <div className="flex items-center justify-center px-6 bg-white">
         <div className="w-full max-w-md">{children}</div>
       </div>
 
@@ -21,13 +22,14 @@ export default function AuthLayout({
           src={Img}
           alt="Authentication"
           fill
+          sizes="full"
           priority
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover"
+          className="object-cover size-full"
         />
 
-        <h3 className=" text-[4rem] text-slate-400 absolute top-1/2 -translate-1/2 left-1/2">
-          Hey👋
+        {/* Fixed Center Text */}
+        <h3 className="text-[4rem] text-slate-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          Hey 👋
         </h3>
       </div>
     </section>

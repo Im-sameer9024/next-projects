@@ -1,11 +1,8 @@
-import Ai from '@/features/auth/components/Ai'
 import React from 'react'
 
 const Dashboard = () => {
   return (
-    <div>
-      <Ai/>
-    </div>
+    <div>Dashboard</div>
   )
 }
 

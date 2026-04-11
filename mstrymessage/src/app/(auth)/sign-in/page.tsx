@@ -1,8 +1,11 @@
+import SignInPage from '@/features/auth/pages/SignInPage'
 import React from 'react'
 
 const SignIn = () => {
   return (
-    <div>SignIn</div>
+    <>
+      <SignInPage/>
+    </>
   )
 }
 

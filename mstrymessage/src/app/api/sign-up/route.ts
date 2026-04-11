@@ -1,8 +1,8 @@
+import { RegistrationSuccessTemplate } from "@/shared/email-templates/userSignUp.template";
+import { SendEmail } from "@/shared/helpers/emailSend.helpers";
 import { PasswordHashed } from "@/shared/helpers/password.helpers";
 import { prisma } from "@/shared/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { SendEmail } from "@/shared/helpers/emailsend.helpers";
-import { RegistrationSuccessTemplate } from "@/shared/email-templates/usersignup.template";
 
 export async function POST(req: NextRequest) {
   try {
