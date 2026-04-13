@@ -12,10 +12,21 @@ datasource db {
   provider = "postgresql"
 }
 
-
 enum Role {
   USER
   ADMIN
+}
+
+enum Status {
+  CANCEL
+  PENDING
+  COMPLETED
+}
+
+enum Size {
+  SMALL
+  MEDIUM
+  LARGE
 }
 
 model User {
@@ -34,6 +45,7 @@ model User {
 
   accounts Account[]
   sessions Session[]
+  cart     Cart?
 }
 
 model Account {
@@ -63,4 +75,66 @@ model Session {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Category {
+  id          Int    @id @default(autoincrement())
+  title       String @unique
+  description String
+  color       String
+  image       String
+  slug        String @unique
 
+  products Product[]
+
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  Image           String
+  price           Decimal
+  isFeatured      Boolean  @default(false)
+  size            Size     @default(SMALL)
+
+  catSlug  String
+  category Category @relation(fields: [catSlug], references: [slug])
+
+  cartItems CartItem[]
+
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id          String  @id @default(cuid())
+  totalAmount Decimal
+  products    Json[]
+  status      Status  @default(PENDING)
+  intent_id   String? @unique
+}
+
+model CartItem {
+  id       String @id @default(cuid())
+  quantity Int    @default(1)
+
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cart {
+  id String @id @default(cuid())
+
+  items CartItem[]
+
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

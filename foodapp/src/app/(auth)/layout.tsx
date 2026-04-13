@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Img from "../../../public/auth-layout.webp";
 
 export default function AuthLayout({
   children,
@@ -10,7 +9,6 @@ export default function AuthLayout({
 }) {
   return (
     <section className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
-      
       {/* 🔐 Left Side (Form) */}
       <div className="flex items-center justify-center px-6 bg-white">
         <div className="w-full max-w-md">{children}</div>
@@ -19,10 +17,10 @@ export default function AuthLayout({
       {/* 🖼 Right Side (Image) */}
       <div className="relative hidden lg:block">
         <Image
-          src={Img}
+          src={"https://i.postimg.cc/hjZVmBqP/auth-layout.jpg"}
           alt="Authentication"
           fill
-          sizes="full"
+          sizes="(max-width: 768px) 100vw, 50vw"
           priority
           className="object-cover size-full"
         />

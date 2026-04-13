@@ -3,8 +3,11 @@
 
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 //----------------- Main axios instance ---------------------
 export const axiosInstance = axios.create({
+  baseURL:BASE_URL,
   withCredentials: true,
   timeout: 30000, // 30 sec
 });
@@ -28,7 +31,7 @@ export const apiConnector = async <T = any>({
   return axiosInstance({
     method,
     url,
-    data: bodyData,
+    data: bodyData ?? {},
     headers: headers ?? {},
     params: params ?? {},
   });
