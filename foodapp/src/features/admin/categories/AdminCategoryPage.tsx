@@ -21,6 +21,7 @@ const AdminCategoryPage = () => {
   const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
   const [categoryId, setCategoryId] = useState<number | null>(null);
 
+
   //------------------------- APIs ----------------
   const { data, isPending, error, isError } = useGetAllCategories();
   const {
@@ -36,7 +37,7 @@ const AdminCategoryPage = () => {
 
   //------------------------- Handlers ----------------
   const handleDeleteCategory = () => {
-    if (!categoryId) return;
+    if (!categoryId || !SingleCategoryData) return;
 
 
     deleteCategory(

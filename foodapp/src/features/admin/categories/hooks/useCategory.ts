@@ -239,94 +239,26 @@ export const useUpdateCategory = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: UpdateCategory,
-
-    // 🔥 Optimistic update
-    onMutate: async (variables: any) => {
-      const previousCategories = queryClient.getQueryData(["categories"]);
-      const previousCategory = queryClient.getQueryData([
-        "category",
-        variables.id,
-      ]);
-
-      // ✅ update list instantly
-      queryClient.setQueryData(["categories"], (old: any) => {
-        if (!old) return old;
-
-        return {
-          ...old,
-          data: old.data.map((item: any) =>
-            item.id === variables.id ? { ...item, ...variables.data } : item,
-          ),
-        };
-      });
-
-      // ✅ update single category cache
-      queryClient.setQueryData(["category", variables.id], (old: any) => {
-        if (!old) return old;
-
-        return {
-          ...old,
-          data: {
-            ...old.data,
-            ...variables.data,
-          },
-        };
-      });
-
-      return {
-        previousCategories,
-        previousCategory,
-      };
+    mutationFn: async (data: FormData) => {
+      console.log("🔥 mutation called"); // debug
+      return UpdateCategory(data);
     },
 
-    // ✅ Success (sync final server data)
-    onSuccess: (data, variables) => {
-      // update list with fresh data
-      queryClient.setQueryData(["categories"], (old: any) => {
-        if (!old) return old;
-
-        return {
-          ...old,
-          data: old.data.map((item: any) =>
-            item.id === variables.categoryId ? data.data : item,
-          ),
-        };
-      });
-
-      // update single cache
-      queryClient.setQueryData(["category", variables.categoryId], {
-        data: data.data,
-      });
-
-      toast.success(GetApiResponseMessage(data));
-    },
-
-    // 🔄 Rollback
-    onError: (error, variables, context) => {
-      if (context?.previousCategories) {
-        queryClient.setQueryData(["categories"], context.previousCategories);
-      }
-
-      if (context?.previousCategory) {
-        queryClient.setQueryData(
-          ["category", variables.categoryId],
-          context.previousCategory,
-        );
-      }
-
-      toast.error(GetApiErrorMessage(error));
-    },
-
-    // 🔄 Final sync
-    onSettled: (data, error, variables) => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ["categories"],
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["category", variables.categoryId],
+        queryKey: ["category", data.data?.id],
       });
+
+      toast.success(GetApiResponseMessage(data));
+    },
+
+    onError: (error) => {
+      console.error("❌ update error", error);
+      toast.error(GetApiErrorMessage(error));
     },
   });
 };

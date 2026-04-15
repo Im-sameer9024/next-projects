@@ -4,7 +4,6 @@ import { categoryApiUrls } from "@/services/apiEndpoints";
 import { CategoryDeleteProps } from "@/shared/types/category";
 import {
   CategoryFormData,
-  CategoryUpdateData,
 } from "@/shared/validation/category.schema";
 
 export const GetAllCategories = async () => {
@@ -36,14 +35,12 @@ export const CreateCategory = async (data: CategoryFormData) => {
   return response.data;
 };
 
-export const UpdateCategory = async (data: CategoryUpdateData) => {
+export const UpdateCategory = async (data: FormData) => {
   const response = await apiConnector({
     method: "PUT",
     url: categoryApiUrls.UPDATE_CATEGORY,
     bodyData: data,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+   
   });
 
   return response.data;

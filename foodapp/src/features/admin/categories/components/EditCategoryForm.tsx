@@ -10,7 +10,6 @@ import { Input } from "@/shared/components/ui/input";
 import { SingleCategoryProps } from "@/shared/types/category";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { useUploadImage } from "../../products/hooks/useProduct";
 import InputField from "@/shared/components/custom/InputField";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,8 +17,10 @@ import {
   CategoryUpdateData,
   categoryUpdateSchema,
 } from "@/shared/validation/category.schema";
-import { useUpdateCategory, useUpdateCategoryImage } from "../hooks/useCategory";
-import { UpdateCategoryImage } from "../apiOperations";
+import {
+  useUpdateCategory,
+  useUpdateCategoryImage,
+} from "../hooks/useCategory";
 
 interface Props {
   SingleCategoryData: SingleCategoryProps;
@@ -40,7 +41,10 @@ const EditCategoryForm = ({
   const [img, setImg] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
-  const { mutateAsync: UploadImage, isPending: isUploading } = useUpdateCategoryImage();
+  const { mutateAsync: UploadImage, isPending: isUploading } =
+    useUpdateCategoryImage();
+
+  console.log(SingleCategoryData);
 
   // 🔥 FORM
   const {
@@ -48,10 +52,11 @@ const EditCategoryForm = ({
     control,
     watch,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<CategoryUpdateData>({
     resolver: zodResolver(categoryUpdateSchema),
     defaultValues: {
+      categoryId: "",
       title: "",
       description: "",
       slug: "",
@@ -65,13 +70,14 @@ const EditCategoryForm = ({
   useEffect(() => {
     if (SingleCategoryData) {
       reset({
-        title: SingleCategoryData.title,
-        description: SingleCategoryData.description,
-        slug: SingleCategoryData.slug,
-        color: SingleCategoryData.color,
+        categoryId: String(SingleCategoryData?.id),
+        title: SingleCategoryData?.title,
+        description: SingleCategoryData?.description,
+        slug: SingleCategoryData?.slug,
+        color: SingleCategoryData?.color,
       });
 
-      setPreview(SingleCategoryData.image);
+      setPreview(SingleCategoryData?.image);
     }
   }, [SingleCategoryData, reset]);
 
@@ -95,12 +101,10 @@ const EditCategoryForm = ({
 
     const res = await UploadImage(formData as any);
 
-    console.log(res)
+    console.log(res);
 
     if (res?.data?.secure_url) {
       const uploadedUrl = res.data.secure_url;
-
-      
 
       // 🔥 IMPORTANT: update preview also
       setPreview(uploadedUrl);
@@ -112,6 +116,8 @@ const EditCategoryForm = ({
 
   // 🔥 SUBMIT
   const onSubmit = (data: CategoryUpdateData) => {
+    console.log("update", data);
+
     const formData = new FormData();
 
     formData.append("categoryId", String(SingleCategoryData.id));
@@ -171,6 +177,7 @@ const EditCategoryForm = ({
                     <Image
                       src={preview}
                       alt="Preview"
+                      loading="eager"
                       fill
                       sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover rounded-lg"
@@ -227,7 +234,7 @@ const EditCategoryForm = ({
               </div>
 
               <CustomButton type="submit" loading={isUpdating} fullWidth active>
-                {isSubmitting ? "Updating..." : "Update Category"}
+                Update Category
               </CustomButton>
             </form>
           </>

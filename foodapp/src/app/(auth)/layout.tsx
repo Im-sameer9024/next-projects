@@ -17,8 +17,8 @@ export default function AuthLayout({
       {/* 🖼 Right Side (Image) */}
       <div className="relative hidden lg:block">
         <Image
-          src={"https://i.postimg.cc/hjZVmBqP/auth-layout.jpg"}
-          alt="Authentication"
+          src={"https://res.cloudinary.com/dd33a4qkx/image/upload/q_auto/f_auto/v1776244991/auth-layout_jvvugp.jpg"}
+          alt="Authentication-layout-image"
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
           priority

@@ -16,6 +16,7 @@ import { useCreateCategory } from "../hooks/useCategory";
 import { Input } from "@/shared/components/ui/input";
 import { useUploadImage } from "../../products/hooks/useProduct";
 import { AspectRatio } from "@/shared/components/ui/aspect-ratio";
+import { toast } from "sonner";
 
 const AddCategoryForm = ({
   closeAddCategoryModal,
@@ -77,6 +78,8 @@ const AddCategoryForm = ({
 
   const onSubmit = async (data: CategoryFormData) => {
     // console.log("FORM DATA:", data); // 🔥 debug
+
+    if (!imgUrl) return toast.error("Please upload an image first");
 
     const formData = new FormData();
     formData.append("title", data.title);
