@@ -3,13 +3,13 @@ import { NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
-    const categories = await prisma.category.findMany();
+    const products = await prisma.product.findMany();
 
     return NextResponse.json(
       {
         success: true,
-        data: categories,
-        message: "Categories fetched successfully",
+        data: products,
+        message: "Products fetched successfully",
       },
       {
         status: 200,
@@ -19,7 +19,7 @@ export const GET = async () => {
     return NextResponse.json(
       {
         success: false,
-        message: "Error fetching categories",
+        message: "Error fetching Products",
         error: error,
       },
       {

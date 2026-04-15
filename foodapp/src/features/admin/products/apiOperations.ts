@@ -16,7 +16,7 @@ export const GetAllProducts = async () => {
 export const UploadImage = async (data: imageUploadSchemaProps) => {
   const response = await apiConnector({
     method: "POST",
-    url: productApiUrls.UPload_IMAGE,
+    url: productApiUrls.UPlOAD_IMAGE,
     bodyData: data,
      headers:{
       "Content-Type": "multipart/form-data",

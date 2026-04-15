@@ -1,44 +1,30 @@
 import { ConnectCloudinary } from "@/shared/config/cloudinary.config";
 import { prisma } from "@/shared/lib/prisma";
-import { UploadImageToCloudinary } from "@/shared/lib/uploadImage";
 import { validate } from "@/shared/lib/validator";
-import { CloudinaryImageUploadResponseProps } from "@/shared/types/cloudinary";
 import { productCreateSchema } from "@/shared/validation/product.schema";
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma } from "../../../../../generated/prisma/client";
 
 export const POST = async (req: NextRequest) => {
   try {
-    const connectCloudinary = await ConnectCloudinary();
-
-    if (!connectCloudinary.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Error connecting to cloudinary",
-        },
-        {
-          status: 500,
-        },
-      );
-    }
+    await ConnectCloudinary();
 
     const formData = await req.formData();
 
     const title = formData.get("title");
     const description = formData.get("description");
-    const image = formData.get("image");
     const price = formData.get("price");
     const size = formData.get("size");
     const slug = formData.get("slug");
     const isFeatured = formData.get("isFeatured");
+    const image = formData.get("image");
+    const image_public_id = formData.get("image_public_id");
 
     const parsedData = {
       title: title?.toString(),
       description: description?.toString(),
-      image: image?.toString(), // URL
       slug: slug?.toString(),
-
+      image: image?.toString(),
+      image_public_id: image_public_id?.toString(),
       price: price?.toString(), // ✅ FIXED
 
       size: size?.toString(),
@@ -67,11 +53,16 @@ export const POST = async (req: NextRequest) => {
       data: {
         title: result.data?.title,
         description: result.data?.description,
-        catSlug: result.data?.slug,
         price: result.data?.price,
         size: result.data?.size.split(","),
         isFeatured: result.data?.isFeatured,
         image: result.data?.image,
+        image_public_id: result.data?.image_public_id,
+        category: {
+          connect: {
+            slug: result.data?.slug,
+          },
+        },
       },
     });
 
@@ -79,7 +70,7 @@ export const POST = async (req: NextRequest) => {
       {
         success: true,
         data: newProduct,
-        message: "Category created successfully",
+        message: "Product created successfully",
       },
       {
         status: 201,

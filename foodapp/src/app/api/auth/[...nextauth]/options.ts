@@ -1,11 +1,11 @@
-import { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/shared/lib/prisma";
 import { comparePassword } from "@/shared/lib/hash";
+import type { NextAuthConfig } from "next-auth";
 
-export const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
 
   session: {
@@ -40,7 +40,7 @@ export const authOptions: NextAuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: {
-            email: credentials.email,
+            email: credentials.email as string,
           },
         });
 
@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         const isValid = await comparePassword(
-          credentials.password,
+          credentials.password as string,
           user.password,
         );
 

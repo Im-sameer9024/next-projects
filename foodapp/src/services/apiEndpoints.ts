@@ -16,5 +16,5 @@ export const productApiUrls = {
   CREATE_PRODUCT: "/api/products/create",
   DELETE_PRODUCT: "/api/products/delete",
   UPDATE_PRODUCT: "/api/products/update",
-  UPload_IMAGE: "/api/products/image-upload",
+  UPlOAD_IMAGE: "/api/products/image-upload",
 };

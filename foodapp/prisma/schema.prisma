@@ -54,7 +54,7 @@ model Account {
   token_type        String?
   scope             String?
   id_token          String?
-
+ session_state     String?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
@@ -68,6 +68,15 @@ model Session {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
+ 
 
 model Category {
   id              Int    @id @default(autoincrement())

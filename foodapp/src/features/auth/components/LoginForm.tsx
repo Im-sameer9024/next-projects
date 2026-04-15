@@ -7,9 +7,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "@/shared/components/custom/InputField";
 import { LoginFormData, loginSchema } from "../validation/auth.shcema";
 import CustomButton from "@/shared/components/custom/CustomButton";
-import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const LoginForm = ({
   loading,

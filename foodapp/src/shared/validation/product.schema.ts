@@ -6,8 +6,6 @@ export const imageUploadSchema = z.object({
     .refine((file) => file.size > 0, "Image is required"),
 });
 
-
-
 export const productCreateSchema = z.object({
   title: z
     .string()
@@ -19,7 +17,8 @@ export const productCreateSchema = z.object({
     .min(3, "Description is required")
     .max(200, "Description must be less than 200 characters"),
 
-  image: z.string().min(1, "Image is required"), // URL
+  image: z.string().trim(),
+  image_public_id: z.string().trim(),
 
   slug: z.string().min(1, "Slug is required"),
 
@@ -30,7 +29,7 @@ export const productCreateSchema = z.object({
   size: z.string().min(1, "At least one size is required"),
 
   isFeatured: z.boolean({
-    message: "isFeatured is required",
+    message: "Is Featured must be required",
   }),
 });
 

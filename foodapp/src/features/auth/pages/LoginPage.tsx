@@ -15,7 +15,6 @@ const LoginPage = () => {
     setLoading(true);
     try {
       signIn("google", {
-        redirect: false,
         callbackUrl: "/",
       });
     } catch (error) {

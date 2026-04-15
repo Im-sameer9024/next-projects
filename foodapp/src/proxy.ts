@@ -1,64 +1,33 @@
-import { withAuth } from "next-auth/middleware";
+import { auth } from "@/shared/lib/auth";
 import { NextResponse } from "next/server";
 
-export default withAuth(
-  function middleware(req) {
-    const token = req.nextauth?.token;
-    const pathname = req.nextUrl.pathname;
+export default auth((req) => {
+  const { user } = req.auth || {};
+  const pathname = req.nextUrl.pathname;
 
-    // 🟢 Public routes
-    if (
-      pathname.startsWith("/login") ||
-      pathname.startsWith("/signup")
-    ) {
-      if (token) {
-        return NextResponse.redirect(
-          new URL(token.role === "ADMIN" ? "/admin" : "/user", req.url)
-        );
-      }
-      return NextResponse.next();
-    }
-
-    // 🚫 Block root "/"
-    if (pathname === "/") {
-      if (!token) {
-        return NextResponse.redirect(new URL("/login", req.url));
-      }
+  // Public routes
+  if (pathname.startsWith("/login") || pathname.startsWith("/signup")) {
+    if (user) {
       return NextResponse.redirect(
-        new URL(token.role === "ADMIN" ? "/admin" : "/user", req.url)
+        new URL(user.role === "ADMIN" ? "/admin" : "/user", req.url)
       );
     }
-
-    // 🔐 Not logged in
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-
-    // 🔐 Admin protection (FIXED)
-    if (pathname.startsWith("/admin") && token.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/user", req.url));
-    }
-
-    // 🔐 Prevent admin from accessing user routes
-    if (pathname.startsWith("/user") && token.role === "ADMIN") {
-      return NextResponse.redirect(new URL("/admin", req.url));
-    }
-
     return NextResponse.next();
-  },
-  {
-    callbacks: {
-      authorized: () => true,
-    },
   }
-);
+
+  // Not logged in
+  if (!user) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  // Admin protection
+  if (pathname.startsWith("/admin") && user.role !== "ADMIN") {
+    return NextResponse.redirect(new URL("/user", req.url));
+  }
+
+  return NextResponse.next();
+});
 
 export const config = {
-  matcher: [
-    "/", // important
-    "/admin/:path*",
-    "/user/:path*", // ✅ FIXED
-    "/login",
-    "/signup",
-  ],
+  matcher: ["/", "/admin/:path*", "/user/:path*", "/login", "/signup"],
 };
