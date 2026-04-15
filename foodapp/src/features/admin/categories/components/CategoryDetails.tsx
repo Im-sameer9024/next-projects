@@ -12,6 +12,7 @@ const CategoryDetails = ({ category }: { category: SingleCategoryProps }) => {
           src={category.image}
           alt={category.title}
           fill
+          sizes="(max-width: 768px) 100vw, 25vw"
           className="object-cover"
         />
 

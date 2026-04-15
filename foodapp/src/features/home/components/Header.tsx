@@ -27,6 +27,7 @@ const Header = () => {
             src={"https://i.postimg.cc/RFdXby5Q/header.avif"}
             alt="Pizza Header"
             fill
+            
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover"
             priority

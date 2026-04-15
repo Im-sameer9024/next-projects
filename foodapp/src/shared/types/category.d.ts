@@ -7,3 +7,9 @@ export type SingleCategoryProps = {
   color: string;
   createdAt: string;
 };
+
+
+export type CategoryDeleteProps = {
+  categoryId:number;
+  image_public_id:string;
+}

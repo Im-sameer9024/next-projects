@@ -23,12 +23,6 @@ enum Status {
   COMPLETED
 }
 
-enum Size {
-  SMALL
-  MEDIUM
-  LARGE
-}
-
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -76,12 +70,13 @@ model Session {
 }
 
 model Category {
-  id          Int    @id @default(autoincrement())
-  title       String @unique
-  description String
-  color       String
-  image       String
-  slug        String @unique
+  id              Int    @id @default(autoincrement())
+  title           String @unique
+  description     String
+  color           String
+  image           String
+  image_public_id String
+  slug            String @unique
 
   products Product[]
 
@@ -92,10 +87,11 @@ model Product {
   id              String   @id @default(cuid())
   title           String
   description     String
-  Image           String
-  price           Decimal
+  image           String
+  image_public_id String
+  price           String
   isFeatured      Boolean  @default(false)
-  size            Size     @default(SMALL)
+  size            String[] @default([])
 
   catSlug  String
   category Category @relation(fields: [catSlug], references: [slug])
@@ -107,7 +103,7 @@ model Product {
 
 model Order {
   id          String  @id @default(cuid())
-  totalAmount Decimal
+  totalAmount String
   products    Json[]
   status      Status  @default(PENDING)
   intent_id   String? @unique

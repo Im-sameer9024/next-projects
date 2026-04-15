@@ -1,8 +1,11 @@
+import AdminProductPage from '@/features/admin/products/AdminProductPage'
 import React from 'react'
 
 const AdminProducts = () => {
   return (
-    <div>AdminProducts</div>
+    <>
+      <AdminProductPage/>
+    </>
   )
 }
 

@@ -35,7 +35,7 @@ const AdminSidebar = () => {
 
       {/* 🔝 Header */}
       <div className="flex items-center gap-2 mt-2 mb-6">
-        <Image src={Logo} width={32} height={32} alt="logo" />
+        <Image src={Logo} width={32} height={32} alt="logo"loading="lazy"  />
 
         {!collapsed && (
           <span className="font-bold text-lg whitespace-nowrap">FoodApp</span>

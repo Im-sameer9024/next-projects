@@ -2,14 +2,27 @@
 
 import Modal from "@/shared/components/custom/Modal";
 import { Button } from "@/shared/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/shared/components/ui/dropdown-menu";
 import { SingleCategoryProps } from "@/shared/types/category";
 import { MoreVertical, Pencil, Trash } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import CategoryDetails from "./CategoryDetails";
 
-const AdminCategoryCard = ({ category }: { category: SingleCategoryProps }) => {
+const AdminCategoryCard = ({
+  category,
+  openDeleteCategoryModal,
+  openEditCategoryModal
+}: {
+  category: SingleCategoryProps;
+  openDeleteCategoryModal: (id: number) => void;
+  openEditCategoryModal:(id:number) => void;
+}) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -17,13 +30,14 @@ const AdminCategoryCard = ({ category }: { category: SingleCategoryProps }) => {
       <section
         onClick={() => setShowModal(true)}
         className="relative group bg-white border border-gray-200 rounded-2xl p-4 
-                   hover:shadow-xl transition-all duration-300 cursor-pointer"
+                   hover:shadow-xl transition-all duration-300 "
       >
         {/* 🔥 3-dot Menu */}
-        <div className="absolute top-3 right-3 z-10">
+        <div className="absolute top-3 right-3 z-10 ">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
+                className="hover:cursor-pointer"
                 variant="ghost"
                 size="icon"
                 onClick={(e) => e.stopPropagation()} // ✅ prevent modal open
@@ -34,19 +48,20 @@ const AdminCategoryCard = ({ category }: { category: SingleCategoryProps }) => {
 
             <DropdownMenuContent align="end">
               <DropdownMenuItem
+                className="hover:cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log("Edit", category.id);
+                  openEditCategoryModal(category?.id as number)
                 }}
               >
                 <Pencil className="mr-2 h-4 w-4" /> Edit
               </DropdownMenuItem>
 
               <DropdownMenuItem
-                className="text-red-500"
+                className="text-red-500 hover:cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log("Delete", category.id);
+                  openDeleteCategoryModal(category?.id as number);
                 }}
               >
                 <Trash className="mr-2 h-4 w-4" /> Delete
@@ -62,6 +77,7 @@ const AdminCategoryCard = ({ category }: { category: SingleCategoryProps }) => {
               src={category.image}
               alt={category.title}
               fill
+              sizes="(max-width: 768px) 100vw, 25vw"
               className="object-cover rounded-full border"
             />
           </div>
@@ -89,9 +105,7 @@ const AdminCategoryCard = ({ category }: { category: SingleCategoryProps }) => {
               className="w-3 h-3 rounded-full border"
               style={{ backgroundColor: category.color }}
             />
-            <span className="text-xs text-gray-400">
-              {category.color}
-            </span>
+            <span className="text-xs text-gray-400">{category.color}</span>
           </div>
         </div>
       </section>
@@ -102,10 +116,11 @@ const AdminCategoryCard = ({ category }: { category: SingleCategoryProps }) => {
         isVisible={showModal}
         onClose={() => setShowModal(false)}
         width="50%"
-        content={
-          <CategoryDetails category={category} />
-        }
+        content={<CategoryDetails category={category} />}
       />
+
+
+
     </>
   );
 };

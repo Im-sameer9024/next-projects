@@ -1,8 +1,11 @@
 import { ConnectCloudinary } from "@/shared/config/cloudinary.config";
 import { prisma } from "@/shared/lib/prisma";
+import { UploadImageToCloudinary } from "@/shared/lib/uploadImage";
 import { validate } from "@/shared/lib/validator";
-import { categoryCreateSchema } from "@/shared/validation/category.schema";
+import { CloudinaryImageUploadResponseProps } from "@/shared/types/cloudinary";
+import { productCreateSchema } from "@/shared/validation/product.schema";
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "../../../../../generated/prisma/client";
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -22,27 +25,30 @@ export const POST = async (req: NextRequest) => {
 
     const formData = await req.formData();
 
-    const data = {
-      title: formData.get("title"),
-      description: formData.get("description"),
-      color: formData.get("color"),
-      image: formData.get("image"),
-      image_public_id: formData.get("image_public_id"),
-      slug: formData.get("slug"),
-    };
+    const title = formData.get("title");
+    const description = formData.get("description");
+    const image = formData.get("image");
+    const price = formData.get("price");
+    const size = formData.get("size");
+    const slug = formData.get("slug");
+    const isFeatured = formData.get("isFeatured");
 
     const parsedData = {
-      title: data.title?.toString(),
-      description: data.description?.toString(),
-      color: data.color?.toString(),
-      image: data.image?.toString(),
-      image_public_id: formData.get("image_public_id"),
-      slug: data.slug?.toString(),
+      title: title?.toString(),
+      description: description?.toString(),
+      image: image?.toString(), // URL
+      slug: slug?.toString(),
+
+      price: price?.toString(), // ✅ FIXED
+
+      size: size?.toString(),
+
+      isFeatured: isFeatured?.toString() === "true",
     };
 
     //--------------- Validate ------------
 
-    const result = validate(categoryCreateSchema, parsedData);
+    const result = validate(productCreateSchema, parsedData);
 
     if (!result.success) {
       return NextResponse.json(
@@ -57,21 +63,22 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    const categoryCreated = await prisma.category.create({
+    const newProduct = await prisma.product.create({
       data: {
         title: result.data?.title,
         description: result.data?.description,
-        color: result.data?.color,
+        catSlug: result.data?.slug,
+        price: result.data?.price,
+        size: result.data?.size.split(","),
+        isFeatured: result.data?.isFeatured,
         image: result.data?.image,
-        image_public_id: result.data?.image_public_id,
-        slug: result.data?.slug,
       },
     });
 
     return NextResponse.json(
       {
         success: true,
-        data: categoryCreated,
+        data: newProduct,
         message: "Category created successfully",
       },
       {

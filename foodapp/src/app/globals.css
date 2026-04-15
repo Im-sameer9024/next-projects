@@ -144,4 +144,33 @@
     margin: 0 auto;
     overflow-x: hidden;
   }
+
+  /* 🔥 Scrollbar width */
+  ::-webkit-scrollbar {
+    width: 6px; /* decrease width */
+    height: 6px;
+  }
+
+  /* 🔥 Track (background) */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* 🔥 Thumb (scroll handle) */
+  ::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1; /* slate-300 */
+    border-radius: 999px;
+  }
+
+  /* 🔥 Hover effect */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8; /* slate-400 */
+  }
+
+  /* 🔥 REMOVE arrows completely */
+  ::-webkit-scrollbar-button {
+    display: none;
+    height: 0;
+    width: 0;
+  }
 }

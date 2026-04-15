@@ -1,7 +1,6 @@
-import { AnimatePresence, motion } from 'motion/react';
-import React from 'react';
-import { IoCloseOutline } from 'react-icons/io5';
-
+import { AnimatePresence, motion } from "motion/react";
+import React from "react";
+import { IoCloseOutline } from "react-icons/io5";
 
 interface ModalProps {
   isVisible: boolean;
@@ -10,8 +9,7 @@ interface ModalProps {
   width?: string;
 }
 
-
-const Modal = ({ isVisible, content, onClose, width = '40%' }:ModalProps) => {
+const Modal = ({ isVisible, content, onClose, width = "40%" }: ModalProps) => {
   return (
     <AnimatePresence>
       {isVisible && (
@@ -19,11 +17,10 @@ const Modal = ({ isVisible, content, onClose, width = '40%' }:ModalProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onClose}
           className="
             fixed inset-0 z-50 
             flex items-center justify-center
-            bg-black/30 backdrop-blur-sm
+            bg-black/30 backdrop-blur-sm   p-4
           "
         >
           {/* Modal Box */}
@@ -38,6 +35,7 @@ const Modal = ({ isVisible, content, onClose, width = '40%' }:ModalProps) => {
               p-5 rounded-xl shadow-xl
               border border-slate-200
               relative
+             max-h-[80vh] overflow-y-auto
             "
           >
             {/* Close Button */}

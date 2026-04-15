@@ -3,11 +3,10 @@ import z from "zod";
 export const categoryCreateSchema = z.object({
   title: z.string().min(3).max(10).trim(),
   description: z.string().min(3).max(100).trim(),
-  image: z
-    .instanceof(File)
-    .refine((file) => file.size > 0, "Image is required"),
+  image: z.string().trim(),
+  image_public_id:z.string().trim(),
   color: z.string().trim(),
-  slug: z.string().trim(),
+  slug: z.string().min(2).max(10).trim(),
 });
 
 export const categoryUpdateSchema = z.object({
@@ -23,3 +22,6 @@ export const imageUpdateSchema = z.object({
     .instanceof(File)
     .refine((file) => file.size > 0, "Image is required"),
 });
+
+export type CategoryFormData = z.infer<typeof categoryCreateSchema>;
+export type CategoryUpdateData = z.infer<typeof categoryUpdateSchema>;
