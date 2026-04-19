@@ -69,6 +69,7 @@ const CreateCourse = () => {
             type="submit"
           >
             Continue
+            {/* here add a comment  */}
           </CustomButton>
         </div>
       </form>
