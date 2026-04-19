@@ -11,6 +11,7 @@ type CustomButtonProps = {
   variant?: "default" | "outline" | "secondary" | "ghost" | "destructive";
   size?: "default" | "sm" | "lg" | "icon";
   className?: string;
+  active?: boolean;
 
   // 🔥 Features
   leftIcon?: React.ReactNode;
@@ -27,6 +28,7 @@ const CustomButton = ({
   variant = "default",
   size = "default",
   className = "",
+  active = false,
 
   leftIcon,
   rightIcon,
@@ -41,7 +43,7 @@ const CustomButton = ({
       size={size}
       onClick={onClick}
       disabled={disabled || loading}
-      className={`flex items-center justify-center gap-2 hover:cursor-pointer ${
+      className={`flex items-center font-content disabled:cursor-not-allowed justify-center gap-2 hover:cursor-pointer ${active ? " bg-btnBlue hover:bg-btnHoverBlue" : " bg-lightText hover:bg-darkText"} ${
         fullWidth ? "w-full" : ""
       } ${className}`}
     >

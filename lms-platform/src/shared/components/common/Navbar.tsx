@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import CustomButton from "../custom/CustomButton";
 import { guestRoutes } from "@/shared/data/data";
+import { Button } from "../ui/button";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -65,15 +66,16 @@ const Navbar = () => {
       <div className=" flex gap-x-2 ml-auto mr-2">
         {isTeacherPage || isPlayerPage ? (
           <Link href={"/"}>
-            <CustomButton leftIcon={<LogOut />} variant="ghost" size="sm">
+            <Button variant="ghost" size="sm">
+              <LogOut/>
               Exit
-            </CustomButton>
+            </Button>
           </Link>
         ) : (
           <Link href={"/teacher/courses"}>
-            <CustomButton size="sm" variant="ghost">
+            <Button variant={"ghost"} size="sm">
               Teacher mode
-            </CustomButton>
+            </Button>
           </Link>
         )}
       </div>

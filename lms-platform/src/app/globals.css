@@ -144,5 +144,6 @@
     max-width: var(--breakpoint-3xl);
     height: auto;
     margin: 0 auto;
+    color:var(--color-lightText);
   }
 }

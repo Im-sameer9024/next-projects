@@ -1,9 +1,26 @@
-import React from 'react'
+"use client";
+
+import CustomButton from "@/shared/components/custom/CustomButton";
+import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 const CoursesPage = () => {
-  return (
-    <div>CoursesPage</div>
-  )
-}
+  const router = useRouter();
 
-export default CoursesPage
+  return (
+    <div>
+      <div>
+        <CustomButton
+          active={true}
+          onClick={() => router.push("/teacher/courses/create")}
+          leftIcon={<Plus />}
+        >
+          New Course
+        </CustomButton>
+      </div>
+    </div>
+  );
+};
+
+export default CoursesPage;
