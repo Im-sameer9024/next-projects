@@ -1,11 +1,9 @@
 import Image from "next/image";
-import React from "react";
-import logoSvg from '../../../../public/logo.svg'
+import logoSvg from "../../../../public/logo.svg";
 function Logo() {
   return (
     <>
       <Image
-      
         src={logoSvg}
         alt="logo"
         width={100}
