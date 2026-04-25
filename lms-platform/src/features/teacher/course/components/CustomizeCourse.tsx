@@ -31,7 +31,7 @@ const CustomizeCourse = ({ course }: { course: Course }) => {
         <TitleForm initialData={course} />
         <DescriptionForm initialData={course} />
         <ImageForm initialData={course} />
-        <CategoryForm/>
+        <CategoryForm initialData={course}/>
       </div>
     </div>
   );

@@ -23,8 +23,14 @@ export const CreateCourseImageSchema = z.object({
     }),
 });
 
+
+export const CreateCourseCategorySchema = z.object({
+  categoryId:z.string()
+})
+
 export type CreateCourseTitleTypes = z.infer<typeof CreateCourseTitleSchema>;
 export type CreateCourseDescriptionTypes = z.infer<
   typeof CreateCourseDescriptionSchema
 >;
 export type CreateCourseImageTypes = z.infer<typeof CreateCourseImageSchema>;
+export type CreateCourseCategoryTypes = z.infer<typeof CreateCourseCategorySchema>;

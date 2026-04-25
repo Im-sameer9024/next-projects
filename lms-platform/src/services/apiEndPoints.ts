@@ -4,3 +4,9 @@ export const courseUrls = {
   COURSE_UPDATE_SINGLE_VALUE: (courseId: string) => `/api/courses/${courseId}`,
   COURSE_IMAGE_UPLOAD:"/api/courses/image-upload"
 };
+
+
+
+export const categoryUrls =  {
+  GET_ALL_CATEGORIES: "/api/category",
+}
