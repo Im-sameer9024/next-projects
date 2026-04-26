@@ -45,7 +45,7 @@ const CustomInput = <T extends FieldValues>({
     <div className="space-y-1 w-full">
       {/* 🔹 Label */}
       {label && (
-        <label htmlFor={id} className="text-sm font-semibold text-darkText">
+        <label htmlFor={id} className="text-sm font-semibold text-text-slate-500">
           {label}
         </label>
       )}
@@ -56,7 +56,7 @@ const CustomInput = <T extends FieldValues>({
         control={control}
         render={({ field, fieldState }) => (
           <>
-            <div className="relative flex items-center">
+            <div className="relative flex items-center ">
               {/* Left Icon */}
               {leftIcon && (
                 <span className="absolute left-3 text-muted-foreground">
@@ -71,7 +71,7 @@ const CustomInput = <T extends FieldValues>({
                 placeholder={placeholder}
                 disabled={disabled || loading}
                 className={cn(
-                  "w-full text-darkText",
+                  "w-full text-slate-500 ",
                   leftIcon && "pl-10",
                   (rightIcon || isPassword || loading) && "pr-10",
                   fieldState.error &&
@@ -83,9 +83,9 @@ const CustomInput = <T extends FieldValues>({
               {/* 🔥 Right Side Controls */}
               <div className="absolute right-3 flex items-center gap-1">
                 {/* Loading */}
-                {loading && (
+                {/* {loading && (
                   <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                )}
+                )} */}
 
                 {/* Password Toggle */}
                 {isPassword && !loading && (
@@ -93,7 +93,7 @@ const CustomInput = <T extends FieldValues>({
                     type="button"
                     tabIndex={-1}
                     onClick={() => setShowPassword((prev) => !prev)}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>

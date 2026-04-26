@@ -18,7 +18,7 @@ type CustomButtonProps = React.ComponentProps<typeof Button> & {
 const CustomButton = ({
   children,
   loading = false,
-  loadingText,
+  loadingText = "Loading...",
   disabled,
   className,
   active = false,
@@ -39,11 +39,11 @@ const CustomButton = ({
       disabled={isDisabled}
       aria-busy={loading}
       className={cn(
-        "transition-all duration-200 flex items-center justify-center gap-2",
+        "transition-all  duration-200 flex items-center justify-center gap-2 hover:cursor-pointer",
         fullWidth && "w-full",
         active && "ring-2 ring-primary ring-offset-2",
         iconOnly && "p-2",
-        className
+        className,
       )}
       {...props}
     >

@@ -46,7 +46,7 @@ const CustomSelect = <T extends FieldValues>({
     <div className="space-y-1 w-full">
       {/* 🔹 Label */}
       {label && (
-        <label className="text-sm font-semibold text-darkText">{label}</label>
+        <label className="text-sm font-semibold text-text-slate-500">{label}</label>
       )}
 
       {/* 🔹 Select */}
@@ -62,7 +62,7 @@ const CustomSelect = <T extends FieldValues>({
             >
               <SelectTrigger
                 className={cn(
-                  "w-full text-darkText",
+                  "w-full text-text-slate-500",
                   fieldState.error && "border-red-500",
                   className,
                 )}
