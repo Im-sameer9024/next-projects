@@ -9,13 +9,14 @@ import SidebarLink from "./SidebarLink";
 import Logo from "./Logo";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { Skeleton } from "../ui/skeleton";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const pathname = usePathname();
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const role = session?.user?.role;
 
@@ -41,7 +42,7 @@ const Sidebar = () => {
         {/*-------------------- logo ----------------- */}
 
         <Link
-          href="/"
+          href={role === Roles.teacher ? "/teacher/courses" : "/"}
           className="flex items-center gap-2   w-full justify-center py-5"
         >
           <Logo />
@@ -52,7 +53,7 @@ const Sidebar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="font-semibold text-slate-500 whitespace-nowrap"
+              className="font-semibold text-slate-700 whitespace-nowrap"
             >
               LMS Platform
             </motion.span>
@@ -61,16 +62,24 @@ const Sidebar = () => {
 
         {/* links  */}
         <div className="flex flex-col gap-3 w-full p-4">
-          {routes.map((link) => {
-            return (
-              <SidebarLink
-                key={link?.id}
-                data={link}
-                pathname={pathname}
-                isCollapsed={isCollapsed}
-              />
-            );
-          })}
+          {status === "loading" ? (
+            <>
+              <Skeleton className="w-full h-8" />
+              <Skeleton className="w-full h-8" />
+              <Skeleton className="w-full h-8" />
+            </>
+          ) : (
+            routes.map((link) => {
+              return (
+                <SidebarLink
+                  key={link?.id}
+                  data={link}
+                  pathname={pathname}
+                  isCollapsed={isCollapsed}
+                />
+              );
+            })
+          )}
         </div>
       </motion.div>
     </>

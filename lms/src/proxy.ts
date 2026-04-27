@@ -14,24 +14,33 @@ export async function proxy(req: NextRequest) {
 
   const isTeacherRoute = pathname.startsWith("/teacher");
 
-  // ✅ 1. Allow auth pages if NOT logged in
+  // 1. Allow auth pages if NOT logged in
   if (!token && isAuthPage) {
     return NextResponse.next();
   }
 
-  // ✅ 2. Redirect logged-in users away from auth pages
+  // 2. Redirect logged-in users away from auth pages
   if (token && isAuthPage) {
     return token.role === "TEACHER"
-      ? NextResponse.redirect(new URL("/teacher/analytics", req.url))
+      ? NextResponse.redirect(new URL("/teacher/courses", req.url))
       : NextResponse.redirect(new URL("/", req.url));
   }
 
-  // ✅ 3. Protect teacher routes
+  // 3. Protect teacher routes
   if (isTeacherRoute && token?.role !== "TEACHER") {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // ✅ 4. Protect all other routes
+  if (pathname === "/" && token?.role === "TEACHER") {
+    return NextResponse.redirect(new URL("/teacher/courses", req.url));
+  }
+
+  // 4. 🚀 Restrict teacher to only teacher routes
+  if (token?.role === "TEACHER" && !isTeacherRoute) {
+    return NextResponse.redirect(new URL("/teacher/courses", req.url));
+  }
+
+  // 5. Protect all other routes
   if (!token && !isAuthPage) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
@@ -40,5 +49,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/teacher/:path*", "/sign-in", "/sign-up"],
+  matcher: ["/((?!_next|api|favicon.ico).*)"],
 };

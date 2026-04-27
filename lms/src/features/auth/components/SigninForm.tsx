@@ -46,9 +46,9 @@ const SigninForm = () => {
       // ✅ wait for updated session
       const updatedSession = await getSession();
 
-      if (updatedSession?.user.role === Roles.teacher) {
+      if (updatedSession?.user?.role === Roles.teacher) {
         router.push("/teacher/courses");
-      } else {
+      } else if (updatedSession?.user.role === Roles.user) {
         router.push("/");
       }
       toast.success("Logged in successfully");

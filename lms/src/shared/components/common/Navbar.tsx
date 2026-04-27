@@ -2,7 +2,7 @@
 
 import { LogOut, Menu } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "../ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import Logo from "./Logo";
 import SidebarLink from "./SidebarLink";
 import { usePathname } from "next/navigation";
@@ -20,7 +20,6 @@ const Navbar = () => {
   const { data: session, status } = useSession();
 
   const role = session?.user?.role;
-
 
   const routes = role === Roles.teacher ? teacherRoutes : guestRoutes;
 
@@ -46,13 +45,13 @@ const Navbar = () => {
 
           <div className="flex flex-col gap-2 p-3">
             {routes.map((link) => (
-              <SheetClose asChild key={link.id}>
-                <SidebarLink
-                  data={link}
-                  pathname={pathname}
-                  isCollapsed={false}
-                />
-              </SheetClose>
+              <SidebarLink
+                key={link.id}
+                data={link}
+                pathname={pathname}
+                isCollapsed={false}
+                isMobile={true}
+              />
             ))}
           </div>
         </SheetContent>
@@ -64,7 +63,7 @@ const Navbar = () => {
           <DropdownMenuTrigger asChild>
             {status === "loading" ? (
               <div className="w-9 h-9 bg-gray-200 animate-pulse rounded-full" />
-            ) : (
+            ) : session ? (
               <Avatar className="h-9 w-9 border cursor-pointer">
                 <AvatarImage src={session?.user?.image || ""} alt="User" />
                 <AvatarFallback>
@@ -77,7 +76,7 @@ const Navbar = () => {
                     "U"}
                 </AvatarFallback>
               </Avatar>
-            )}
+            ) : null}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
             {/* Logout */}

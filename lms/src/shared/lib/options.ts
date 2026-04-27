@@ -82,8 +82,8 @@ export const authOptions: NextAuthConfig = {
         token.email = user?.email;
         token.name = user?.name;
         token.isVerified = user?.isVerified;
-        token.role = user.role;
-        token.image = user.image;
+        token.role = user?.role;
+        token.image = user?.image;
       }
 
       return token;
