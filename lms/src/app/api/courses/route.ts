@@ -1,8 +1,7 @@
+import { Roles } from "@/shared/data/data";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { Role } from "../../../../generated/prisma/enums";
-
 export async function GET() {
   try {
     const courses = await prisma.course.findMany({
@@ -37,7 +36,7 @@ export async function POST(req: NextRequest) {
 
     const user = session.user;
 
-    if (user.role !== Role.TEACHER) {
+    if (user.role !== Roles.teacher) {
       return NextResponse.json(
         {
           success: false,
