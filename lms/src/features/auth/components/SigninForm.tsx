@@ -46,12 +46,13 @@ const SigninForm = () => {
       // ✅ wait for updated session
       const updatedSession = await getSession();
 
-      if (updatedSession?.user?.role === Roles.teacher) {
+      if (updatedSession?.user?.role === Roles?.teacher) {
         router.push("/teacher/courses");
-      } else if (updatedSession?.user.role === Roles.user) {
+        toast.success("Logged in Teacher");
+      } else if (updatedSession?.user?.role === Roles?.user) {
         router.push("/");
+        toast.success("Logged in User");
       }
-      toast.success("Logged in successfully");
     } catch (error) {
       console.log("error in signin", error);
     } finally {
