@@ -35,10 +35,13 @@ const SigninForm = () => {
         email: data.email,
         password: data.password,
         redirect: false,
+        callbackUrl: "/",
       });
 
+      console.log(res)
+
       // ❌ Handle error properly
-      if (res.error) {
+      if (res?.error) {
         toast.error(`Please check fields`);
         return;
       }
