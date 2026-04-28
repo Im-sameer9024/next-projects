@@ -13,11 +13,11 @@ import { getSession, signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { useAppContext } from "@/app/providers/context/useAppContext";
 import { Roles } from "@/shared/data/data";
+import { useRouter } from "next/navigation";
 
 const SigninForm = () => {
-  const { router } = useAppContext();
-
   const { globalLoading, setGlobalLoading } = useAppContext();
+  const router = useRouter();
 
   const { handleSubmit, control } = useForm<SignInSchemaValidationTypes>({
     resolver: zodResolver(SignInSchemaValidation),
@@ -48,11 +48,10 @@ const SigninForm = () => {
 
       if (updatedSession?.user?.role === Roles?.teacher) {
         router.push("/teacher/courses");
-        toast.success("Logged in Teacher");
       } else if (updatedSession?.user?.role === Roles?.user) {
         router.push("/");
-        toast.success("Logged in User");
       }
+      toast.success("Logged in Successfully");
     } catch (error) {
       console.log("error in signin", error);
     } finally {

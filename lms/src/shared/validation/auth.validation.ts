@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { actualRoles } from "../data/data";
 
 export const SignUpSchemaValidation = z.object({
   name: z
@@ -14,7 +15,7 @@ export const SignUpSchemaValidation = z.object({
     .max(18, {
       message: "password should be at most 18 characters",
     }),
-  role: z.enum(["teacher", "user"]),
+  role: z.enum(actualRoles),
 });
 
 export const SignInSchemaValidation = z.object({

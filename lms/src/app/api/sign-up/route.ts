@@ -1,8 +1,8 @@
 import { PasswordHashed } from "@/shared/helpers/password.helper";
 import { prisma } from "@/shared/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { Role } from "../../../../generated/prisma/enums";
 import { validate } from "@/shared/middleware/validation.middleware";
+import { Role } from "@/generated/prisma/enums";
 import {
   SignUpSchemaValidation,
   SignUpSchemaValidationTypes,
@@ -56,8 +56,6 @@ export async function POST(req: NextRequest) {
 
     const hashedPassword = await PasswordHashed(password);
 
-    const actualRole = role === "teacher" ? Role.TEACHER : Role.USER;
-
     // 🔥 Avatar seed
     const seed = name.split(" ")[0] || "Guest";
 
@@ -68,7 +66,7 @@ export async function POST(req: NextRequest) {
         name: name?.trim(),
         email: email.toLowerCase(),
         password: hashedPassword,
-        role: actualRole,
+        role: role as Role,
         image: avatarUrl,
       },
     });

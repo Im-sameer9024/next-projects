@@ -20,6 +20,7 @@ import {
   GetApiErrorMessage,
   GetApiResponseMessage,
 } from "@/shared/lib/apiMessages";
+import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
   const { handleSubmit, control, setValue } =
@@ -29,12 +30,13 @@ const SignupForm = () => {
         name: "",
         email: "",
         password: "",
-        role: "user",
+        role: "USER",
       },
     });
 
   const role = useWatch({ control, name: "role" });
-  const { globalLoading, setGlobalLoading, router } = useAppContext();
+  const { globalLoading, setGlobalLoading } = useAppContext();
+  const router = useRouter();
 
   const onSubmit = async (data: SignUpSchemaValidationTypes) => {
     console.log("FORM DATA:", data);
@@ -48,13 +50,11 @@ const SignupForm = () => {
     setGlobalLoading(true);
     try {
       const res = await SignupUser(formData as any);
-      console.log("---------------------- response of signup ----------------------",res);
-    
-      if(res.success){
+
+      if (res?.success) {
         toast.success(GetApiResponseMessage(res));
-        router.push("/");
+        router.push("/sign-in");
       }
-    
     } catch (error) {
       toast.error(GetApiErrorMessage(error));
     } finally {
@@ -103,20 +103,20 @@ const SignupForm = () => {
           disabled={globalLoading}
           value={role}
           onValueChange={(val) =>
-            setValue("role", val as "user" | "teacher", {
+            setValue("role", val as "USER" | "TEACHER", {
               shouldValidate: true,
             })
           }
           className="flex gap-6"
         >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="user" id="user" />
-            <Label htmlFor="user">User</Label>
+            <RadioGroupItem value="USER" id="USER" />
+            <Label htmlFor="USER">User</Label>
           </div>
 
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="teacher" id="teacher" />
-            <Label htmlFor="teacher">Teacher</Label>
+            <RadioGroupItem value="TEACHER" id="TEACHER" />
+            <Label htmlFor="TEACHER">Teacher</Label>
           </div>
         </RadioGroup>
       </div>

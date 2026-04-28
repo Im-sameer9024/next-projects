@@ -14,35 +14,36 @@ export async function proxy(req: NextRequest) {
 
   const isTeacherRoute = pathname.startsWith("/teacher");
 
-  // 1. Allow auth pages if NOT logged in
-  if (!token && isAuthPage) {
-    return NextResponse.next();
-  }
+  // ✅ 1. If NOT logged in
+  if (!token) {
+    if (isAuthPage) return NextResponse.next();
 
-  // 2. Redirect logged-in users away from auth pages
-  if (token && isAuthPage) {
-    return token.role === "TEACHER"
-      ? NextResponse.redirect(new URL("/teacher/courses", req.url))
-      : NextResponse.redirect(new URL("/", req.url));
-  }
-
-  // 3. Protect teacher routes
-  if (isTeacherRoute && token?.role !== "TEACHER") {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
-
-  if (pathname === "/" && token?.role === "TEACHER") {
-    return NextResponse.redirect(new URL("/teacher/courses", req.url));
-  }
-
-  // 4. 🚀 Restrict teacher to only teacher routes
-  if (token?.role === "TEACHER" && !isTeacherRoute) {
-    return NextResponse.redirect(new URL("/teacher/courses", req.url));
-  }
-
-  // 5. Protect all other routes
-  if (!token && !isAuthPage) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
+  }
+
+  // ✅ 2. If logged in & trying to access auth pages
+  if (isAuthPage) {
+    if (token.role === "TEACHER") {
+      return NextResponse.redirect(new URL("/teacher/courses", req.url));
+    } else {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
+
+  // ✅ 3. TEACHER restrictions
+  if (token.role === "TEACHER") {
+    //  Block access to non-teacher routes
+    if (!isTeacherRoute) {
+      return NextResponse.redirect(new URL("/teacher/courses", req.url));
+    }
+  }
+
+  // ✅ 4. USER restrictions
+  if (token.role !== "TEACHER") {
+    //  Block access to teacher routes
+    if (isTeacherRoute) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
   }
 
   return NextResponse.next();
