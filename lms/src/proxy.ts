@@ -2,9 +2,13 @@ import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function proxy(req: NextRequest) {
+  const isSecure = req.url.startsWith("https://");
+
   const token = await getToken({
     req,
     secret: process.env.NEXTAUTH_SECRET,
+    secureCookie: isSecure,
+    salt: isSecure ? "__Secure-authjs.session-token" : "authjs.session-token",
   });
 
   console.log("Token in proxy",token)
