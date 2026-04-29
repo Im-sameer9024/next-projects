@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import CustomButton from "@/shared/components/custom/CustomButton";
@@ -8,8 +9,15 @@ import {
 } from "@/shared/validation/course.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useCreateCourse } from "../hooks/useCourse";
+import { useRouter } from "next/navigation";
 
 const CourseCreateForm = () => {
+  //----------------- api hooks --------------
+  const { mutateAsync: CreateCourse, isPending: isCreatingCourse } =
+    useCreateCourse();
+  const router = useRouter();
+
   const {
     control,
     handleSubmit,
@@ -23,9 +31,15 @@ const CourseCreateForm = () => {
   });
 
   const onSubmit = async (data: CreateCourseTitleSchemaType) => {
-    console.log("COURSE DATA:", data);
+    const formData = new FormData();
+    formData.append("title", data.title);
 
-    // 👉 API call here
+    const res = await CreateCourse(formData as any);
+
+    if (res.success) {
+      router.push(`/teacher/courses/${res.data?.id}`);
+      reset();
+    }
   };
 
   const handleCancel = () => {
@@ -38,6 +52,8 @@ const CourseCreateForm = () => {
       <CustomInput
         name="title"
         control={control}
+        loading={isCreatingCourse}
+        disabled={isCreatingCourse}
         label="Course title"
         type="text"
         placeholder="e.g 'Web Development Bootcamp'"
@@ -47,6 +63,7 @@ const CourseCreateForm = () => {
       <div className="flex  items-center  gap-4">
         {/* Cancel */}
         <CustomButton
+          disabled={isCreatingCourse}
           type="button"
           variant="ghost"
           onClick={handleCancel}
@@ -58,7 +75,8 @@ const CourseCreateForm = () => {
         {/* Submit */}
         <CustomButton
           type="submit"
-          loading={isSubmitting}
+          loading={isSubmitting || isCreatingCourse}
+          disabled={isCreatingCourse}
           className=" bg-blue-500 hover:bg-blue-600"
         >
           Continue

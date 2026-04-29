@@ -12,4 +12,7 @@ export const CreateCourseTitleSchema = z.object({
 });
 
 
+
+
+
 export type CreateCourseTitleSchemaType = z.infer<typeof CreateCourseTitleSchema>;

@@ -2,6 +2,7 @@ import { Roles } from "@/shared/data/data";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+
 export async function GET() {
   try {
     const courses = await prisma.course.findMany({
@@ -11,7 +12,42 @@ export async function GET() {
         },
       },
     });
-  } catch (error) {}
+
+    if (!courses || courses.length === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: [],
+          message: "No courses found",
+        },
+        {
+          status: 404,
+        },
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: courses,
+        message: "Courses fetched successfully",
+      },
+      {
+        status: 200,
+      },
+    );
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Internal Server Error",
+      },
+      {
+        status: 500,
+      },
+    );
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -65,5 +101,16 @@ export async function POST(req: NextRequest) {
         status: 201,
       },
     );
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error creating course:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Internal Server Error",
+      },
+      {
+        status: 500,
+      },
+    );
+  }
 }

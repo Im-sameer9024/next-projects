@@ -2,11 +2,15 @@
 
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+if(!BASE_URL) {
+  throw new Error("BASE_URL is not defined");
+}
+
 //----------------- Main axios instance ---------------------
 export const axiosInstance = axios.create({
-  baseURL:BASE_URL,
+  baseURL: BASE_URL,
   withCredentials: true,
   timeout: 30000, // 30 sec
 });

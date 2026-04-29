@@ -11,7 +11,6 @@ export async function proxy(req: NextRequest) {
     salt: isSecure ? "__Secure-authjs.session-token" : "authjs.session-token",
   });
 
-  console.log("Token in proxy",token)
 
   const { pathname } = req.nextUrl;
 
