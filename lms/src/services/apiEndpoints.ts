@@ -11,4 +11,9 @@ export const courseApiEndpoints = {
   CREATE_COURSE: "/api/courses",
   GET_SINGLE_COURSE: (courseId: string) => `/api/courses/${courseId}`,
   UPDATE_SINGLE_VALUE_COURSE: (courseId: string) => `/api/courses/${courseId}`,
+  UPLOAD_IMAGE:"/api/courses/image-upload",
+}
+
+export const categoryApiEndpoints = {
+  GET_CATEGORIES: "/api/category",
 }

@@ -11,6 +11,13 @@ export async function GET() {
           not: "",
         },
       },
+      include:{
+        attachments:{
+          orderBy:{
+            createdAt:"desc"
+          }
+        }
+      }
     });
 
     if (!courses || courses.length === 0) {

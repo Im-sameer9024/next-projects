@@ -3,42 +3,51 @@
 import CustomButton from "@/shared/components/custom/CustomButton";
 import CustomInput from "@/shared/components/custom/CustomInput";
 import {
-  CreateCourseTitleSchema,
-  CreateCourseTitleSchemaType,
+  CreateCourseDescriptionSchema,
+  CreateCourseDescriptionSchemaType,
 } from "@/shared/validation/course.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit } from "lucide-react";
 import React, { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useUpdateCourse } from "../hooks/useCourse";
+import CustomTextarea from "@/shared/components/custom/CustomTextarea";
 
-const TitleForm = ({
-  title,
+const DescriptionForm = ({
+  description,
   courseId,
 }: {
-  title: string;
+  description: string;
   courseId: string;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
 
-  //   api hook
-
+  // 🔥 API hook
   const { mutateAsync: UpdateCourse, isPending: isUpdatingCourse } =
     useUpdateCourse();
 
-  const { handleSubmit, control, reset } = useForm<CreateCourseTitleSchemaType>(
-    {
-      resolver: zodResolver(CreateCourseTitleSchema),
-      defaultValues: { title: title },
-    },
-  );
+  // 🔥 Form setup
+  const { handleSubmit, control, reset } =
+    useForm<CreateCourseDescriptionSchemaType>({
+      resolver: zodResolver(CreateCourseDescriptionSchema),
+      defaultValues: {
+        description: description || "",
+      },
+    });
 
-  const watchedTitle = useWatch({
+  const watchedDescription = useWatch({
     control,
-    name: "title",
+    name: "description",
   });
 
-  const onSubmit = async (data: CreateCourseTitleSchemaType) => {
+  // 🔥 Submit handler
+  const onSubmit = async (data: CreateCourseDescriptionSchemaType) => {
+    // prevent unnecessary API call
+    if (data.description === description) {
+      setIsEdit(false);
+      return;
+    }
+
     try {
       await UpdateCourse({
         courseId,
@@ -51,8 +60,9 @@ const TitleForm = ({
     }
   };
 
+  // 🔥 Toggle edit
   const toggleEdit = () => {
-    if (isEdit) reset({ title });
+    if (isEdit) reset({ description: description || "" });
     setIsEdit((prev) => !prev);
   };
 
@@ -60,7 +70,9 @@ const TitleForm = ({
     <section className="bg-white border p-4 border-slate-200 rounded">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-sm text-slate-700">Course Title</h3>
+        <h3 className="font-semibold text-sm text-slate-700">
+          Course Description
+        </h3>
 
         <CustomButton
           leftIcon={!isEdit && <Edit size={16} />}
@@ -79,23 +91,24 @@ const TitleForm = ({
 
       {/* 🔥 Smooth Height Animation */}
       <div
-        className={`overflow-hidden transition-all duration-00 ease-in-out ${
-          isEdit ? "max-h-40 opacity-100 mt-3" : "max-h-10 opacity-100 mt-2"
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          isEdit ? "max-h-60 opacity-100 mt-3" : "max-h-20 opacity-100 mt-2"
         }`}
       >
         {isEdit ? (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 p-1">
-            <CustomInput
-              type="text"
+            {/* 🔥 Use textarea for description */}
+            <CustomTextarea
               control={control}
-              name="title"
-              loading={isUpdatingCourse}
               disabled={isUpdatingCourse}
+              loading={isUpdatingCourse}
+              name="description"
+              placeholder="e.g. - This course is about for...."
             />
 
             <CustomButton
               loading={isUpdatingCourse}
-              disabled={isUpdatingCourse || watchedTitle === title}
+              disabled={isUpdatingCourse || watchedDescription === description}
               loadingText="Saving..."
               className="bg-blue-500 hover:bg-blue-600"
               type="submit"
@@ -104,11 +117,13 @@ const TitleForm = ({
             </CustomButton>
           </form>
         ) : (
-          <p className="text-sm text-slate-600">{title}</p>
+          <p className="text-sm text-slate-600 whitespace-pre-line">
+            {description || "No description"}
+          </p>
         )}
       </div>
     </section>
   );
 };
 
-export default TitleForm;
+export default DescriptionForm;

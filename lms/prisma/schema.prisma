@@ -70,6 +70,7 @@ model Course {
   title       String  @db.Text
   description String? @db.Text
   image       String?
+  image_public_id String?
   price       String?
   isPublished Boolean @default(false)
 
@@ -96,6 +97,7 @@ model Attachment {
   id   String @id @default(uuid())
   name String
   url  String @db.Text
+  attachment_public_id String?
 
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)

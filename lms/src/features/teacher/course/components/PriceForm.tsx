@@ -3,8 +3,8 @@
 import CustomButton from "@/shared/components/custom/CustomButton";
 import CustomInput from "@/shared/components/custom/CustomInput";
 import {
-  CreateCourseTitleSchema,
-  CreateCourseTitleSchemaType,
+  CreateCoursePriceSchema,
+  CreateCoursePriceSchemaType,
 } from "@/shared/validation/course.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit } from "lucide-react";
@@ -12,37 +12,45 @@ import React, { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useUpdateCourse } from "../hooks/useCourse";
 
-const TitleForm = ({
-  title,
+const PriceForm = ({
+  price,
   courseId,
 }: {
-  title: string;
+  price: string | null;
   courseId: string;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
 
-  //   api hook
+  const { mutateAsync: UpdateCourse, isPending } = useUpdateCourse();
 
-  const { mutateAsync: UpdateCourse, isPending: isUpdatingCourse } =
-    useUpdateCourse();
-
-  const { handleSubmit, control, reset } = useForm<CreateCourseTitleSchemaType>(
+  const { handleSubmit, control, reset } = useForm<CreateCoursePriceSchemaType>(
     {
-      resolver: zodResolver(CreateCourseTitleSchema),
-      defaultValues: { title: title },
+      resolver: zodResolver(CreateCoursePriceSchema),
+      defaultValues: {
+        price: price || "",
+      },
     },
   );
 
-  const watchedTitle = useWatch({
+  const watchedPrice = useWatch({
     control,
-    name: "title",
+    name: "price",
   });
 
-  const onSubmit = async (data: CreateCourseTitleSchemaType) => {
+  const onSubmit = async (data: CreateCoursePriceSchemaType) => {
+    const normalizedPrice = String(Number(data.price)); // ✅ clean + consistent
+
+    if (normalizedPrice === (price || "")) {
+      setIsEdit(false);
+      return;
+    }
+
     try {
       await UpdateCourse({
         courseId,
-        data,
+        data: {
+          price: normalizedPrice, // ✅ always clean string
+        },
       });
 
       setIsEdit(false);
@@ -52,7 +60,7 @@ const TitleForm = ({
   };
 
   const toggleEdit = () => {
-    if (isEdit) reset({ title });
+    if (isEdit) reset({ price: price || "" });
     setIsEdit((prev) => !prev);
   };
 
@@ -60,7 +68,7 @@ const TitleForm = ({
     <section className="bg-white border p-4 border-slate-200 rounded">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-sm text-slate-700">Course Title</h3>
+        <h3 className="font-semibold text-sm text-slate-700">Course Price</h3>
 
         <CustomButton
           leftIcon={!isEdit && <Edit size={16} />}
@@ -70,32 +78,32 @@ const TitleForm = ({
             isEdit
               ? "bg-transparent text-slate-500"
               : "bg-blue-500 hover:bg-blue-600"
-          } transition-all duration-200`}
+          }`}
           onClick={toggleEdit}
         >
           {isEdit ? "Cancel" : "Edit"}
         </CustomButton>
       </div>
 
-      {/* 🔥 Smooth Height Animation */}
+      {/* Content */}
       <div
-        className={`overflow-hidden transition-all duration-00 ease-in-out ${
-          isEdit ? "max-h-40 opacity-100 mt-3" : "max-h-10 opacity-100 mt-2"
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          isEdit ? "max-h-40 mt-3" : "max-h-10 mt-2"
         }`}
       >
         {isEdit ? (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 p-1">
             <CustomInput
-              type="text"
+              type="number"
               control={control}
-              name="title"
-              loading={isUpdatingCourse}
-              disabled={isUpdatingCourse}
+              name="price"
+              placeholder="Enter price (e.g. 499)"
+              disabled={isPending}
             />
 
             <CustomButton
-              loading={isUpdatingCourse}
-              disabled={isUpdatingCourse || watchedTitle === title}
+              loading={isPending}
+              disabled={isPending || watchedPrice === (price || "")}
               loadingText="Saving..."
               className="bg-blue-500 hover:bg-blue-600"
               type="submit"
@@ -104,11 +112,13 @@ const TitleForm = ({
             </CustomButton>
           </form>
         ) : (
-          <p className="text-sm text-slate-600">{title}</p>
+          <p className="text-sm text-slate-600">
+            {price ? `₹${price}` : "Free / Not set"}
+          </p>
         )}
       </div>
     </section>
   );
 };
 
-export default TitleForm;
+export default PriceForm;
