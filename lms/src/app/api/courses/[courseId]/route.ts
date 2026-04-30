@@ -13,6 +13,13 @@ export async function GET(
       where: {
         id: courseId,
       },
+      include: {
+        attachments: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+      },
     });
 
     if (!course) {

@@ -1,4 +1,4 @@
-import { Course } from "@/generated/prisma/client";
+import { Attachment, Course } from "@/generated/prisma/client";
 import { MdOutlineDashboard } from "react-icons/md";
 import TitleForm from "./TitleForm";
 import DescriptionForm from "./DescriptionForm";
@@ -8,12 +8,14 @@ import { VscChecklist } from "react-icons/vsc";
 import PriceForm from "./PriceForm";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { IoDocumentOutline } from "react-icons/io5";
+import AttachmentForm from "./AttachmentForm";
 
-const CourseUpdate = ({ course }: { course: Course }) => {
-
-
-  console.log(course);
-
+const CourseUpdate = ({
+  course,
+}: {
+  course: Course & { attachments: Attachment[] };
+}) => {
+  console.log("course is here",course);
 
   return (
     <section className=" mt-10 w-full grid grid-cols-2 gap-14 ">
@@ -60,12 +62,11 @@ const CourseUpdate = ({ course }: { course: Course }) => {
               <FaIndianRupeeSign className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
             </div>
             <p className=" font-heading font-semibold text-md text-slate-700">
-             Sell your course
+              Sell your course
             </p>
           </div>
           <PriceForm price={course.price as string} courseId={course.id} />
         </section>
-
 
         {/*-------------------- Attachment section -------------  */}
         <section className=" space-y-4">
@@ -74,12 +75,11 @@ const CourseUpdate = ({ course }: { course: Course }) => {
               <IoDocumentOutline className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
             </div>
             <p className=" font-heading font-semibold text-md text-slate-700">
-             Resources and Attachments
+              Resources and Attachments
             </p>
           </div>
-          <PriceForm price={course.price as string} courseId={course.id} />
+          <AttachmentForm attachments={course.attachments || []} courseId={course.id} />
         </section>
-
       </section>
     </section>
   );

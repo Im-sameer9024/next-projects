@@ -2,6 +2,7 @@
 import { Course } from "@/generated/prisma/client";
 import { apiConnector } from "@/services/apiConnector";
 import {
+  attachmentApiEndpoints,
   categoryApiEndpoints,
   courseApiEndpoints,
 } from "@/services/apiEndpoints";
@@ -68,6 +69,42 @@ export const GetCategories = async (): Promise<ApiResponse<any>> => {
   const response = await apiConnector({
     method: "GET",
     url: categoryApiEndpoints.GET_CATEGORIES,
+  });
+  return response.data;
+};
+
+//-------------------- attachment api operations----------------------------
+
+export const UploadAttachment = async (
+  data: Partial<any>,
+): Promise<ApiResponse<any>> => {
+  const response = await apiConnector({
+    method: "POST",
+    url: attachmentApiEndpoints.UPLOAD_ATTACHMENT,
+    bodyData: data,
+  });
+  return response.data;
+};
+
+export const CreateAttachment = async (
+  data: Partial<any>,
+): Promise<ApiResponse<any>> => {
+  const response = await apiConnector({
+    method: "POST",
+    url: attachmentApiEndpoints.CREATE_ATTACHMENT,
+    bodyData: data,
+  });
+  return response.data;
+};
+
+export const DeleteAttachment = async (
+  courseId: string,
+  attachmentId: string,
+): Promise<ApiResponse<null>> => {
+  const response = await apiConnector({
+    method: "DELETE",
+    url: attachmentApiEndpoints.DELETE_ATTACHMENT(attachmentId),
+    bodyData: { courseId },
   });
   return response.data;
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import CustomButton from "@/shared/components/custom/CustomButton";
-import CustomInput from "@/shared/components/custom/CustomInput";
 import {
   CreateCourseDescriptionSchema,
   CreateCourseDescriptionSchemaType,

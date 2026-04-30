@@ -41,6 +41,19 @@ export const CreateCoursePriceSchema = z.object({
     }),
 });
 
+export const CreateCourseAttachmentSchema = z.object({
+  name: z
+    .string()
+    .min(3, "Name should be at least 3 char")
+    .max(50, "Name should be at most 50 char"),
+  url: z.string({
+    message: "url is required",
+  }),
+  public_id: z.string({
+    message: "public_id is required",
+  }),
+});
+
 export type CreateCoursePriceSchemaType = z.infer<
   typeof CreateCoursePriceSchema
 >;
@@ -55,4 +68,8 @@ export type CreateCourseDescriptionSchemaType = z.infer<
 
 export type CreateCourseImageSchemaType = z.infer<
   typeof CreateCourseImageSchema
+>;
+
+export type CreateCourseAttachmentSchemaType = z.infer<
+  typeof CreateCourseAttachmentSchema
 >;

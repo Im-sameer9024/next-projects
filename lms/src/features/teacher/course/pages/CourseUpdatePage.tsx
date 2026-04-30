@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import type { Course } from "@/generated/prisma/client";
+import type { CourseWithAttachments } from "@/shared/types/course.d";
 import { useGetSingleCourse } from "../hooks/useCourse";
 import ErrorPage from "@/shared/components/common/ErrorPage";
 import { Spinner } from "@/shared/components/ui/spinner";
@@ -17,7 +17,6 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
 
   const courseData = SingleCourse?.data;
 
-  console.log(courseData);
 
   const requiredFields = [
     courseData?.title,
@@ -55,7 +54,7 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
         {!isSingleCourseError && isSingleCoursePending && <div>Loading...</div>}
 
         {!isSingleCourseError && !isSingleCoursePending && SingleCourse && (
-          <CourseUpdate course={courseData as Course} />
+          <CourseUpdate course={courseData as CourseWithAttachments} />
         )}
       </section>
     </section>
