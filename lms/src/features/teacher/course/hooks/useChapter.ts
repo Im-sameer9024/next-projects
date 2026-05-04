@@ -35,7 +35,7 @@ export const useCreateChapter = () => {
             course.id === variables.courseId
               ? {
                   ...course,
-                  chapters: [...course.chapters, data.data],
+                  chapters: [...(course.chapters || []), data.data],
                 }
               : course,
           ),
@@ -131,7 +131,6 @@ export const useUpdateChapter = () => {
           data: data.data,
         };
       });
-
     },
     onError: (error) => {
       console.error("Error updating Chapter:", error);
