@@ -54,6 +54,17 @@ export const CreateCourseAttachmentSchema = z.object({
   }),
 });
 
+export const CreateCourseChapterSchema = z.object({
+  title: z
+    .string()
+    .min(8, {
+      message: "title should be at least 8 char",
+    })
+    .max(80, {
+      message: "title should be at most 80 char",
+    }),
+});
+
 export type CreateCoursePriceSchemaType = z.infer<
   typeof CreateCoursePriceSchema
 >;
@@ -72,4 +83,8 @@ export type CreateCourseImageSchemaType = z.infer<
 
 export type CreateCourseAttachmentSchemaType = z.infer<
   typeof CreateCourseAttachmentSchema
+>;
+
+export type CreateCourseChapterSchemaType = z.infer<
+  typeof CreateCourseChapterSchema
 >;

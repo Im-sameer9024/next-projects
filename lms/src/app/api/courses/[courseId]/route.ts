@@ -8,12 +8,19 @@ export async function GET(
 ) {
   try {
     const { courseId } = await params;
+    const session = await auth();
 
     const course = await prisma.course.findUnique({
       where: {
         id: courseId,
+        userId: session?.user?.id,
       },
       include: {
+        chapters: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
         attachments: {
           orderBy: {
             createdAt: "desc",

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import type { CourseWithAttachments } from "@/shared/types/course.d";
+import type { CourseWithAllObjects } from "@/shared/types/course.d";
 import { useGetSingleCourse } from "../hooks/useCourse";
 import ErrorPage from "@/shared/components/common/ErrorPage";
 import { Spinner } from "@/shared/components/ui/spinner";
@@ -15,8 +15,7 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
     isError: isSingleCourseError,
   } = useGetSingleCourse(courseId);
 
-  const courseData = SingleCourse?.data;
-
+  const courseData = SingleCourse?.data as CourseWithAllObjects;
 
   const requiredFields = [
     courseData?.title,
@@ -24,22 +23,23 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
     courseData?.price,
     courseData?.categoryId,
     courseData?.image,
+    (courseData?.chapters ?? []).some((chapter) => chapter?.isPublished),
   ];
 
   const totalFields = requiredFields.length;
 
   const completedFields = requiredFields.filter(Boolean).length;
 
-  const completionText = `(${completedFields} / ${totalFields})`;
+  const completionText = `(${completedFields} of ${totalFields})`;
 
   return (
     <section aria-label="course-update-page">
       {/*-------------- heading --------- */}
       <section>
-        <h2 className=" font-heading font-semibold text-xl text-slate-700">
+        <h2 className="  font-heading font-semibold text-xl text-slate-700">
           Course Setup
         </h2>
-        <p className=" font-light text-xs text-slate-500 flex items-center gap-1">
+        <p className="   font-light text-xs text-slate-500 flex items-center gap-1">
           Complete All Fields{" "}
           {isSingleCoursePending ? <Spinner /> : completionText}
         </p>
@@ -54,7 +54,7 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
         {!isSingleCourseError && isSingleCoursePending && <div>Loading...</div>}
 
         {!isSingleCourseError && !isSingleCoursePending && SingleCourse && (
-          <CourseUpdate course={courseData as CourseWithAttachments} />
+          <CourseUpdate course={courseData as CourseWithAllObjects} />
         )}
       </section>
     </section>

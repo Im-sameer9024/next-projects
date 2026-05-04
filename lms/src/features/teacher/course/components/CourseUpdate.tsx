@@ -1,4 +1,4 @@
-import { Attachment, Course } from "@/generated/prisma/client";
+import { Attachment, Chapter, Course } from "@/generated/prisma/client";
 import { MdOutlineDashboard } from "react-icons/md";
 import TitleForm from "./TitleForm";
 import DescriptionForm from "./DescriptionForm";
@@ -9,14 +9,13 @@ import PriceForm from "./PriceForm";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { IoDocumentOutline } from "react-icons/io5";
 import AttachmentForm from "./AttachmentForm";
+import ChapterForm from "./ChapterForm";
 
 const CourseUpdate = ({
   course,
 }: {
-  course: Course & { attachments: Attachment[] };
+  course: Course & {chapters: Chapter[]} &  { attachments: Attachment[] } ;
 }) => {
-  console.log("course is here",course);
-
   return (
     <section className=" mt-10 w-full grid grid-cols-2 gap-14 ">
       {/*------------------------------------------------ Left side ---------------------------------------- */}
@@ -45,15 +44,20 @@ const CourseUpdate = ({
 
       {/*------------------------------------- right side--------------------------------  */}
       <section className=" space-y-4 ">
-        {/* heading  */}
-        <div className=" flex  items-center gap-2">
-          <div>
-            <VscChecklist className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+        {/*---------------- chapter section ---------------- */}
+        <section className=" space-y-4">
+          {/* heading  */}
+          <div className=" flex  items-center gap-2">
+            <div>
+              <VscChecklist className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+            </div>
+            <p className=" font-heading font-semibold text-md text-slate-700">
+              Course chapter
+            </p>
           </div>
-          <p className=" font-heading font-semibold text-md text-slate-700">
-            Course chapter
-          </p>
-        </div>
+
+          <ChapterForm chapters={course.chapters || []} courseId={course.id} />
+        </section>
 
         {/*---------------------- price section -------------- */}
         <section className=" space-y-4">
@@ -78,7 +82,10 @@ const CourseUpdate = ({
               Resources and Attachments
             </p>
           </div>
-          <AttachmentForm attachments={course.attachments || []} courseId={course.id} />
+          <AttachmentForm
+            attachments={course.attachments || []}
+            courseId={course.id}
+          />
         </section>
       </section>
     </section>

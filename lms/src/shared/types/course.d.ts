@@ -1,5 +1,17 @@
-import { Course, Attachment } from "@/generated/prisma/client";
+import {
+  Course,
+  Attachment,
+  Chapter,
+  Category,
+  Purchase,
+} from "@/generated/prisma/client";
 
-export type CourseWithAttachments = Course & {
+export type CourseWithAllObjects = Course & {
   attachments: Attachment[];
+} & {
+  chapters: Chapter[];
+} & {
+  category: Category[];
+} & {
+  purchases: Purchase[];
 };

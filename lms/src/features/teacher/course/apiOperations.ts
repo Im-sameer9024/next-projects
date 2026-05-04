@@ -4,6 +4,7 @@ import { apiConnector } from "@/services/apiConnector";
 import {
   attachmentApiEndpoints,
   categoryApiEndpoints,
+  chapterApiEndpoints,
   courseApiEndpoints,
 } from "@/services/apiEndpoints";
 import { ApiResponse } from "@/shared/types/apiResponse";
@@ -106,5 +107,45 @@ export const DeleteAttachment = async (
     url: attachmentApiEndpoints.DELETE_ATTACHMENT(attachmentId),
     bodyData: { courseId },
   });
+  return response.data;
+};
+
+//-------------------- chapter api operations----------------------------
+
+export const CreateChapter = async (
+  courseId: string,
+  data: Partial<any>,
+): Promise<ApiResponse<any>> => {
+  const response = await apiConnector({
+    method: "POST",
+    url: chapterApiEndpoints.CREATE_CHAPTER(courseId),
+    bodyData: data,
+  });
+
+  return response.data;
+};
+
+export const GetSingleChapter = async (
+  courseId: string,
+  chapterId: string,
+): Promise<ApiResponse<any>> => {
+  const response = await apiConnector({
+    method: "GET",
+    url: chapterApiEndpoints.GET_SINGLE_CHAPTER(courseId, chapterId),
+  });
+  return response.data;
+};
+
+export const UpdateChapter = async (
+  courseId: string,
+  chapterId: string,
+  data: Partial<any>,
+): Promise<ApiResponse<any>> => {
+  const response = await apiConnector({
+    method: "PATCH",
+    url: chapterApiEndpoints.UPDATE_SINGLE_CHAPTER(courseId, chapterId),
+    bodyData: data,
+  });
+
   return response.data;
 };

@@ -14,6 +14,7 @@ import {
   GetApiResponseMessage,
 } from "@/shared/lib/apiMessages";
 import { Course } from "@/generated/prisma/client";
+import { CourseWithAllObjects } from "@/shared/types/course";
 
 export const useGetCourse = () => {
   return useQuery({
@@ -75,25 +76,24 @@ export const useUpdateCourse = () => {
 
         return {
           ...old,
-          data: updatedCourse,
+          data: { ...old.data, ...updatedCourse },
         };
       });
 
       // ✅ Update course list
       queryClient.setQueryData(["courses"], (old: any) => {
-        if (!old?.data) return old;
+        if (!old) return old;
 
         return {
           ...old,
           data: old.data.map((course: any) =>
             course.id === variables.courseId
-              ? updatedCourse
-              : course
+              ? { ...course, ...updatedCourse }
+              : course,
           ),
         };
       });
 
-      toast.success(GetApiResponseMessage(data));
     },
 
     onError: (error) => {

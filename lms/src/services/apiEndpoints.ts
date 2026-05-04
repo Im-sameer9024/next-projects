@@ -20,3 +20,11 @@ export const attachmentApiEndpoints = {
   DELETE_ATTACHMENT: (attachmentId: string) =>
     `/api/attachment/${attachmentId}`,
 };
+
+export const chapterApiEndpoints = {
+  CREATE_CHAPTER: (courseId: string) => `/api/courses/${courseId}/chapters`,
+  GET_SINGLE_CHAPTER: (courseId: string, chapterId: string) =>
+    `/api/courses/${courseId}/chapters/${chapterId}`,
+  UPDATE_SINGLE_CHAPTER: (courseId: string, chapterId: string) =>
+    `/api/courses/${courseId}/chapters/${chapterId}`,
+};

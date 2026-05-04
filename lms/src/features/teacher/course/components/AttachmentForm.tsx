@@ -210,9 +210,7 @@ const AttachmentForm = ({
 
                 <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center cursor-pointer">
                   <Upload className="w-6 h-6 text-white mb-1" />
-                  <p className="text-sm text-white font-medium">
-                    Change File
-                  </p>
+                  <p className="text-sm text-white font-medium">Change File</p>
                   <input
                     type="file"
                     className="hidden"
@@ -248,51 +246,54 @@ const AttachmentForm = ({
             </div>
           </form>
         ) : (
-          <div className="space-y-2">
+          <div >
             {attachments.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-32 bg-gray-100 border border-dashed rounded-md">
-                <Upload className="w-6 h-6 text-gray-400 mb-1" />
-                <p className="text-sm text-gray-500">No attachments uploaded</p>
-              </div>
+              <>
+                <p className="text-sm text-gray-500 ">
+                  No attachments uploaded
+                </p>
+              </>
             ) : (
-              attachments.map((att) => (
-                <div
-                  key={att.id}
-                  className="flex justify-between items-center border border-slate-200 rounded-md px-3 py-2 "
-                >
-                  <Link
-                    href={att?.url}
-                    target="_blank"
-                    className="text-sm text-blue-600"
+              <div className=" max-h-70 overflow-y-auto space-y-2">
+                {attachments.map((att) => (
+                  <div
+                    key={att.id}
+                    className="flex justify-between items-center border border-slate-200 rounded-md px-3 py-2 "
                   >
-                    {att.name}
-                  </Link>
-
-                  <div className="flex items-center gap-3">
-                    {/* 👁 Preview */}
-                    <CustomButton
-                      size={"icon"}
-                      variant={"ghost"}
-                      onClick={() => setPreviewUrl(att.url)}
+                    <Link
+                      href={att?.url}
+                      target="_blank"
+                      className="text-sm text-blue-600"
                     >
-                      <Eye className="w-4 h-4 cursor-pointer text-gray-600 hover:text-black" />
-                    </CustomButton>
+                      {att.name}
+                    </Link>
 
-                    {/* 🗑 Delete */}
-                    <CustomButton
-                      size={"icon"}
-                      variant={"ghost"}
-                      onClick={() => handleDelete(att.id)}
-                    >
-                      {deletingId === att.id ? (
-                        <Spinner />
-                      ) : (
-                        <Trash className="w-4 h-4 text-red-500 cursor-pointer hover:text-red-700" />
-                      )}
-                    </CustomButton>
+                    <div className="flex items-center gap-3">
+                      {/* 👁 Preview */}
+                      <CustomButton
+                        size={"icon"}
+                        variant={"ghost"}
+                        onClick={() => setPreviewUrl(att.url)}
+                      >
+                        <Eye className="w-4 h-4 cursor-pointer text-gray-600 hover:text-black" />
+                      </CustomButton>
+
+                      {/* 🗑 Delete */}
+                      <CustomButton
+                        size={"icon"}
+                        variant={"ghost"}
+                        onClick={() => handleDelete(att.id)}
+                      >
+                        {deletingId === att.id ? (
+                          <Spinner />
+                        ) : (
+                          <Trash className="w-4 h-4 text-red-500 cursor-pointer hover:text-red-700" />
+                        )}
+                      </CustomButton>
+                    </div>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             )}
           </div>
         )}

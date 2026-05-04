@@ -1,3 +1,4 @@
+import { cloudinary } from "@/shared/config/cloudinary.config";
 import { Roles } from "@/shared/data/data";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
@@ -42,12 +43,30 @@ export async function DELETE(
       where: { id: attachmentId },
     });
 
-    if (!attachment) {
+    if (!attachment || !attachment.attachment_public_id) {
       return NextResponse.json(
         { success: false, message: "Attachment not found" },
         { status: 404 },
       );
     }
+
+    // Delete the attachment from Cloudinary
+    await cloudinary.uploader.destroy(
+      attachment?.attachment_public_id,
+      (error) => {
+        if (error) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: "Error deleting attachment from Cloudinary",
+            },
+            { status: 500 },
+          );
+        }
+      },
+    );
+
+    
 
     // Ensure the attachment belongs to a course owned by the user
     const course = await prisma.course.findUnique({
@@ -66,14 +85,14 @@ export async function DELETE(
       );
     }
 
-   const deleteAttachment =  await prisma.attachment.delete({
+    const deleteAttachment = await prisma.attachment.delete({
       where: { id: attachmentId },
     });
 
     return NextResponse.json(
       {
         success: true,
-        data:deleteAttachment,
+        data: deleteAttachment,
         message: "Attachment deleted successfully",
       },
       {

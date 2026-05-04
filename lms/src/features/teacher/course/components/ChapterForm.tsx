@@ -1,58 +1,47 @@
-"use client";
-
+import { Chapter } from "@/generated/prisma/client";
 import CustomButton from "@/shared/components/custom/CustomButton";
 import CustomInput from "@/shared/components/custom/CustomInput";
 import {
-  CreateCourseTitleSchema,
-  CreateCourseTitleSchemaType,
+  CreateCourseChapterSchema,
+  CreateCourseChapterSchemaType,
 } from "@/shared/validation/course.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit } from "lucide-react";
 import React, { useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { useUpdateCourse } from "../hooks/useCourse";
+import { useForm } from "react-hook-form";
+import ChapterList from "./ChapterList";
+import { useCreateChapter } from "../hooks/useChapter";
 
-const TitleForm = ({
-  title,
+const ChapterForm = ({
+  chapters,
   courseId,
 }: {
-  title: string;
+  chapters: Chapter[];
   courseId: string;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
 
-  //   api hook
+  const { mutateAsync: CreateChapter, isPending: isCreatingChapter } =
+    useCreateChapter();
 
-  const { mutateAsync: UpdateCourse, isPending: isUpdatingCourse } =
-    useUpdateCourse();
+  const { handleSubmit, control, reset } =
+    useForm<CreateCourseChapterSchemaType>({
+      resolver: zodResolver(CreateCourseChapterSchema),
+      defaultValues: { title: "" },
+    });
 
-  const { handleSubmit, control, reset } = useForm<CreateCourseTitleSchemaType>(
-    {
-      resolver: zodResolver(CreateCourseTitleSchema),
-      defaultValues: { title: title },
-    },
-  );
-
-  const watchedTitle = useWatch({
-    control,
-    name: "title",
-  });
-
-  const onSubmit = async (data: CreateCourseTitleSchemaType) => {
+  const onSubmit = async (data: CreateCourseChapterSchemaType) => {
     try {
-      await UpdateCourse({
-        courseId,
-        data,
-      });
-
+      await CreateChapter({ courseId, data });
+      reset({ title: "" });
       setIsEdit(false);
     } catch (error) {
-      console.error("Update failed:", error);
+      console.error("Error creating chapter:", error);
     }
   };
 
   const toggleEdit = () => {
-    if (isEdit) reset({ title });
+    if (isEdit) reset({ title: "" });
     setIsEdit((prev) => !prev);
   };
 
@@ -60,7 +49,9 @@ const TitleForm = ({
     <section className="bg-white border p-4 border-slate-200 rounded">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-sm ">Course Title</h3>
+        <h3 className="font-semibold text-sm text-slate-700">
+          Course Chapters
+        </h3>
 
         <CustomButton
           leftIcon={!isEdit && <Edit size={16} />}
@@ -79,8 +70,8 @@ const TitleForm = ({
 
       {/* 🔥 Smooth Height Animation */}
       <div
-        className={`overflow-hidden transition-all duration-00 ease-in-out ${
-          isEdit ? "max-h-40 opacity-100 mt-3" : "max-h-10 opacity-100 mt-2"
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          isEdit ? "max-h-40 opacity-100 mt-3" : "max-h-100 opacity-100 mt-2"
         }`}
       >
         {isEdit ? (
@@ -89,13 +80,14 @@ const TitleForm = ({
               type="text"
               control={control}
               name="title"
-              loading={isUpdatingCourse}
-              disabled={isUpdatingCourse}
+              placeholder="e.g 'Chapter-1'"
+              loading={isCreatingChapter}
+              disabled={isCreatingChapter}
             />
 
             <CustomButton
-              loading={isUpdatingCourse}
-              disabled={isUpdatingCourse || watchedTitle === title}
+              loading={isCreatingChapter}
+              disabled={isCreatingChapter}
               loadingText="Saving..."
               className="bg-blue-500 hover:bg-blue-600"
               type="submit"
@@ -104,11 +96,21 @@ const TitleForm = ({
             </CustomButton>
           </form>
         ) : (
-          <p className="text-sm text-slate-600">{title}</p>
+          <div>
+            {chapters.length === 0 ? (
+              <>
+                <p className="text-sm text-gray-500 ">No Chapters created</p>
+              </>
+            ) : (
+              <>
+                <ChapterList chapters={chapters} />
+              </>
+            )}
+          </div>
         )}
       </div>
     </section>
   );
 };
 
-export default TitleForm;
+export default ChapterForm;

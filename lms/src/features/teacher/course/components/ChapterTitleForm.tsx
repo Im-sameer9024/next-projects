@@ -1,53 +1,58 @@
 "use client";
 
-import CustomButton from "@/shared/components/custom/CustomButton";
-import CustomInput from "@/shared/components/custom/CustomInput";
-import {
-  CreateCourseTitleSchema,
-  CreateCourseTitleSchemaType,
-} from "@/shared/validation/course.validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit } from "lucide-react";
 import React, { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { useUpdateCourse } from "../hooks/useCourse";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Edit } from "lucide-react";
 
-const TitleForm = ({
+import CustomButton from "@/shared/components/custom/CustomButton";
+import CustomInput from "@/shared/components/custom/CustomInput";
+
+
+
+// 👉 create hook similar to useUpdateCourse
+import { CreateChapterTitleSchema, CreateChapterTitleSchemaType } from "@/shared/validation/chapter.validation";
+import { cn } from "@/shared/lib/utils";
+import { useUpdateChapter } from "../hooks/useChapter";
+
+const ChapterTitleForm = ({
   title,
-  courseId,
+  chapterId,
+  courseId
 }: {
   title: string;
-  courseId: string;
+  chapterId: string;
+  courseId:string;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
 
-  //   api hook
+  const { mutateAsync: UpdateChapter, isPending:isUpdatingChapter } = useUpdateChapter();
 
-  const { mutateAsync: UpdateCourse, isPending: isUpdatingCourse } =
-    useUpdateCourse();
-
-  const { handleSubmit, control, reset } = useForm<CreateCourseTitleSchemaType>(
-    {
-      resolver: zodResolver(CreateCourseTitleSchema),
-      defaultValues: { title: title },
-    },
-  );
+  const { handleSubmit, control, reset } =
+    useForm<CreateChapterTitleSchemaType>({
+      resolver: zodResolver(CreateChapterTitleSchema),
+      defaultValues: { title },
+    });
 
   const watchedTitle = useWatch({
     control,
     name: "title",
   });
 
-  const onSubmit = async (data: CreateCourseTitleSchemaType) => {
+  const onSubmit = async (data: CreateChapterTitleSchemaType) => {
     try {
-      await UpdateCourse({
+
+        console.log(data)
+
+      await UpdateChapter({
         courseId,
+        chapterId,
         data,
       });
 
       setIsEdit(false);
     } catch (error) {
-      console.error("Update failed:", error);
+      console.error("Chapter update failed:", error);
     }
   };
 
@@ -60,28 +65,32 @@ const TitleForm = ({
     <section className="bg-white border p-4 border-slate-200 rounded">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-sm ">Course Title</h3>
+        <h3 className="font-semibold text-sm text-slate-700">
+          Chapter Title
+        </h3>
 
         <CustomButton
           leftIcon={!isEdit && <Edit size={16} />}
           size="sm"
           variant={isEdit ? "outline" : "default"}
-          className={`${
+          className={cn(
+            "transition-all duration-200",
             isEdit
               ? "bg-transparent text-slate-500"
               : "bg-blue-500 hover:bg-blue-600"
-          } transition-all duration-200`}
+          )}
           onClick={toggleEdit}
         >
           {isEdit ? "Cancel" : "Edit"}
         </CustomButton>
       </div>
 
-      {/* 🔥 Smooth Height Animation */}
+      {/* Animated Section */}
       <div
-        className={`overflow-hidden transition-all duration-00 ease-in-out ${
+        className={cn(
+          "overflow-hidden transition-all duration-300 ease-in-out",
           isEdit ? "max-h-40 opacity-100 mt-3" : "max-h-10 opacity-100 mt-2"
-        }`}
+        )}
       >
         {isEdit ? (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 p-1">
@@ -89,13 +98,13 @@ const TitleForm = ({
               type="text"
               control={control}
               name="title"
-              loading={isUpdatingCourse}
-              disabled={isUpdatingCourse}
+              loading={isUpdatingChapter}
+              disabled={isUpdatingChapter}
             />
 
             <CustomButton
-              loading={isUpdatingCourse}
-              disabled={isUpdatingCourse || watchedTitle === title}
+              loading={isUpdatingChapter}
+              disabled={isUpdatingChapter || watchedTitle === title}
               loadingText="Saving..."
               className="bg-blue-500 hover:bg-blue-600"
               type="submit"
@@ -111,4 +120,4 @@ const TitleForm = ({
   );
 };
 
-export default TitleForm;
+export default ChapterTitleForm;

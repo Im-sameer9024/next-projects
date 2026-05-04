@@ -4,7 +4,7 @@ import React, { useId, useState } from "react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import { Input } from "../ui/input";
 import { cn } from "@/shared/lib/utils";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 
 type CustomInputProps<T extends FieldValues> = {
   name: Path<T>;

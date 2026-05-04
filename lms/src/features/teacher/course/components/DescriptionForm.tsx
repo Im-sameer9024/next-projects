@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useUpdateCourse } from "../hooks/useCourse";
 import CustomTextarea from "@/shared/components/custom/CustomTextarea";
+import { toast } from "sonner";
 
 const DescriptionForm = ({
   description,
@@ -54,6 +55,7 @@ const DescriptionForm = ({
       });
 
       setIsEdit(false);
+      toast.success("Course description updated successfully")
     } catch (error) {
       console.error("Update failed:", error);
     }

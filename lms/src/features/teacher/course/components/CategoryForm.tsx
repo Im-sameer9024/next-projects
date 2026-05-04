@@ -16,6 +16,7 @@ import {
 } from "@/shared/components/ui/combobox";
 import { Spinner } from "@/shared/components/ui/spinner";
 import { Edit } from "lucide-react";
+import { toast } from "sonner";
 
 type FormType = {
   categoryId: string;
@@ -62,6 +63,7 @@ const CategoryForm = ({
       });
 
       setIsEdit(false);
+      toast.success("Course category updated successfully")
     } catch (error) {
       console.error(error);
     }
