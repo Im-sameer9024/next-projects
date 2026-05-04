@@ -96,8 +96,6 @@ export async function PATCH(
 ) {
   try {
     const session = await auth();
-    const { isPublished, ...values } = await req.json();
-
 
     if (!session) {
       return NextResponse.json(
@@ -110,6 +108,8 @@ export async function PATCH(
         },
       );
     }
+
+    const { isPublished, ...values } = await req.json();
 
     const { courseId, chapterId } = await params;
 
@@ -139,6 +139,7 @@ export async function PATCH(
       },
       data: {
         ...values,
+        ...(isPublished !== undefined && { isPublished }),
       },
     });
 

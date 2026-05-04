@@ -22,6 +22,15 @@ export const CreateChapterDescriptionSchema = z.object({
       { message: "Description cannot be empty" }
     ),
 });
+
+
+export const CreateChapterAccessSchema = z.object({
+  isFree: z.boolean(),
+});
+
+export type CreateChapterAccessSchemaType = z.infer<
+  typeof CreateChapterAccessSchema
+>;
 export type CreateChapterTitleSchemaType = z.infer<
   typeof CreateChapterTitleSchema
 >;

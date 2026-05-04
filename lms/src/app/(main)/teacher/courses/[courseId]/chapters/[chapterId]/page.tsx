@@ -7,10 +7,9 @@ const ChapterEditPage = async ({
 }) => {
   const { chapterId, courseId } = await params;
 
-
   return (
     <>
-      <ChapterUpdatePage courseId={courseId} chapterId={chapterId}/>
+      <ChapterUpdatePage courseId={courseId} chapterId={chapterId} />
     </>
   );
 };

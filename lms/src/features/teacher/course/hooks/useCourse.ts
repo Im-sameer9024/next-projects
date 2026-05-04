@@ -14,7 +14,6 @@ import {
   GetApiResponseMessage,
 } from "@/shared/lib/apiMessages";
 import { Course } from "@/generated/prisma/client";
-import { CourseWithAllObjects } from "@/shared/types/course";
 
 export const useGetCourse = () => {
   return useQuery({

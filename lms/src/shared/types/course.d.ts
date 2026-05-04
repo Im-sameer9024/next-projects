@@ -11,7 +11,7 @@ export type CourseWithAllObjects = Course & {
 } & {
   chapters: Chapter[];
 } & {
-  category: Category[];
+  category: Category | null;
 } & {
   purchases: Purchase[];
 };

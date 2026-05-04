@@ -27,4 +27,7 @@ export const chapterApiEndpoints = {
     `/api/courses/${courseId}/chapters/${chapterId}`,
   UPDATE_SINGLE_CHAPTER: (courseId: string, chapterId: string) =>
     `/api/courses/${courseId}/chapters/${chapterId}`,
+  UPLOAD_VIDEO: "/api/mux/upload",
+  SAVE_VIDEO: "/api/mux/save",
+  DELETE_VIDEO: "/api/mux/delete",
 };

@@ -31,7 +31,17 @@ const ChapterUpdatePage = ({
     return <div>Loading...</div>;
   }
 
-  const chapter = ChapterData?.data as Chapter & { muxData: MuxData };
+  if (isChapterError) {
+    return <ErrorPage message={SingleChapterError.message} />;
+  }
+
+  const chapter = ChapterData?.data as
+    | (Chapter & { muxData?: MuxData })
+    | undefined;
+
+  if (!chapter) {
+    return <ErrorPage message="Chapter data not found" />;
+  }
 
   const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
 
@@ -71,15 +81,7 @@ const ChapterUpdatePage = ({
       </section>
 
       <section>
-        {/*--------------- Error handleing ----------- */}
-        {isChapterError && <ErrorPage message={SingleChapterError.message} />}
-
-        {/*---------------------------- Loading handling ------------- */}
-        {!isChapterError && isChapterPending && <div>Loading...</div>}
-
-        {!isChapterError && !isChapterPending && ChapterData && (
-          <ChapterUpdate chapter={chapter} courseId={courseId}/>
-        )}
+        <ChapterUpdate chapter={chapter} courseId={courseId} />
       </section>
     </section>
   );

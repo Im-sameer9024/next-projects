@@ -149,3 +149,42 @@ export const UpdateChapter = async (
 
   return response.data;
 };
+
+//------------------------- chapter video related api operations ---------------------------
+
+export const UploadChapterVideo = async (data:any) => {
+  const response = await apiConnector({
+    method: "POST",
+    url: chapterApiEndpoints.UPLOAD_VIDEO,
+    bodyData: data,
+  });
+  return response.data;
+};
+
+export const SaveChapterVideo = async (
+  courseId: string,
+  chapterId: string,
+  uploadId: string,
+): Promise<ApiResponse<any>> => {
+  const response = await apiConnector({
+    method: "POST",
+    url: chapterApiEndpoints.SAVE_VIDEO,
+    bodyData: { courseId, chapterId, uploadId },
+  });
+
+  return response.data;
+};
+
+export const DeleteChapterVideo = async (
+  chapterId: string,
+): Promise<ApiResponse<any>> => {
+  const response = await apiConnector({
+    method: "DELETE",
+    url: chapterApiEndpoints.DELETE_VIDEO,
+    bodyData: {
+      chapterId,
+    },
+  });
+
+  return response.data;
+};
