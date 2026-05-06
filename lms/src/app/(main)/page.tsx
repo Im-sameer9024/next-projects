@@ -11,6 +11,8 @@ const Home = () => {
 
   const{control} = useForm()
 
+  //for the build check
+
   return (
     <div>
       <h2 className="  ">

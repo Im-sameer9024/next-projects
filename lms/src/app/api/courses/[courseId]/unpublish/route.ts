@@ -7,9 +7,9 @@ export async function PATCH(
   {
     params,
   }: {
-    params: {
+    params: Promise<{
       courseId: string;
-    };
+    }>;
   },
 ) {
   try {
