@@ -92,6 +92,7 @@ export const useGetSingleChapter = ({
   return useQuery({
     queryKey: ["chapter", chapterId],
     queryFn: () => GetSingleChapter(courseId, chapterId),
+    refetchInterval:5000
   });
 };
 
