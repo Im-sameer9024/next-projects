@@ -1,5 +1,6 @@
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
+import Mux from "@mux/mux-node";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -148,6 +149,139 @@ export async function PATCH(
         success: true,
         data: chapter,
         message: "chapter updated successfully",
+      },
+      {
+        status: 200,
+      },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "something went wrong",
+        error: error,
+      },
+      {
+        status: 500,
+      },
+    );
+  }
+}
+
+const mux = new Mux({
+  tokenId: process.env.MUX_TOKEN_ID!,
+  tokenSecret: process.env.MUX_TOKEN_SECRET!,
+});
+
+export async function DELETE(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ courseId: string; chapterId: string }>;
+  },
+) {
+  try {
+    const session = await auth();
+
+    if (!session) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+        },
+      );
+    }
+
+    const { courseId, chapterId } = await params;
+
+    const ownCourse = await prisma.course.findUnique({
+      where: {
+        id: courseId,
+        userId: session.user?.id,
+      },
+    });
+
+    if (!ownCourse) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+        },
+      );
+    }
+
+    const chapter = await prisma.chapter.findUnique({
+      where: {
+        id: chapterId,
+        courseId: courseId,
+      },
+    });
+
+    if (!chapter) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "chapter not found",
+        },
+        {
+          status: 404,
+        },
+      );
+    }
+
+    if (chapter.videoUrl) {
+      const existingMuxData = await prisma.muxData.findFirst({
+        where: {
+          chapterId: chapterId,
+        },
+      });
+
+      if (existingMuxData) {
+        await mux.video.assets.delete(existingMuxData.assetId);
+
+        await prisma.muxData.delete({
+          where: { id: existingMuxData.id },
+        });
+      }
+    }
+
+    const deletedChapter = await prisma.chapter.delete({
+      where: {
+        id: chapterId,
+        courseId: courseId,
+      },
+    });
+
+    const publishedChaptersInCourse = await prisma.chapter.findMany({
+      where: {
+        courseId: courseId,
+        isPublished: true,
+      },
+    });
+
+    if (!publishedChaptersInCourse.length) {
+      await prisma.course.update({
+        where: {
+          id: courseId,
+        },
+        data: {
+          isPublished: false,
+        },
+      });
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: deletedChapter,
+        message: "chapter Delete successfully",
       },
       {
         status: 200,

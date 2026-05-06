@@ -14,8 +14,21 @@ import ChapterForm from "./ChapterForm";
 const CourseUpdate = ({
   course,
 }: {
-  course: Course & {chapters: Chapter[]} &  { attachments: Attachment[] } ;
+  course: Course & { chapters?: Chapter[] } & { attachments?: Attachment[] };
 }) => {
+  
+  if (!course) {
+    return <div className="text-sm text-gray-500">Loading course...</div>;
+  }
+
+  const safeChapters = Array.isArray(course.chapters)
+    ? course.chapters
+    : [];
+
+  const safeAttachments = Array.isArray(course.attachments)
+    ? course.attachments
+    : [];
+
   return (
     <section className=" mt-10 w-full grid grid-cols-2 gap-14 ">
       {/*------------------------------------------------ Left side ---------------------------------------- */}
@@ -56,7 +69,7 @@ const CourseUpdate = ({
             </p>
           </div>
 
-          <ChapterForm chapters={course.chapters || []} courseId={course.id} />
+          <ChapterForm chapters={safeChapters} courseId={course.id} />
         </section>
 
         {/*---------------------- price section -------------- */}
@@ -83,7 +96,7 @@ const CourseUpdate = ({
             </p>
           </div>
           <AttachmentForm
-            attachments={course.attachments || []}
+            attachments={safeAttachments}
             courseId={course.id}
           />
         </section>

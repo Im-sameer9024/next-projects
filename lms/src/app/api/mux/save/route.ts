@@ -11,56 +11,55 @@ export async function POST(req: NextRequest) {
   try {
     const { uploadId, chapterId } = await req.json();
 
+    // get upload details
     const upload = await mux.video.uploads.retrieve(uploadId);
 
     const assetId = upload.asset_id;
 
+    // asset still processing
     if (!assetId) {
-      return Response.json(
-        { error: "Video still processing. Try again." },
-        { status: 400 },
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Video still processing",
+        },
+        {
+          status: 400,
+        },
       );
     }
 
-    const asset = await mux.video.assets.retrieve(assetId);
-    const playbackId = asset.playback_ids?.[0]?.id;
-
-    const createMuxData = await prisma.muxData.upsert({
-      where: { chapterId },
+    // save assetId only
+    const muxData = await prisma.muxData.upsert({
+      where: {
+        chapterId,
+      },
       update: {
         assetId,
-        ...(playbackId && { playbackId }),
       },
       create: {
         assetId,
         chapterId,
-        ...(playbackId && { playbackId }),
       },
     });
-
-    if (playbackId) {
-      await prisma.chapter.update({
-        where: { id: chapterId },
-        data: { videoUrl: playbackId },
-      });
-    }
 
     return NextResponse.json(
       {
         success: true,
-        data: createMuxData,
-        message: "Video saved successfully",
+        data: muxData,
+        message: "Mux asset saved successfully",
       },
       {
         status: 200,
       },
     );
   } catch (error) {
+    console.error("SAVE VIDEO ERROR:", error);
+
     return NextResponse.json(
       {
         success: false,
-        message: "Error saving video",
-        error: error,
+        message: "Error saving mux asset",
       },
       {
         status: 500,

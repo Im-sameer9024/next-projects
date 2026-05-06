@@ -2,9 +2,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CreateChapter,
+  DeleteChapter,
   DeleteChapterVideo,
   GetSingleChapter,
+  PublishChapter,
   SaveChapterVideo,
+  UnPublishChapter,
   UpdateChapter,
 } from "../apiOperations";
 import {
@@ -29,15 +32,17 @@ export const useCreateChapter = () => {
 
     onSuccess: (data, variables) => {
       queryClient.setQueryData(["courses"], (old: any) => {
-        if (!old) return old;
-
+        if (!old?.data) return old;
+        const safeChapters = Array.isArray(old.data.chapters)
+          ? old.data.chapters
+          : [];
         return {
           ...old,
           data: old.data.map((course: CourseWithAllObjects) =>
             course.id === variables.courseId
               ? {
                   ...course,
-                  chapters: [...(course.chapters || []), data.data],
+                  chapters: [...safeChapters, data.data],
                 }
               : course,
           ),
@@ -45,22 +50,25 @@ export const useCreateChapter = () => {
       });
 
       queryClient.setQueryData(["course", variables.courseId], (old: any) => {
-        if (!old) return old;
+        if (!old.data) return old;
+        const safeChapters = Array.isArray(old.data.chapters)
+          ? old.data.chapters
+          : [];
 
         return {
           ...old,
           data: {
             ...old.data,
-            chapters: [...old.data.chapters, data.data],
+            chapters: [...safeChapters, data.data],
           },
         };
       });
 
       queryClient.setQueryData(["chapter", data.data.id], (old: any) => {
-        if (!old) return old;
+        if (!old?.data) return old;
 
         return {
-          ...old,
+          ...old.data,
           data: data.data,
         };
       });
@@ -101,51 +109,69 @@ export const useUpdateChapter = () => {
       data: any;
     }) => UpdateChapter(courseId, chapterId, data),
 
-    onSuccess: (data, variables) => {
+    onSuccess: (res, variables) => {
+      const updatedChapter = res?.data;
+
+      // ✅ update courses list
       queryClient.setQueryData(["courses"], (old: any) => {
         if (!old?.data) return old;
 
         return {
-          ...old,
-          data: old.data.map((course: CourseWithAllObjects) =>
-            course.id === variables.courseId
-              ? {
-                  ...course,
-                  chapters: course.chapters.map((chapter) =>
-                    chapter.id === variables.chapterId ? data.data : chapter,
-                  ),
-                }
-              : course,
-          ),
+          ...old.data,
+          data: old.data.map((course: CourseWithAllObjects) => {
+            if (course.id !== variables.courseId) return course;
+
+            const safeChapters = Array.isArray(course.chapters)
+              ? course.chapters
+              : [];
+
+            return {
+              ...course,
+              chapters: safeChapters.map((chapter) =>
+                chapter.id === variables.chapterId
+                  ? { ...chapter, ...updatedChapter }
+                  : chapter,
+              ),
+            };
+          }),
         };
       });
 
+      // ✅ update single course
       queryClient.setQueryData(["course", variables.courseId], (old: any) => {
-        if (!old) return old;
+        if (!old?.data) return old;
+
+        const safeChapters = Array.isArray(old.data.chapters)
+          ? old.data.chapters
+          : [];
 
         return {
           ...old,
           data: {
             ...old.data,
-            chapters: old.data.chapters.map((chapter: Chapter) =>
-              chapter.id === variables.chapterId ? data.data : chapter,
+            chapters: safeChapters.map((chapter: Chapter) =>
+              chapter.id === variables.chapterId
+                ? { ...chapter, ...updatedChapter }
+                : chapter,
             ),
           },
         };
       });
 
+      // ✅ update single chapter
       queryClient.setQueryData(["chapter", variables.chapterId], (old: any) => {
-        if (!old) return old;
+        if (!old?.data) return old;
 
         return {
           ...old,
           data: {
             ...old.data,
-            ...data.data,
+            ...updatedChapter,
           },
         };
       });
     },
+
     onError: (error) => {
       console.error("Error updating Chapter:", error);
       toast.error(GetApiErrorMessage(error));
@@ -184,13 +210,15 @@ export const useSaveChapterVideo = () => {
       });
 
       queryClient.setQueryData(["course", variables.courseId], (old: any) => {
-        if (!old) return old;
-
+        if (!old?.data) return old;
+        const safeChapters = Array.isArray(old.data.chapters)
+          ? old.data.chapters
+          : [];
         return {
           ...old,
           data: {
             ...old.data,
-            chapters: old.data.chapters.map(
+            chapters: safeChapters.map(
               (chapter: Chapter & { muxData?: MuxData }) =>
                 chapter.id === variables.chapterId
                   ? {
@@ -218,6 +246,7 @@ export const useDeleteChapterVideo = () => {
   return useMutation({
     mutationFn: async ({
       chapterId,
+      courseId,
     }: {
       courseId: string;
       chapterId: string;
@@ -226,7 +255,7 @@ export const useDeleteChapterVideo = () => {
     onSuccess: (_, variables) => {
       // update chapter
       queryClient.setQueryData(["chapter", variables.chapterId], (old: any) => {
-        if (!old) return old;
+        if (!old?.data) return old;
 
         return {
           ...old,
@@ -240,13 +269,17 @@ export const useDeleteChapterVideo = () => {
 
       // update course
       queryClient.setQueryData(["course", variables.courseId], (old: any) => {
-        if (!old) return old;
+        if (!old?.data) return old;
+
+        const safeChapters = Array.isArray(old.data.chapters)
+          ? old.data.chapters
+          : [];
 
         return {
           ...old,
           data: {
             ...old.data,
-            chapters: old.data.chapters.map((c: any) =>
+            chapters: safeChapters.map((c: any) =>
               c.id === variables.chapterId
                 ? { ...c, videoUrl: null, muxData: null }
                 : c,
@@ -256,6 +289,170 @@ export const useDeleteChapterVideo = () => {
       });
 
       toast.success("Video deleted");
+    },
+  });
+};
+
+export const useDeleteChapter = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      courseId,
+      chapterId,
+    }: {
+      courseId: string;
+      chapterId: string;
+    }) => DeleteChapter(courseId, chapterId),
+
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(["course", variables.courseId], (old: any) => {
+        if (!old?.data) return old;
+
+        const safeChapters = Array.isArray(old.data.chapters)
+          ? old.data.chapters
+          : [];
+
+        return {
+          ...old,
+          data: {
+            ...old.data,
+            chapters: safeChapters.filter(
+              (chapter: Chapter) => chapter.id !== variables.chapterId,
+            ),
+          },
+        };
+      });
+
+      queryClient.setQueryData(["chapter", variables.chapterId], () => null);
+
+      toast.success(GetApiResponseMessage(data));
+    },
+
+    onError: (error) => {
+      console.error("Error deleting chapter:", error);
+      toast.error(GetApiErrorMessage(error));
+    },
+  });
+};
+
+export const usePublishChapter = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      courseId,
+      chapterId,
+    }: {
+      courseId: string;
+      chapterId: string;
+    }) => PublishChapter(courseId, chapterId),
+
+    onSuccess: (data, variables) => {
+      const updatedChapter = data?.data;
+
+      // 🔥 Update single chapter cache
+      queryClient.setQueryData(["chapter", variables.chapterId], (old: any) => {
+        if (!old?.data) return old;
+
+        return {
+          ...old,
+          data: {
+            ...old.data,
+            isPublished: updatedChapter?.isPublished,
+          },
+        };
+      });
+
+      // 🔥 Update course chapters list
+      queryClient.setQueryData(["course", variables.courseId], (old: any) => {
+        if (!old?.data) return old;
+
+        const safeChapters = Array.isArray(old.data.chapters)
+          ? old.data.chapters
+          : [];
+
+        return {
+          ...old,
+          data: {
+            ...old.data,
+            chapters: safeChapters.map((chapter: any) =>
+              chapter.id === variables.chapterId
+                ? {
+                    ...chapter,
+                    isPublished: updatedChapter?.isPublished,
+                  }
+                : chapter,
+            ),
+          },
+        };
+      });
+
+      toast.success(GetApiResponseMessage(data));
+    },
+
+    onError: (error) => {
+      console.error("Error publishing chapter:", error);
+      toast.error(GetApiErrorMessage(error));
+    },
+  });
+};
+
+export const useUnPublishChapter = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      courseId,
+      chapterId,
+    }: {
+      courseId: string;
+      chapterId: string;
+    }) => UnPublishChapter(courseId, chapterId),
+
+    onSuccess: (data, variables) => {
+      const updatedChapter = data?.data;
+
+      // ✅ update single chapter
+      queryClient.setQueryData(["chapter", variables.chapterId], (old: any) => {
+        if (!old?.data) return old;
+
+        return {
+          ...old,
+          data: {
+            ...old.data,
+            isPublished: updatedChapter?.isPublished,
+          },
+        };
+      });
+
+      // ✅ update course list
+      queryClient.setQueryData(["course", variables.courseId], (old: any) => {
+        if (!old?.data) return old;
+
+        const safeChapters = Array.isArray(old.data.chapters)
+          ? old.data.chapters
+          : [];
+
+        return {
+          ...old,
+          data: {
+            ...old.data,
+            chapters: safeChapters.map((ch: any) =>
+              ch.id === variables.chapterId
+                ? { ...ch, isPublished: updatedChapter?.isPublished }
+                : ch,
+            ),
+          },
+        };
+      });
+
+      toast.success(GetApiResponseMessage(data));
+    },
+
+    onError: (error) => {
+      console.error("Error unpublishing chapter:", error);
+      toast.error(GetApiErrorMessage(error));
     },
   });
 };

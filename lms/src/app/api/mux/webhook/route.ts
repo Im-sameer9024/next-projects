@@ -28,6 +28,12 @@ export async function POST(req: Request) {
     const assetId = asset.id;
     const chapterId = asset.passthrough;
 
+    if (!playbackId) {
+        return Response.json({
+          success: false,
+          message: "PlaybackId not found",
+        });
+      }
 
     const existingMuxData = await prisma.muxData.findFirst({
       where: { assetId },

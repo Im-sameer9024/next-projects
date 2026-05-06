@@ -27,7 +27,12 @@ export const useCreateAttachment = () => {
             course.id === data.data?.courseId
               ? {
                   ...course,
-                  attachments: [data?.data, ...course.attachments],
+                  attachments: [
+                    data?.data,
+                    ...(Array.isArray(course.attachments)
+                      ? course.attachments
+                      : []),
+                  ],
                 }
               : course,
           ),
@@ -40,7 +45,12 @@ export const useCreateAttachment = () => {
           ...old,
           data: {
             ...old.data,
-            attachments: [data?.data, ...old.data.attachments],
+            attachments: [
+              data?.data,
+              ...(Array.isArray(old.data.attachments)
+                ? old.data.attachments
+                : []),
+            ],
           },
         };
       });
@@ -75,7 +85,10 @@ export const useDeleteAttachment = () => {
             course.id === variables.courseId
               ? {
                   ...course,
-                  attachments: course.attachments.filter(
+                  attachments: (Array.isArray(course.attachments)
+                    ? course.attachments
+                    : []
+                  ).filter(
                     (attachment: any) =>
                       attachment.id !== variables.attachmentId,
                   ),

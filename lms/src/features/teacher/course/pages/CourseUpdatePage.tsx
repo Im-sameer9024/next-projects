@@ -6,6 +6,9 @@ import { useGetSingleCourse } from "../hooks/useCourse";
 import ErrorPage from "@/shared/components/common/ErrorPage";
 import { Spinner } from "@/shared/components/ui/spinner";
 import CourseUpdate from "../components/CourseUpdate";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import Banner from "../components/Banner";
+import CourseActions from "../components/CourseActions";
 
 const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
   const {
@@ -31,33 +34,56 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
   const completedFields = requiredFields.filter(Boolean).length;
 
   const completionText = `(${completedFields} of ${totalFields})`;
+  const isComplete = requiredFields.every(Boolean);
 
   return (
-    <section aria-label="course-update-page">
-      {/*-------------- heading --------- */}
-      <section>
-        <h2 className="  font-heading font-semibold text-xl text-slate-700">
-          Course Setup
-        </h2>
-        <p className="   font-light text-xs text-slate-500 flex items-center gap-1">
-          Complete All Fields{" "}
-          {isSingleCoursePending ? <Spinner /> : completionText}
-        </p>
-      </section>
-      <section>
-        {/*--------------- Error handleing ----------- */}
-        {isSingleCourseError && (
-          <ErrorPage message={SingleCourseError.message} />
-        )}
+    <>
+      {!courseData?.isPublished && (
+        <Banner label="This course is unpublished. It will not be visible to the students." />
+      )}
 
-        {/*---------------------------- Loading handling ------------- */}
-        {!isSingleCourseError && isSingleCoursePending && <div>Loading...</div>}
+      <section aria-label="course-update-page">
+        {/*-------------- heading --------- */}
+        <section className=" flex justify-between mt-4">
+          <div>
+            <h2 className="  font-heading font-semibold text-xl text-slate-700">
+              Course Setup
+            </h2>
+            <p className="   font-light text-xs text-slate-500 flex items-center gap-1">
+              Complete All Fields{" "}
+              {isSingleCoursePending ? <Spinner /> : completionText}
+              {isComplete && (
+                <span className=" text-green-400 ">
+                  <IoMdCheckmarkCircleOutline size={18} />
+                </span>
+              )}
+            </p>
+          </div>
+          {!isSingleCoursePending && courseData && (
+            <CourseActions
+              disabled={!isComplete}
+              courseId={courseId}
+              isPublished={courseData.isPublished}
+            />
+          )}
+        </section>
+        <section>
+          {/*--------------- Error handleing ----------- */}
+          {isSingleCourseError && (
+            <ErrorPage message={SingleCourseError.message} />
+          )}
 
-        {!isSingleCourseError && !isSingleCoursePending && SingleCourse && (
-          <CourseUpdate course={courseData as CourseWithAllObjects} />
-        )}
+          {/*---------------------------- Loading handling ------------- */}
+          {!isSingleCourseError && isSingleCoursePending && (
+            <div>Loading...</div>
+          )}
+
+          {!isSingleCourseError && !isSingleCoursePending && SingleCourse && (
+            <CourseUpdate course={courseData as CourseWithAllObjects} />
+          )}
+        </section>
       </section>
-    </section>
+    </>
   );
 };
 

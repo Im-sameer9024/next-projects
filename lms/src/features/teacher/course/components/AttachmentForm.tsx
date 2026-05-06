@@ -174,7 +174,7 @@ const AttachmentForm = ({
           } transition-all duration-200`}
           onClick={toggleEdit}
         >
-          {isEdit ? "Cancel" : "Edit"}
+          {isEdit ? "Cancel" : "Add"}
         </CustomButton>
       </div>
 
@@ -247,7 +247,7 @@ const AttachmentForm = ({
           </form>
         ) : (
           <div >
-            {attachments.length === 0 ? (
+            {!attachments || attachments.length === 0 ? (
               <>
                 <p className="text-sm text-gray-500 ">
                   No attachments uploaded

@@ -53,6 +53,39 @@ export const UpdateCourse = async (
   return response.data;
 };
 
+export const DeleteCourse = async (
+  courseId: string,
+): Promise<ApiResponse<null>> => {
+  const response = await apiConnector({
+    method: "DELETE",
+    url: courseApiEndpoints.DELETE_COURSE(courseId),
+  });
+
+  return response.data;
+};
+
+export const PublishCourse = async (
+  courseId: string,
+): Promise<ApiResponse<Course>> => {
+  const response = await apiConnector({
+    method: "PATCH",
+    url: courseApiEndpoints.PUBLISH_COURSE(courseId),
+  });
+
+  return response.data;
+};
+
+export const UnPublishCourse = async (
+  courseId: string,
+): Promise<ApiResponse<Course>> => {
+  const response = await apiConnector({
+    method: "PATCH",
+    url: courseApiEndpoints.UNPUBLISH_COURSE(courseId),
+  });
+
+  return response.data;
+};
+
 export const UploadImage = async (
   data: Partial<any>,
 ): Promise<ApiResponse<any>> => {
@@ -152,7 +185,7 @@ export const UpdateChapter = async (
 
 //------------------------- chapter video related api operations ---------------------------
 
-export const UploadChapterVideo = async (data:any) => {
+export const UploadChapterVideo = async (data: any) => {
   const response = await apiConnector({
     method: "POST",
     url: chapterApiEndpoints.UPLOAD_VIDEO,
@@ -184,6 +217,42 @@ export const DeleteChapterVideo = async (
     bodyData: {
       chapterId,
     },
+  });
+
+  return response.data;
+};
+
+export const DeleteChapter = async (
+  courseId: string,
+  chapterId: string,
+): Promise<ApiResponse<any>> => {
+  const response = await apiConnector({
+    method: "DELETE",
+    url: chapterApiEndpoints.DELETE_SINGLE_CHAPTER(courseId, chapterId),
+  });
+
+  return response.data;
+};
+
+export const PublishChapter = async (
+  courseId: string,
+  chapterId: string,
+): Promise<ApiResponse<any>> => {
+  const response = await apiConnector({
+    method: "PATCH",
+    url: chapterApiEndpoints.PUBLISH_CHAPTER(courseId, chapterId),
+  });
+
+  return response.data;
+};
+
+export const UnPublishChapter = async (
+  courseId: string,
+  chapterId: string,
+): Promise<ApiResponse<any>> => {
+  const response = await apiConnector({
+    method: "PATCH",
+    url: chapterApiEndpoints.UNPUBLISH_CHAPTER(courseId, chapterId),
   });
 
   return response.data;

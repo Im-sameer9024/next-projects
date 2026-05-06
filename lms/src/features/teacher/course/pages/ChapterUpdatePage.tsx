@@ -8,7 +8,8 @@ import Link from "next/link";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import ChapterUpdate from "../components/ChapterUpdate";
-
+import Banner from "@/features/teacher/course/components/Banner";
+import ChapterActions from "../components/ChapterActions";
 
 const ChapterUpdatePage = ({
   courseId,
@@ -50,40 +51,59 @@ const ChapterUpdatePage = ({
 
   const completionText = ` ( ${completedFields} of ${totalFields} )  `;
 
+  const isComplete = requiredFields.every(Boolean);
+
   return (
-    <section aria-label="course-update-page">
-      {/* link for back to the course page */}
-      <div className="  ">
-        <Link
-          href={`/teacher/courses/${courseId}`}
-          className=" flex items-center gap-2"
-        >
-          <span>
-            <FaArrowLeftLong />
-          </span>
-          Back to Course Page
-        </Link>
-      </div>
-
-      {/*-------------- heading --------- */}
-      <section className=" mt-4">
-        <h2 className=" font-heading font-semibold text-xl text-slate-700">
-          Chapter Setup
-        </h2>
-        <p className=" font-light text-xs text-slate-500 flex items-center gap-1">
-          Complete All Fields {isChapterPending ? <Spinner /> : completionText}
-          {completedFields == totalFields && (
-            <span className=" text-green-400 ">
-              <IoMdCheckmarkCircleOutline size={18} />
+    <>
+      {!chapter.isPublished && (
+        <Banner
+          variant={"warning"}
+          label="This chapter is not unpublished. It will not be visible in the course"
+        />
+      )}
+      <section aria-label="course-update-page">
+        {/* link for back to the course page */}
+        <div className="w-fit mt-4">
+          <Link
+            href={`/teacher/courses/${courseId}`}
+            className=" flex items-center gap-2"
+          >
+            <span>
+              <FaArrowLeftLong />
             </span>
-          )}
-        </p>
-      </section>
+            Back to Course Page
+          </Link>
+        </div>
 
-      <section>
-        <ChapterUpdate chapter={chapter} courseId={courseId} />
+        {/*-------------- heading --------- */}
+        <section className=" mt-4 flex justify-between">
+          <div>
+            <h2 className=" font-heading font-semibold text-xl text-slate-700">
+              Chapter Setup
+            </h2>
+            <p className=" font-light text-xs text-slate-500 flex items-center gap-1">
+              Complete All Fields{" "}
+              {isChapterPending ? <Spinner /> : completionText}
+              {isComplete && (
+                <span className=" text-green-400 ">
+                  <IoMdCheckmarkCircleOutline size={18} />
+                </span>
+              )}
+            </p>
+          </div>
+          <ChapterActions
+            disabled={!isComplete}
+            courseId={courseId}
+            chapterId={chapterId}
+            isPublished={chapter.isPublished}
+          />
+        </section>
+
+        <section>
+          <ChapterUpdate chapter={chapter} courseId={courseId} />
+        </section>
       </section>
-    </section>
+    </>
   );
 };
 

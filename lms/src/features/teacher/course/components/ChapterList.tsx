@@ -3,55 +3,73 @@
 import { Chapter } from "@/generated/prisma/client";
 import CustomButton from "@/shared/components/custom/CustomButton";
 import { Kbd } from "@/shared/components/ui/kbd";
-import { Edit, Menu, Trash } from "lucide-react";
+import { Edit, Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const ChapterList = ({ chapters }: { chapters: Chapter[] }) => {
+const ChapterList = ({ chapters }: { chapters?: Chapter[] }) => {
   const router = useRouter();
 
+  // ✅ Always safe
+  const safeChapters = Array.isArray(chapters) ? chapters : [];
+
   const handleEdit = (chapterId: string, courseId: string) => {
+    if (!chapterId || !courseId) return; // extra safety
     router.push(`/teacher/courses/${courseId}/chapters/${chapterId}`);
   };
 
+  // ✅ Empty state (important UX)
+  if (safeChapters.length === 0) {
+    return (
+      <p className="text-sm text-gray-500">
+        No chapters created yet
+      </p>
+    );
+  }
+
   return (
     <div className="space-y-2">
-      {chapters.map((chapter: Chapter) => {
-        return (
-          <div
-            key={chapter.id}
-            className="flex items-center justify-between p-2 border border-slate-200 rounded"
-          >
-            <div className="flex items-center space-x-2">
-              <span className="text-gray-500">
-                <Menu size={16} />
-              </span>
-              <span className="text-sm">{chapter.title}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Kbd className={`${chapter.isPublished && "text-blue-500"}`}>
-                {chapter.isPublished ? "Published" : "Draft"}
-              </Kbd>
-
-              <CustomButton
-                onClick={() => handleEdit(chapter.id, chapter.courseId)}
-                size="sm"
-                variant="outline"
-              >
-                <Edit size={16} /> Edit
-              </CustomButton>
-
-              <CustomButton
-                size="sm"
-                variant="outline"
-                className="text-red-500 hover:text-red-600 hover:bg-red-100"
-              >
-                <Trash size={16} />
-              </CustomButton>
-            </div>
+      {safeChapters.map((chapter) => (
+        <div
+          key={chapter.id}
+          className="flex items-center justify-between p-2 border border-slate-200 rounded hover:bg-slate-50 transition"
+        >
+          {/* LEFT */}
+          <div className="flex items-center space-x-2">
+            <Menu size={16} className="text-gray-400" />
+            <span className="text-sm font-medium">
+              {chapter.title || "Untitled Chapter"}
+            </span>
           </div>
-        );
-      })}
+
+          {/* RIGHT */}
+          <div className="flex items-center space-x-2">
+            {chapter.isFree && (
+              <Kbd className="text-blue-500">Free</Kbd>
+            )}
+
+            <Kbd
+              className={`${
+                chapter.isPublished
+                  ? "text-green-500"
+                  : "text-gray-500"
+              }`}
+            >
+              {chapter.isPublished ? "Published" : "Draft"}
+            </Kbd>
+
+            <CustomButton
+              onClick={() =>
+                handleEdit(chapter.id, chapter.courseId)
+              }
+              size="sm"
+              variant="outline"
+            >
+              <Edit size={14} /> Edit
+            </CustomButton>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

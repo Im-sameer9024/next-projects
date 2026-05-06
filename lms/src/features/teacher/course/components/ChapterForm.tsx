@@ -45,6 +45,8 @@ const ChapterForm = ({
     setIsEdit((prev) => !prev);
   };
 
+  const safeChapters = Array.isArray(chapters) ? chapters : [];
+
   return (
     <section className="bg-white border p-4 border-slate-200 rounded">
       {/* Header */}
@@ -64,7 +66,7 @@ const ChapterForm = ({
           } transition-all duration-200`}
           onClick={toggleEdit}
         >
-          {isEdit ? "Cancel" : "Edit"}
+          {isEdit ? "Cancel" : "Add"}
         </CustomButton>
       </div>
 
@@ -97,13 +99,13 @@ const ChapterForm = ({
           </form>
         ) : (
           <div>
-            {chapters.length === 0 ? (
+            {safeChapters.length === 0 ? (
               <>
                 <p className="text-sm text-gray-500 ">No Chapters created</p>
               </>
             ) : (
               <>
-                <ChapterList chapters={chapters} />
+                <ChapterList chapters={safeChapters} />
               </>
             )}
           </div>

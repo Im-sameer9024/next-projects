@@ -7,9 +7,9 @@ import {
 } from "@/generated/prisma/client";
 
 export type CourseWithAllObjects = Course & {
-  attachments: Attachment[];
+  attachments?: Attachment[];
 } & {
-  chapters: Chapter[];
+  chapters?: Chapter[];
 } & {
   category: Category | null;
 } & {

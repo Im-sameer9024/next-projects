@@ -4,8 +4,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CreateCourse,
+  DeleteCourse,
   GetCourses,
   GetSingleCourse,
+  PublishCourse,
+  UnPublishCourse,
   UpdateCourse,
 } from "../apiOperations";
 import { toast } from "sonner";
@@ -92,11 +95,124 @@ export const useUpdateCourse = () => {
           ),
         };
       });
-
     },
 
     onError: (error) => {
       console.error("Error updating course:", error);
+      toast.error(GetApiErrorMessage(error));
+    },
+  });
+};
+
+export const useDeleteCourse = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ courseId }: { courseId: string }) => DeleteCourse(courseId),
+
+    onSuccess: (data, variables) => {
+      // ✅ Remove from courses list cache
+      queryClient.setQueryData(["courses"], (old: any) => {
+        if (!old?.data) return old;
+        return {
+          ...old,
+          data: old.data.filter(
+            (course: any) => course.id !== variables.courseId,
+          ),
+        };
+      });
+
+      // ✅ Remove single course cache entry
+      queryClient.removeQueries({ queryKey: ["course", variables.courseId] });
+
+      toast.success(GetApiResponseMessage(data));
+    },
+
+    onError: (error) => {
+      console.error("Error deleting course:", error);
+      toast.error(GetApiErrorMessage(error));
+    },
+  });
+};
+
+export const usePublishCourse = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ courseId }: { courseId: string }) => PublishCourse(courseId),
+
+    onSuccess: (data, variables) => {
+      const updatedCourse = data?.data;
+
+      // ✅ Update single course cache
+      queryClient.setQueryData(["course", variables.courseId], (old: any) => {
+        if (!old?.data) return old;
+        return {
+          ...old,
+          data: { ...old.data, isPublished: updatedCourse?.isPublished },
+        };
+      });
+
+      // ✅ Update courses list cache
+      queryClient.setQueryData(["courses"], (old: any) => {
+        if (!old?.data) return old;
+        return {
+          ...old,
+          data: old.data.map((course: any) =>
+            course.id === variables.courseId
+              ? { ...course, isPublished: updatedCourse?.isPublished }
+              : course,
+          ),
+        };
+      });
+
+      toast.success(GetApiResponseMessage(data));
+    },
+
+    onError: (error) => {
+      console.error("Error publishing course:", error);
+      toast.error(GetApiErrorMessage(error));
+    },
+  });
+};
+
+export const useUnPublishCourse = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ courseId }: { courseId: string }) =>
+      UnPublishCourse(courseId),
+
+    onSuccess: (data, variables) => {
+      const updatedCourse = data?.data;
+
+      // ✅ Update single course cache
+      queryClient.setQueryData(["course", variables.courseId], (old: any) => {
+        if (!old?.data) return old;
+        return {
+          ...old,
+          data: { ...old.data, isPublished: updatedCourse?.isPublished },
+        };
+      });
+
+      // ✅ Update courses list cache
+      queryClient.setQueryData(["courses"], (old: any) => {
+        if (!old?.data) return old;
+        return {
+          ...old,
+          data: old.data.map((course: any) =>
+            course.id === variables.courseId
+              ? { ...course, isPublished: updatedCourse?.isPublished }
+              : course,
+          ),
+        };
+      });
+
+      toast.success(GetApiResponseMessage(data));
+    },
+
+    onError: (error) => {
+      console.error("Error unpublishing course:", error);
       toast.error(GetApiErrorMessage(error));
     },
   });
