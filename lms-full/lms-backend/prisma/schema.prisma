@@ -12,20 +12,147 @@ datasource db {
   provider = "postgresql"
 }
 
-
-model User{
-  id String @id @default(uuid())
-  name String
-  email String @unique
-  password String
-  posts Post[]
+enum Roles {
+  USER
+  TEACHER
 }
 
-model Post{
-  id String @id @default(uuid())
-  title String
-  content String
-  published Boolean @default(false)
-  author User @relation(fields: [authorId], references: [id])
-  authorId String
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  password String?
+  avatar   String?
+  googleId String?
+
+  isVerified       String?
+  verifyCode       String?
+  verifyCodeExpiry DateTime?
+
+  role Roles @default(USER)
+
+  courses Course[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Course {
+  id              String  @id @default(uuid())
+  title           String  @db.Text
+  description     String? @db.Text
+  image           String?
+  image_public_id String?
+  price           String?
+  isPublished     Boolean @default(false)
+
+  // relations 
+
+  teacherId String
+  teacher   User   @relation(fields: [teacherId], references: [id])
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  attachments Attachment[]
+  chapters    Chapter[]
+  purchases   Purchase[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  courses Course[]
+}
+
+model Attachment {
+  id                   String  @id @default(uuid())
+  name                 String
+  attachment_doc       String?
+  attachment_public_id String?
+
+  // relations 
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Chapter {
+  id          String  @id @default(uuid())
+  title       String  @db.Text
+  description String? @db.Text
+
+  videoUrl    String?
+  isPublished Boolean @default(false)
+  isFree      Boolean @default(false)
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  muxData        MuxData?
+  userProgresses UserProgress[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MuxData {
+  id         String  @id @default(uuid())
+  assetId    String  @unique
+  playbackId String?
+
+  // relations 
+
+  chapterId String  @unique
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Purchase {
+  id     String @id @default(uuid())
+  userId String
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+}
+
+model StripeCustomer {
+  id               String @id @default(uuid())
+  userId           String
+  stripeCustomerId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model UserProgress {
+  id          String  @id @default(uuid())
+  userId      String
+  isCompleted Boolean @default(false)
+
+  // relations 
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, chapterId])
+  @@index([chapterId])
 }
