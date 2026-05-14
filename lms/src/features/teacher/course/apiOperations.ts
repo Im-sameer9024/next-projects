@@ -22,11 +22,23 @@ export const CreateCourse = async (
   return response.data;
 };
 
-export const GetCourses = async (): Promise<ApiResponse<Course[]>> => {
+export const GetCoursesByTeacher = async (page: number = 1): Promise<ApiResponse<Course[]>> => {
   const response = await apiConnector({
     method: "GET",
-    url: courseApiEndpoints.GET_COURSES,
+    url: `${courseApiEndpoints.GET_COURSES_BY_TEACHER}?page=${page}`,
   });
+  return response.data;
+};
+
+export const GetAllCourses = async (
+  pageParam: number = 1
+) => {
+  const response = await apiConnector({
+    method: "GET",
+
+    url: `${courseApiEndpoints.GET_ALL_COURSES}?page=${pageParam}&limit=10`,
+  });
+
   return response.data;
 };
 

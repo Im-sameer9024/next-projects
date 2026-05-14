@@ -2,7 +2,13 @@
 
 import { LogOut, Menu } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 import Logo from "./Logo";
 import SidebarLink from "./SidebarLink";
 import { usePathname } from "next/navigation";
@@ -14,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import SearchInput from "./SearchInput";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -22,6 +29,7 @@ const Navbar = () => {
   const role = session?.user?.role;
 
   const routes = role === Roles.teacher ? teacherRoutes : guestRoutes;
+  const isSearchPage = pathname === "/search";
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/sign-in" });
@@ -38,6 +46,9 @@ const Navbar = () => {
         </SheetTrigger>
 
         <SheetContent side="left" className="w-56 p-0">
+          <SheetHeader className="sr-only">
+            <SheetTitle>Mobile Navigation Menu</SheetTitle>
+          </SheetHeader>
           <div className="px-4 py-4 border-b border-gray-200 flex items-center gap-2">
             <Logo />
             <span className="font-semibold">LMS</span>
@@ -56,6 +67,13 @@ const Navbar = () => {
           </div>
         </SheetContent>
       </Sheet>
+
+      {/* ---------------- LEFT SIDE ---------------- */}
+      {isSearchPage && (
+        <div className=" hidden md:block">
+          <SearchInput />
+        </div>
+      )}
 
       {/* ---------------- RIGHT SIDE ---------------- */}
       <div className="flex gap-2 ml-auto ">

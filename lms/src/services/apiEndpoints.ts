@@ -3,7 +3,8 @@ export const authApiEndpoints = {
 };
 
 export const courseApiEndpoints = {
-  GET_COURSES: "/api/courses",
+  GET_COURSES_BY_TEACHER: "/api/courses/teachers",
+  GET_ALL_COURSES: "/api/courses",
   CREATE_COURSE: "/api/courses",
   GET_SINGLE_COURSE: (courseId: string) => `/api/courses/${courseId}`,
   UPDATE_SINGLE_VALUE_COURSE: (courseId: string) => `/api/courses/${courseId}`,

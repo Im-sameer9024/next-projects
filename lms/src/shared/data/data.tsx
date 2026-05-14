@@ -32,7 +32,7 @@ export const guestRoutes: RoutesProps[] = [
     id: 2,
     text: "Browse",
     icon: <Compass/>,
-    link: "/search",
+    link: "/user/search",
   },
 ];
 

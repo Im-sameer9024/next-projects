@@ -1,11 +1,18 @@
 "use client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   CreateCourse,
   DeleteCourse,
-  GetCourses,
+  GetAllCourses,
+  GetCoursesByTeacher,
   GetSingleCourse,
   PublishCourse,
   UnPublishCourse,
@@ -18,10 +25,29 @@ import {
 } from "@/shared/lib/apiMessages";
 import { Course } from "@/generated/prisma/client";
 
-export const useGetCourse = () => {
+export const useGetCoursesByTeacher = (page: number = 1) => {
   return useQuery({
+    queryKey: ["courses", page],
+    queryFn: () => GetCoursesByTeacher(page),
+    placeholderData: keepPreviousData, // keeps old data visible while next page loads
+  });
+};
+
+export const useGetAllCourses = () => {
+  return useInfiniteQuery({
     queryKey: ["courses"],
-    queryFn: GetCourses,
+
+    queryFn: ({ pageParam = 1 }) => GetAllCourses(pageParam),
+
+    initialPageParam: 1,
+
+    getNextPageParam: (lastPage) => {
+      if (lastPage.pagination.hasNextPage) {
+        return lastPage.pagination.currentPage + 1;
+      }
+
+      return undefined;
+    },
   });
 };
 

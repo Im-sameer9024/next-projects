@@ -10,6 +10,7 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import ChapterUpdate from "../components/ChapterUpdate";
 import Banner from "@/features/teacher/course/components/Banner";
 import ChapterActions from "../components/ChapterActions";
+import ChapterUpdateSkeleton from "../skeleton/ChapterUpdateSkeleton";
 
 const ChapterUpdatePage = ({
   courseId,
@@ -29,7 +30,7 @@ const ChapterUpdatePage = ({
   });
 
   if (isChapterPending) {
-    return <div>Loading...</div>;
+    return <ChapterUpdateSkeleton />;
   }
 
   if (isChapterError) {

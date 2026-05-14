@@ -1,3 +1,4 @@
+import { getProgress } from "@/actions/getProgress";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 import Mux from "@mux/mux-node";
@@ -104,21 +105,28 @@ export async function GET(
     const { courseId } = await params;
     const session = await auth();
 
+    if (!session?.user) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     const course = await prisma.course.findUnique({
       where: {
         id: courseId,
         userId: session?.user?.id,
       },
       include: {
-        chapters: {
-          orderBy: {
-            createdAt: "asc",
-          },
-        },
         attachments: {
           orderBy: {
             createdAt: "desc",
           },
+        },
+        chapters:{
+          orderBy:{
+            createdAt:"asc"
+          }
         },
       },
     });
@@ -136,10 +144,16 @@ export async function GET(
       );
     }
 
+    const progressPercentage = await getProgress(
+      session?.user?.id as string,
+      course.id,
+    );
+
     return NextResponse.json(
       {
         success: true,
         data: course,
+        progressPercentage: progressPercentage,
         message: "Course fetched successfully",
       },
       {

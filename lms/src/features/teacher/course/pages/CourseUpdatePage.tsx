@@ -4,7 +4,7 @@ import React from "react";
 import type { CourseWithAllObjects } from "@/shared/types/course.d";
 import { useGetSingleCourse } from "../hooks/useCourse";
 import ErrorPage from "@/shared/components/common/ErrorPage";
-import { Spinner } from "@/shared/components/ui/spinner";
+import CourseUpdateSkeleton from "../skeleton/CourseUpdateSkeleton";
 import CourseUpdate from "../components/CourseUpdate";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import Banner from "../components/Banner";
@@ -36,6 +36,16 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
   const completionText = `(${completedFields} of ${totalFields})`;
   const isComplete = requiredFields.every(Boolean);
 
+  // Loading state — show full-page skeleton
+  if (isSingleCoursePending) {
+    return <CourseUpdateSkeleton />;
+  }
+
+  // Error state
+  if (isSingleCourseError) {
+    return <ErrorPage message={SingleCourseError.message} />;
+  }
+
   return (
     <>
       {!courseData?.isPublished && (
@@ -51,7 +61,7 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
             </h2>
             <p className="   font-light text-xs text-slate-500 flex items-center gap-1">
               Complete All Fields{" "}
-              {isSingleCoursePending ? <Spinner /> : completionText}
+              {completionText}
               {isComplete && (
                 <span className=" text-green-400 ">
                   <IoMdCheckmarkCircleOutline size={18} />
@@ -59,7 +69,7 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
               )}
             </p>
           </div>
-          {!isSingleCoursePending && courseData && (
+          {courseData && (
             <CourseActions
               disabled={!isComplete}
               courseId={courseId}
@@ -68,17 +78,7 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
           )}
         </section>
         <section>
-          {/*--------------- Error handleing ----------- */}
-          {isSingleCourseError && (
-            <ErrorPage message={SingleCourseError.message} />
-          )}
-
-          {/*---------------------------- Loading handling ------------- */}
-          {!isSingleCourseError && isSingleCoursePending && (
-            <div>Loading...</div>
-          )}
-
-          {!isSingleCourseError && !isSingleCoursePending && SingleCourse && (
+          {SingleCourse && (
             <CourseUpdate course={courseData as CourseWithAllObjects} />
           )}
         </section>

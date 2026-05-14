@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -15,7 +16,6 @@ import {
   GetApiResponseMessage,
 } from "@/shared/lib/apiMessages";
 import { toast } from "sonner";
-import { CourseWithAllObjects } from "@/shared/types/course";
 import { Chapter, MuxData } from "@/generated/prisma/client";
 
 export const useCreateChapter = () => {
@@ -31,24 +31,14 @@ export const useCreateChapter = () => {
     }) => CreateChapter(courseId, data),
 
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(["courses"], (old: any) => {
+      queryClient.setQueryData(["chapter", data.data.id], (old: any) => {
         if (!old?.data) return old;
-        const safeChapters = Array.isArray(old.data.chapters)
-          ? old.data.chapters
-          : [];
+
         return {
-          ...old,
-          data: old.data.map((course: CourseWithAllObjects) =>
-            course.id === variables.courseId
-              ? {
-                  ...course,
-                  chapters: [...safeChapters, data.data],
-                }
-              : course,
-          ),
+          ...old.data,
+          data: data.data,
         };
       });
-
       queryClient.setQueryData(["course", variables.courseId], (old: any) => {
         if (!old.data) return old;
         const safeChapters = Array.isArray(old.data.chapters)
@@ -64,13 +54,8 @@ export const useCreateChapter = () => {
         };
       });
 
-      queryClient.setQueryData(["chapter", data.data.id], (old: any) => {
-        if (!old?.data) return old;
-
-        return {
-          ...old.data,
-          data: data.data,
-        };
+      queryClient.invalidateQueries({
+        queryKey: ["courses"],
       });
 
       toast.success(GetApiResponseMessage(data));
@@ -92,7 +77,7 @@ export const useGetSingleChapter = ({
   return useQuery({
     queryKey: ["chapter", chapterId],
     queryFn: () => GetSingleChapter(courseId, chapterId),
-    refetchInterval:5000
+    refetchInterval: 5000,
   });
 };
 
@@ -110,31 +95,19 @@ export const useUpdateChapter = () => {
       data: any;
     }) => UpdateChapter(courseId, chapterId, data),
 
-    onSuccess: (res, variables) => {
-      const updatedChapter = res?.data;
+    onSuccess: (data, variables) => {
+      const updatedChapter = data?.data;
 
-      // ✅ update courses list
-      queryClient.setQueryData(["courses"], (old: any) => {
+      // ✅ update single chapter
+      queryClient.setQueryData(["chapter", variables.chapterId], (old: any) => {
         if (!old?.data) return old;
 
         return {
-          ...old.data,
-          data: old.data.map((course: CourseWithAllObjects) => {
-            if (course.id !== variables.courseId) return course;
-
-            const safeChapters = Array.isArray(course.chapters)
-              ? course.chapters
-              : [];
-
-            return {
-              ...course,
-              chapters: safeChapters.map((chapter) =>
-                chapter.id === variables.chapterId
-                  ? { ...chapter, ...updatedChapter }
-                  : chapter,
-              ),
-            };
-          }),
+          ...old,
+          data: {
+            ...old.data,
+            ...updatedChapter,
+          },
         };
       });
 
@@ -159,17 +132,8 @@ export const useUpdateChapter = () => {
         };
       });
 
-      // ✅ update single chapter
-      queryClient.setQueryData(["chapter", variables.chapterId], (old: any) => {
-        if (!old?.data) return old;
-
-        return {
-          ...old,
-          data: {
-            ...old.data,
-            ...updatedChapter,
-          },
-        };
+      queryClient.invalidateQueries({
+        queryKey: ["courses"],
       });
     },
 
@@ -231,6 +195,10 @@ export const useSaveChapterVideo = () => {
             ),
           },
         };
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["courses"],
       });
     },
 
@@ -307,6 +275,10 @@ export const useDeleteChapter = () => {
     }) => DeleteChapter(courseId, chapterId),
 
     onSuccess: (data, variables) => {
+      queryClient.removeQueries({
+        queryKey: ["chapter", variables.chapterId],
+      });
+
       queryClient.setQueryData(["course", variables.courseId], (old: any) => {
         if (!old?.data) return old;
 
@@ -389,6 +361,10 @@ export const usePublishChapter = () => {
         };
       });
 
+      queryClient.invalidateQueries({
+        queryKey: ["courses"],
+      });
+
       toast.success(GetApiResponseMessage(data));
     },
 
@@ -446,6 +422,10 @@ export const useUnPublishChapter = () => {
             ),
           },
         };
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["courses"],
       });
 
       toast.success(GetApiResponseMessage(data));
