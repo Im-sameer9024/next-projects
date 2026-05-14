@@ -12,4 +12,3 @@ export const cookieOptions = {
   maxAge,
   path: "/",
 };
-

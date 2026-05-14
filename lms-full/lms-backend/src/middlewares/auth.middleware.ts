@@ -103,4 +103,4 @@ const isTeacher = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { auth ,isUser,isTeacher};
+export { auth, isUser, isTeacher };

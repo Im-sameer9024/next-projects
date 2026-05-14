@@ -17,9 +17,7 @@ const startServer = async () => {
       );
     });
   } catch (error) {
-    logger.error(
-      error instanceof Error ? error : new Error(String(error)),
-    );
+    logger.error(error instanceof Error ? error : new Error(String(error)));
 
     process.exit(1);
   }

@@ -12,15 +12,12 @@ import {
 import { SendResponse } from "@/shared/utils/response";
 import { SendEmail } from "@/shared/utils/send-email";
 import type { CookieOptions, NextFunction, Request, Response } from "express";
+import { FindUniqueUserByEmail } from "./auth.services";
 
 const SignUp = asyncHandler(async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
+  const existingUser = await FindUniqueUserByEmail(email); //---- auth service-----
 
   //---------------------- check user exits or not -------------
   if (existingUser) {
@@ -81,11 +78,7 @@ const SignUp = asyncHandler(async (req: Request, res: Response) => {
 const LogIn = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
+  const user = await FindUniqueUserByEmail(email); //------- auth services ------
 
   if (!user) {
     return SendResponse(res, {
@@ -235,4 +228,4 @@ const LogOut = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export { SignUp, LogIn, RefreshAccessToken,LogOut };
+export { SignUp, LogIn, RefreshAccessToken, LogOut };
