@@ -25,7 +25,7 @@ model User {
   avatar   String?
   googleId String?
 
-  isVerified       String?
+  isVerified       Boolean @default(false)
   verifyCode       String?
   verifyCodeExpiry DateTime?
 

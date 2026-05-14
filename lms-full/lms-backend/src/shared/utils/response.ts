@@ -1,7 +1,7 @@
-import type { ApiResponseType } from "@/types/response";
+import type { ApiResponseType } from "@/shared/types/response";
 import type { Response } from "express";
 
-export const sendResponse = <T>(
+export const SendResponse = <T>(
   res: Response,
   {
     statusCode = 200,
@@ -21,10 +21,13 @@ export const sendResponse = <T>(
 ): Response => {
   const response: ApiResponseType<T> = {
     success,
-    ...(message && { message }),
-    ...(data && { data }),
-    ...(error && { error }),
-    ...(pagination && { pagination }),
+    ...(message !== undefined && { message }),
+
+    ...(data !== undefined && { data }),
+
+    ...(error !== undefined && { error }),
+
+    ...(pagination !== undefined && { pagination }),
   };
 
   return res.status(statusCode).json(response);
