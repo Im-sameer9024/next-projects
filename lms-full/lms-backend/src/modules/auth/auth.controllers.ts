@@ -13,9 +13,11 @@ import { SendResponse } from "@/shared/utils/response";
 import { SendEmail } from "@/shared/utils/send-email";
 import type { CookieOptions, NextFunction, Request, Response } from "express";
 import { FindUniqueUserByEmail } from "./auth.services";
+import { logger } from "@/middlewares/logger.middleware";
+import { Roles } from "@/generated/prisma/enums";
 
 const SignUp = asyncHandler(async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const { name, email, password,role } = req.body;
 
   const existingUser = await FindUniqueUserByEmail(email); //---- auth service-----
 
@@ -23,13 +25,13 @@ const SignUp = asyncHandler(async (req: Request, res: Response) => {
   if (existingUser) {
     if (existingUser.googleId) {
       return SendResponse(res, {
-        statusCode: 409,
+        statusCode: 400,
         success: false,
         message: "User already exists with google account",
       });
     }
     return SendResponse(res, {
-      statusCode: 409,
+      statusCode: 400,
       success: false,
       message: "User already exists",
     });
@@ -44,6 +46,7 @@ const SignUp = asyncHandler(async (req: Request, res: Response) => {
       email: email,
       password: hashedPassword,
       avatar: avatarUrl,
+      role:role
     },
   });
 
@@ -183,11 +186,25 @@ const RefreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
 
   const newAccessToken = await GenerateAccessToken(payload);
 
+  const user = await prisma.user.findFirst({
+    where: {
+      id: existingUser.id,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      avatar: true,
+      role: true,
+    },
+  });
+
   return SendResponse(res, {
     statusCode: 200,
     success: true,
     data: {
       accessToken: newAccessToken,
+      user: user,
     },
     message: "Refresh token is valid",
   });
@@ -228,4 +245,26 @@ const LogOut = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export { SignUp, LogIn, RefreshAccessToken, LogOut };
+const googleCallback = asyncHandler(async (req: Request, res: Response) => {
+  const user = req.user as any;
+
+  const payload = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
+
+  const accessToken = await GenerateAccessToken(payload);
+  const refreshToken = await GenerateRefreshToken(payload);
+
+  res.cookie("refreshToken", refreshToken, cookieOptions as CookieOptions);
+
+  if (user.role === Roles.TEACHER) {
+    res.redirect(`${process.env.CLIENT_URL}/teacher}`);
+  }
+
+  res.redirect(`${process.env.CLIENT_URL}/user`);
+});
+
+export { SignUp, LogIn, RefreshAccessToken, LogOut, googleCallback };

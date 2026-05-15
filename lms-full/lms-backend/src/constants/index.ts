@@ -5,6 +5,8 @@ const REFRESH_TOKEN_EXPIRES_IN = process.env
 
 const maxAge = ms(REFRESH_TOKEN_EXPIRES_IN);
 
+console.log(maxAge)
+
 export const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
