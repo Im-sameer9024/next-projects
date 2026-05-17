@@ -36,9 +36,9 @@ const LoginForm = () => {
         setAuth(accessToken, user);
 
         if (user.role === "TEACHER") {
-          router.push("/teacher");
+          router.push("/teacher/courses");
         } else {
-          router.push("/user");
+          router.push("/user/dashboard");
         }
       }
 

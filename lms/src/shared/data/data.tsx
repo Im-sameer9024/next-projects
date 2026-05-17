@@ -12,8 +12,6 @@ export const Roles: roleProps = {
 };
 export const actualRoles = Object.values(Roles);
 
-
-
 export type RoutesProps = {
   id: number;
   text: string;
@@ -25,29 +23,28 @@ export const guestRoutes: RoutesProps[] = [
   {
     id: 1,
     text: "Dashboard",
-    icon: <LayoutDashboard/>,
+    icon: <LayoutDashboard />,
     link: "/",
   },
   {
     id: 2,
     text: "Browse",
-    icon: <Compass/>,
+    icon: <Compass />,
     link: "/user/search",
   },
 ];
 
-
-export const teacherRoutes :RoutesProps[]= [
+export const teacherRoutes: RoutesProps[] = [
   {
     id: 1,
     text: "Courses",
-    icon: <List/>,
+    icon: <List />,
     link: "/teacher/courses",
   },
   {
     id: 2,
     text: "Analytics",
-    icon: <BarChart/>,
+    icon: <BarChart />,
     link: "/teacher/analytics",
   },
-]
+];

@@ -1,0 +1,68 @@
+"use client";
+
+import Link from "next/link";
+import { motion, AnimatePresence } from "motion/react";
+import { SheetClose } from "../ui/sheet";
+import { RoutesProps } from "@/shared/utils/data";
+
+const SidebarLink = ({
+  data,
+  pathname,
+  isCollapsed,
+  isMobile = false,
+}: {
+  data: RoutesProps;
+  pathname: string;
+  isCollapsed: boolean;
+  isMobile?: boolean;
+}) => {
+  const isActive =
+    pathname === data?.link || pathname.startsWith(`${data?.link}/`);
+
+  const content = (
+    <motion.div
+      layout
+      whileHover={{ scale: 1.02 }}
+      className={`flex items-center gap-3 p-2 rounded-md text-sm transition-colors
+        ${
+          isActive
+            ? "bg-blue-100 text-blue-500 font-semibold"
+            : "text-slate-500 hover:text-blue-500 hover:bg-blue-100"
+        }`}
+    >
+      {/* ICON */}
+      <motion.span
+        animate={{ scale: isActive ? 1.1 : 1 }}
+        transition={{ duration: 0.2 }}
+      >
+        {data.icon}
+      </motion.span>
+
+      {/* TEXT */}
+      <AnimatePresence mode="wait">
+        {!isCollapsed && (
+          <motion.span
+            key="text"
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -8 }}
+            transition={{ duration: 0.2 }}
+            className="whitespace-nowrap"
+          >
+            {data.text}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+
+  return isMobile ? (
+    <SheetClose asChild>
+      <Link href={data.link}>{content}</Link>
+    </SheetClose>
+  ) : (
+    <Link href={data.link}>{content}</Link>
+  );
+};
+
+export default SidebarLink;

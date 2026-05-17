@@ -12,12 +12,12 @@ import {
 import { SendResponse } from "@/shared/utils/response";
 import { SendEmail } from "@/shared/utils/send-email";
 import type { CookieOptions, NextFunction, Request, Response } from "express";
-import { FindUniqueUserByEmail } from "./auth.services";
+import { FindUniqueUserByEmail, FindUniqueUserById } from "./auth.services";
 import { logger } from "@/middlewares/logger.middleware";
 import { Roles } from "@/generated/prisma/enums";
 
 const SignUp = asyncHandler(async (req: Request, res: Response) => {
-  const { name, email, password,role } = req.body;
+  const { name, email, password, role } = req.body;
 
   const existingUser = await FindUniqueUserByEmail(email); //---- auth service-----
 
@@ -46,23 +46,11 @@ const SignUp = asyncHandler(async (req: Request, res: Response) => {
       email: email,
       password: hashedPassword,
       avatar: avatarUrl,
-      role:role
+      role: role,
     },
   });
 
-  const finalUser = await prisma.user.findFirst({
-    where: {
-      id: newUser.id,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      avatar: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+  const finalUser = await FindUniqueUserById(newUser.id);
 
   SendResponse(res, {
     statusCode: 201,
@@ -101,20 +89,10 @@ const LogIn = asyncHandler(async (req: Request, res: Response) => {
     name: user.name,
     email: user.email,
     role: user.role,
+    avatar: user.avatar as string,
   };
 
-  const createdUser = await prisma.user.findFirst({
-    where: {
-      id: user.id,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      avatar: true,
-      role: true,
-    },
-  });
+  const createdUser = await FindUniqueUserById(user.id);
 
   if (isPasswordValid) {
     const accessToken = await GenerateAccessToken(payload);
@@ -161,11 +139,7 @@ const RefreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
     });
   }
 
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      id: decode.id,
-    },
-  });
+  const existingUser = await FindUniqueUserById(decode.id);
 
   if (!existingUser) {
     return SendResponse(res, {
@@ -182,22 +156,12 @@ const RefreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
     name: existingUser.name,
     email: existingUser.email,
     role: existingUser.role,
+    avatar: existingUser?.avatar as string,
   };
 
   const newAccessToken = await GenerateAccessToken(payload);
 
-  const user = await prisma.user.findFirst({
-    where: {
-      id: existingUser.id,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      avatar: true,
-      role: true,
-    },
-  });
+  const user = await FindUniqueUserById(existingUser.id);
 
   return SendResponse(res, {
     statusCode: 200,
@@ -253,6 +217,7 @@ const googleCallback = asyncHandler(async (req: Request, res: Response) => {
     name: user.name,
     email: user.email,
     role: user.role,
+    avatar: user.avatar,
   };
 
   const accessToken = await GenerateAccessToken(payload);

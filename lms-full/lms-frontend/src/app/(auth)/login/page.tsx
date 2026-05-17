@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import LoginForm from "@/features/auth/components/LoginForm";
 import CustomButton from "@/shared/components/custom/CustomButton";

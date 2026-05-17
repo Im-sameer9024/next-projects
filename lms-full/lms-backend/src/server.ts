@@ -1,4 +1,5 @@
 import app from "./app";
+import { ConnectCloudinary } from "./config/cloudinary";
 import { prisma } from "./config/prisma";
 import { logger } from "./middlewares/logger.middleware";
 
@@ -8,9 +9,10 @@ const NODE_ENV = process.env.NODE_ENV || "development";
 const startServer = async () => {
   try {
     await prisma.$connect();
+    await ConnectCloudinary();
 
     logger.info("Database connected successfully");
-
+    logger.info("Cloudinary connected successfully");
     app.listen(PORT, () => {
       logger.info(
         `Server running on http://localhost:${PORT} in ${NODE_ENV} mode`,

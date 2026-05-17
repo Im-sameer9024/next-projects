@@ -5,12 +5,31 @@ const REFRESH_TOKEN_EXPIRES_IN = process.env
 
 const maxAge = ms(REFRESH_TOKEN_EXPIRES_IN);
 
-console.log(maxAge)
-
 export const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   maxAge,
   path: "/",
+};
+
+export const CourseTitlePrompt = (text: string) => {
+  return `
+Generate exactly 4 professional online course titles related to "${text}".
+
+Rules:
+- Return ONLY a valid JSON array
+- No explanation
+- No numbering
+- No markdown
+- No extra text
+
+Example:
+[
+  "Complete MERN Stack Bootcamp",
+  "Advanced React Development",
+  "Modern Node.js API Masterclass",
+  "Full Stack Web Engineering"
+]
+`;
 };

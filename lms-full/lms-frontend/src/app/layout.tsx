@@ -4,7 +4,7 @@ import { Lato, Montserrat, Geist } from "next/font/google";
 import GlobalProvider from "@/shared/providers/globalProvider";
 import { cn } from "@/shared/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -30,7 +30,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", montserrat.variable, lato.variable, "font-sans", geist.variable)}
+      className={cn(
+        "h-full",
+        "antialiased",
+        montserrat.variable,
+        lato.variable,
+        "font-sans",
+        geist.variable,
+      )}
     >
       <body className="min-h-full flex flex-col">
         <GlobalProvider>{children}</GlobalProvider>

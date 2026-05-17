@@ -35,9 +35,7 @@ const CustomTextarea = <T extends FieldValues>({
     <div className="space-y-1 w-full">
       {/* 🔹 Label */}
       {label && (
-        <label className="text-sm font-semibold text-text-slate-500">
-          {label}
-        </label>
+        <label className="text-sm font-semibold text-slate-500">{label}</label>
       )}
 
       {/* 🔹 Textarea */}
@@ -52,23 +50,19 @@ const CustomTextarea = <T extends FieldValues>({
               placeholder={placeholder}
               disabled={disabled || loading}
               className={cn(
-                "w-full text-text-slate-500 resize-none h-30",
+                "w-full text-slate-500 resize-none h-30",
                 fieldState.error && "border-red-500",
-                className
+                className,
               )}
             />
 
             {/* 🔴 Error */}
             {fieldState.error && (
-              <p className="text-xs text-red-500">
-                {fieldState.error.message}
-              </p>
+              <p className="text-xs text-red-500">{fieldState.error.message}</p>
             )}
 
             {/* 🔹 Description */}
-            {description && (
-              <p className="text-xs">{description}</p>
-            )}
+            {description && <p className="text-xs">{description}</p>}
           </>
         )}
       />

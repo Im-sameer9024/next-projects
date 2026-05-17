@@ -46,7 +46,9 @@ const CustomSelect = <T extends FieldValues>({
     <div className="space-y-1 w-full">
       {/* 🔹 Label */}
       {label && (
-        <label className="text-sm font-semibold text-text-slate-500">{label}</label>
+        <label className="text-sm font-semibold text-text-slate-500">
+          {label}
+        </label>
       )}
 
       {/* 🔹 Select */}

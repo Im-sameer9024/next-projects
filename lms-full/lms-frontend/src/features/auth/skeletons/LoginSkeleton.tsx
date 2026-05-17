@@ -4,7 +4,6 @@ const LoginSkeleton = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="w-full max-w-2xl rounded-3xl bg-white shadow-xl p-8 md:p-10 space-y-8">
-
         {/* Heading */}
         <div className="space-y-3 text-center">
           <Skeleton className="h-10 w-72 mx-auto rounded-md" />

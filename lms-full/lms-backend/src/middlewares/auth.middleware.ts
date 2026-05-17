@@ -1,9 +1,10 @@
 import { Roles } from "@/generated/prisma/enums";
-import { asyncHandler } from "@/shared/utils/async-handler";
 import { DecodeToken } from "@/shared/utils/helpers";
 import { SendResponse } from "@/shared/utils/response";
 import type { NextFunction, Request, Response } from "express";
-import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+
+const { JsonWebTokenError, TokenExpiredError } = jwt;
 
 const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -26,7 +27,6 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
       secret: accessTokenSecret,
     });
 
-    console.log(decoded)
 
     req.user = decoded;
 

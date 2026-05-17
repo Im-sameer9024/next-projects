@@ -23,3 +23,11 @@ export const LoginUser = async (data: LoginSchemaValidationTypes) => {
   });
   return response.data;
 };
+
+export const Logout = async () => {
+  const response = await apiConnector({
+    method: "GET",
+    url: authApiEndpoints.LOGOUT_USER,
+  });
+  return response.data;
+};
