@@ -4,6 +4,8 @@ import express from "express";
 import { CreateCourseSchema } from "./course.validation";
 import {
   CreateCourse,
+  DeleteCourseById,
+  GetAllCourses,
   GetCourseByTeacherId,
   UpdateSingleCourse,
   UploadThumbnail,
@@ -23,8 +25,9 @@ route.post(
   CreateCourse,
 );
 route.patch("/update/:courseId", auth, isTeacher, UpdateSingleCourse);
-
+route.get("/all", auth, isTeacher, GetAllCourses)
 route.get("/:courseId", auth, isTeacher, GetCourseByTeacherId);
+route.delete("/delete/:courseId",auth,isTeacher,DeleteCourseById)
 route.post(
   "/upload-image",
   auth,
@@ -33,8 +36,6 @@ route.post(
   UploadThumbnail,
 );
 
-// ai routes
 
-route.post("/ai/title", auth, isTeacher, AiCourseTitles);
 
 export default route;

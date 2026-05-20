@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { apiConnector } from "@/services/apiConnector";
-import { courseApiEndpoints } from "@/services/apiEndPoints";
+import {
+  attachmentApiEndpoints,
+  courseApiEndpoints,
+} from "@/services/apiEndPoints";
 import {
   CourseImageSchemaType,
   CreateCourseSchemaType,
@@ -43,5 +47,27 @@ export const UploadThumbnail = async (data: FormData) => {
     },
   });
 
+  return response.data;
+};
+
+export const CrateAttachment = async (data: FormData) => {
+  const response = await apiConnector({
+    method: "POST",
+    url: attachmentApiEndpoints.CREATE_ATTACHMENT,
+    bodyData: data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export const DeleteAttachment = async (data:any) => {
+  const response = await apiConnector({
+    method: "POST",
+    url: attachmentApiEndpoints.DELETE_ATTACHMENT,
+    bodyData: data,
+    
+  });
   return response.data;
 };

@@ -98,6 +98,20 @@ const DeleteCourseById = asyncHandler(async (req: Request, res: Response) => {
 
 const GetAllCourses = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.user as PayloadProps;
+
+  const courses = await prisma.course.findMany({
+    where:{
+      teacherId: id as string
+    }
+  })
+
+  return SendResponse(res, {
+    statusCode: 200,
+    success: true,
+    data: courses,
+    message: "Courses fetched successfully",
+  })
+
 });
 
 const UploadThumbnail = asyncHandler(async (req: Request, res: Response) => {

@@ -32,8 +32,37 @@ export const CourseImageSchema = z.object({
     }),
 });
 
+export const CoursePriceSchema = z.object({
+  price: z
+    .string()
+    .min(1, "Price is required")
+    .refine((val) => !isNaN(Number(val)), {
+      message: "Price must be a number",
+    }),
+});
+
+export const CreateAttachmentSchema = z.object({
+  name: z
+    .string()
+    .min(3, {
+      message: "Name should be at least 3 characters long",
+    })
+    .max(20, {
+      message: "Name should be at most 20 characters long",
+    }),
+});
+
+export const DeleteAttachmentSchema = z.object({
+  attachmentId: z.string(),
+  courseId: z.string(),
+});
+
 export type CreateCourseSchemaType = z.infer<typeof CreateCourseSchema>;
 export type CourseDescriptionSchemaType = z.infer<
   typeof CourseDescriptionSchema
 >;
 export type CourseImageSchemaType = z.infer<typeof CourseImageSchema>;
+export type CoursePriceSchemaType = z.infer<typeof CoursePriceSchema>;
+
+export type CreateAttachmentSchemaType = z.infer<typeof CreateAttachmentSchema>;
+export type DeleteAttachmentSchemaType = z.infer<typeof DeleteAttachmentSchema>;

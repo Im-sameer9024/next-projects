@@ -25,7 +25,7 @@ model User {
   avatar   String?
   googleId String? @unique
 
-  isVerified       Boolean @default(false)
+  isVerified       Boolean   @default(false)
   verifyCode       String?
   verifyCodeExpiry DateTime?
 
@@ -35,6 +35,8 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([email])
 }
 
 model Course {
@@ -60,12 +62,18 @@ model Course {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([teacherId])
+  @@index([id, teacherId])
+  @@index([image_public_id])
 }
 
 model Category {
   id      String   @id @default(uuid())
   name    String   @unique
   courses Course[]
+
+  @@index([id])
 }
 
 model Attachment {
@@ -81,12 +89,18 @@ model Attachment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([id, courseId])
+  @@index([courseId])
+  @@index([attachment_public_id])
 }
 
 model Chapter {
   id          String  @id @default(uuid())
   title       String  @db.Text
   description String? @db.Text
+
+  isProcessingVideo Boolean @default(false)
 
   videoUrl    String?
   isPublished Boolean @default(false)
@@ -100,6 +114,10 @@ model Chapter {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([id, courseId])
+  @@index([courseId])
+  @@index([id])
 }
 
 model MuxData {
@@ -114,6 +132,10 @@ model MuxData {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([id, chapterId])
+  @@index([assetId])
+  @@index([chapterId])
 }
 
 model Purchase {
@@ -128,6 +150,7 @@ model Purchase {
 
   @@unique([userId, courseId])
   @@index([courseId])
+
 }
 
 model StripeCustomer {

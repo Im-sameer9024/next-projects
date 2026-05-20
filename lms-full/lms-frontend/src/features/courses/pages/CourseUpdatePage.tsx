@@ -11,6 +11,12 @@ import TitleForm from "../components/TitleForm";
 import DescriptionForm from "../components/DescriptionForm";
 import ThumbnailForm from "../components/ThumbnailForm";
 import CategoryForm from "@/features/category/components/CategoryForm";
+import { VscChecklist } from "react-icons/vsc";
+import ChapterForm from "@/features/chapter/components/ChapterForm";
+import { FaIndianRupeeSign } from "react-icons/fa6";
+import PriceForm from "../components/PriceForm";
+import { IoDocumentOutline } from "react-icons/io5";
+import AttachmentForm from "../components/AttachmentForm";
 
 const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
   const {
@@ -47,6 +53,13 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
   if (isSingleCourseError) {
     return <ErrorPage message={SingleCourseError.message} />;
   }
+
+  const safeChapters = Array.isArray(courseData?.chapters)
+    ? courseData.chapters
+    : [];
+  const safeAttachments = Array.isArray(courseData?.attachments)
+    ? courseData.attachments
+    : [];
 
   return (
     <>
@@ -103,12 +116,70 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
                 title={courseData?.title || ""}
               />
 
-              <ThumbnailForm courseId={courseData?.id || ""} image={courseData?.image || ""} />
+              <ThumbnailForm
+                courseId={courseData?.id || ""}
+                image={courseData?.image || ""}
+              />
 
-              <CategoryForm courseId={courseData?.id || ""} categoryId={courseData?.categoryId || ""} />
+              <CategoryForm
+                courseId={courseData?.id || ""}
+                categoryId={courseData?.categoryId || ""}
+              />
             </section>
           </div>
           {/* Right side  */}
+
+          <div className=" space-y-4">
+            {/*---------------- chapter section ---------------- */}
+            <section className=" space-y-4">
+              {/* heading  */}
+              <div className=" flex  items-center gap-2">
+                <div>
+                  <VscChecklist className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+                </div>
+                <p className=" font-heading font-semibold text-md text-slate-700">
+                  Course chapter
+                </p>
+              </div>
+
+              <ChapterForm
+                chapters={safeChapters}
+                courseId={(courseData?.id as string) || ""}
+              />
+            </section>
+
+            {/*---------------------- price section -------------- */}
+            <section className=" space-y-4">
+              <div className=" flex  items-center gap-2">
+                <div>
+                  <FaIndianRupeeSign className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+                </div>
+                <p className=" font-heading font-semibold text-md text-slate-700">
+                  Sell your course
+                </p>
+              </div>
+              <PriceForm
+                price={(courseData.price as string) || ""}
+                courseId={courseData?.id || ""}
+              />
+            </section>
+
+            {/*-------------------- Attachment section -------------  */}
+            <section className=" space-y-4">
+              <div className=" flex  items-center gap-2">
+                <div>
+                  <IoDocumentOutline className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+                </div>
+                <p className=" font-heading font-semibold text-md text-slate-700">
+                  Resources and Attachments
+                </p>
+              </div>
+              <AttachmentForm
+                attachments={safeAttachments}
+                courseId={courseData?.id || ""}
+              />
+            </section>
+          </div>
         </section>
       </section>
     </>

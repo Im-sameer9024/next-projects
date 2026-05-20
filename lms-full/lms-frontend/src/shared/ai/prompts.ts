@@ -31,3 +31,30 @@ Rules:
 - No headings
 - Length should be 100 - 450 characters
 `;
+
+export const chapterDescriptionPrompt = ({
+  courseTitle,
+  chapterTitle,
+}: {
+  courseTitle: string;
+  chapterTitle: string;
+}) => `
+Generate a professional and engaging chapter description for an online course.
+
+Course Title:
+"${courseTitle}"
+
+Chapter Title:
+"${chapterTitle}"
+
+Rules:
+- Write in a professional and beginner-friendly tone
+- Explain what students will learn in this chapter
+- Keep it concise and engaging
+- Maximum 2 short paragraphs
+- use markdown
+- use headings
+- use bullet points
+- Length should be between 120 - 500 characters
+- Make the chapter feel practical and valuable
+`;

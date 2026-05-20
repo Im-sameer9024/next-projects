@@ -4,6 +4,7 @@ import * as React from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/shared/lib/utils";
+import { Spinner } from "../ui/spinner";
 
 type CustomButtonProps = React.ComponentProps<typeof Button> & {
   loading?: boolean;
@@ -49,7 +50,7 @@ const CustomButton = ({
     >
       {loading ? (
         <>
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Spinner/>
           {!iconOnly && (loadingText || children)}
         </>
       ) : (

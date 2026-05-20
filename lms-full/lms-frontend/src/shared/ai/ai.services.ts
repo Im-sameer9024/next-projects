@@ -2,7 +2,11 @@
 
 import puter from "./puter";
 
-import { courseTitlePrompt, courseDescriptionPrompt } from "./prompts";
+import {
+  courseTitlePrompt,
+  courseDescriptionPrompt,
+  chapterDescriptionPrompt,
+} from "./prompts";
 
 const getTextContent = (content: unknown) => {
   return typeof content === "string" ? content : "";
@@ -18,7 +22,7 @@ export const generateCourseTitles = async (text: string): Promise<string[]> => {
       courseTitlePrompt(text),
 
       {
-        model: "gpt-5-nano",
+        model: "gpt-4o-mini",
       },
     );
 
@@ -49,13 +53,47 @@ export const generateCourseDescription = async (
       courseDescriptionPrompt(title),
 
       {
-        model: "gpt-5-nano",
+        model: "gpt-4o-mini",
       },
     );
 
     return getTextContent(response.message?.content) ?? "";
   } catch (error) {
     console.log("Description AI Error:", error);
+
+    return "";
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                         CHAPTER DESCRIPTION                                 */
+/* -------------------------------------------------------------------------- */
+
+interface GenerateChapterDescriptionProps {
+  courseTitle: string;
+
+  chapterTitle: string;
+}
+
+export const generateChapterDescription = async ({
+  courseTitle,
+  chapterTitle,
+}: GenerateChapterDescriptionProps): Promise<string> => {
+  try {
+    const response = await puter.ai.chat(
+      chapterDescriptionPrompt({
+        courseTitle,
+        chapterTitle,
+      }),
+
+      {
+        model: "gpt-4o-mini",
+      },
+    );
+
+    return getTextContent(response.message?.content) ?? "";
+  } catch (error) {
+    console.log("Chapter Description AI Error:", error);
 
     return "";
   }

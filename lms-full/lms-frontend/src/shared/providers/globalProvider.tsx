@@ -17,9 +17,8 @@ const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
         <PacerProvider>
           <Toaster richColors position="top-right" closeButton />
           {children}
-          {process.env.NODE_ENV == "development" && (
-            <ReactQueryDevtools initialIsOpen={false} />
-          )}
+          
+            <ReactQueryDevtools  initialIsOpen={false} />
         </PacerProvider>
       </AuthProvider>
     </QueryClientProvider>

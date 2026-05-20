@@ -1177,6 +1177,7 @@ export const ChapterScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
+  isProcessingVideo: 'isProcessingVideo',
   videoUrl: 'videoUrl',
   isPublished: 'isPublished',
   isFree: 'isFree',

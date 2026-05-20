@@ -3,12 +3,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  CrateAttachment,
   CreateCourse,
+  DeleteAttachment,
   GetSingleCourseForTeacher,
   UpdateCourseByTeacher,
   UploadThumbnail,
 } from "../apiOperations";
-import { Course } from "../course";
+import { Attachment, Course } from "../course";
 import { toast } from "sonner";
 import { GetApiResponseMessage } from "@/shared/utils/apiMessages";
 
@@ -52,17 +54,26 @@ export const useUpdateCourseByTeacher = () => {
     onSuccess: (data) => {
       const CourseData = data.data as Course;
 
-      queryClient.setQueryData(["course", CourseData.id], (old: any) => {
-        if (!old) return old;
+      queryClient.setQueryData(
+        ["course", CourseData.id],
+        (
+          old:
+            | {
+                data: Course;
+              }
+            | undefined,
+        ) => {
+          if (!old) return old;
 
-        return {
-          ...old,
-          data: {
-            ...old.data,
-            ...CourseData,
-          },
-        };
-      });
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              ...CourseData,
+            },
+          };
+        },
+      );
 
       queryClient.invalidateQueries({
         queryKey: ["courses", CourseData.teacherId],
@@ -89,6 +100,77 @@ export const useUploadThumbnail = () => {
       console.log(error);
 
       toast.error("Upload failed");
+    },
+  });
+};
+
+export const useCreateAttachment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: CrateAttachment,
+    onSuccess: (data) => {
+      const attachmentData = data.data as Attachment;
+
+      queryClient.setQueryData(
+        ["course", attachmentData.courseId],
+        (
+          old:
+            | {
+                data: Course;
+              }
+            | undefined,
+        ) => {
+          if (!old) return old;
+
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              attachments: [
+                ...(Array.isArray(old.data?.attachments)
+                  ? old.data?.attachments
+                  : []),
+                attachmentData,
+              ],
+            },
+          };
+        },
+      );
+    },
+  });
+};
+
+export const useDeleteAttachment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: DeleteAttachment,
+    onSuccess: (data) => {
+      const attachmentData = data.data as Attachment;
+
+      queryClient.setQueryData(
+        ["course", attachmentData?.courseId],
+        (
+          old:
+            | {
+                data: Course;
+              }
+            | undefined
+        ) => {
+          if (!old) return old;
+
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              attachments: old.data?.attachments.filter(
+                (attachment: Attachment) => attachment.id !== attachmentData.id,
+              ),
+            },
+          };
+        },
+      );
     },
   });
 };
