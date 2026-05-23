@@ -5,5 +5,6 @@ declare const GetCourseByTeacherId: (req: Request, res: Response, next: import("
 declare const DeleteCourseById: (req: Request, res: Response, next: import("express").NextFunction) => void;
 declare const GetAllCourses: (req: Request, res: Response, next: import("express").NextFunction) => void;
 declare const UploadThumbnail: (req: Request, res: Response, next: import("express").NextFunction) => void;
-export { CreateCourse, UpdateSingleCourse, GetCourseByTeacherId, DeleteCourseById, GetAllCourses, UploadThumbnail };
+declare const PublishedCourse: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export { CreateCourse, UpdateSingleCourse, GetCourseByTeacherId, DeleteCourseById, GetAllCourses, UploadThumbnail, PublishedCourse, };
 //# sourceMappingURL=course.controllers.d.ts.map

@@ -219,6 +219,20 @@ export const GetChapterById = asyncHandler(async (req, res) => {
 });
 export const UploadChapterVideo = asyncHandler(async (req, res) => {
     const { chapterId } = req.body;
+    const existingMuxData = await prisma.muxData.findUnique({
+        where: {
+            chapterId: chapterId,
+        },
+    });
+    if (existingMuxData?.assetId) {
+        try {
+            await mux.video.assets.delete(existingMuxData.assetId);
+            console.log("Old mux asset deleted");
+        }
+        catch (error) {
+            console.log("Failed to delete old mux asset", error);
+        }
+    }
     const upload = await mux.video.uploads.create({
         new_asset_settings: {
             playback_policies: ["public"],
@@ -275,7 +289,6 @@ export const SaveChapterVideo = asyncHandler(async (req, res) => {
     const { uploadId, chapterId } = req.body;
     const upload = await mux.video.uploads.retrieve(uploadId);
     const assetId = upload.asset_id;
-    console.log("------------------- upload--------------", upload);
     if (!assetId) {
         return SendResponse(res, {
             statusCode: 400,
@@ -284,7 +297,7 @@ export const SaveChapterVideo = asyncHandler(async (req, res) => {
         });
     }
     // save assetId to chapter
-    const muxData = await prisma.muxData.upsert({
+    await prisma.muxData.upsert({
         where: {
             chapterId: chapterId,
         },
@@ -296,7 +309,7 @@ export const SaveChapterVideo = asyncHandler(async (req, res) => {
             chapterId: chapterId,
         },
     });
-    await prisma.chapter.update({
+    const updatedChapter = await prisma.chapter.update({
         where: {
             id: chapterId,
         },
@@ -309,7 +322,7 @@ export const SaveChapterVideo = asyncHandler(async (req, res) => {
         statusCode: 200,
         success: true,
         message: "Chapter video saved successfully",
-        data: muxData,
+        data: updatedChapter,
     });
 });
 export const ChapterVideoWebhook = asyncHandler(async (req, res) => {

@@ -107,5 +107,8 @@ const UploadThumbnail = asyncHandler(async (req, res) => {
         },
     });
 });
-export { CreateCourse, UpdateSingleCourse, GetCourseByTeacherId, DeleteCourseById, GetAllCourses, UploadThumbnail };
+const PublishedCourse = asyncHandler(async (req, res) => {
+    const { courseId } = req.params;
+});
+export { CreateCourse, UpdateSingleCourse, GetCourseByTeacherId, DeleteCourseById, GetAllCourses, UploadThumbnail, PublishedCourse, };
 //# sourceMappingURL=course.controllers.js.map
