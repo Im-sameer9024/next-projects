@@ -139,11 +139,18 @@ const UploadThumbnail = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const PublishedCourse = asyncHandler(async (req: Request, res: Response) => {
+  
+  const { courseId } = req.params;
+
+})
+
 export {
   CreateCourse,
   UpdateSingleCourse,
   GetCourseByTeacherId,
   DeleteCourseById,
   GetAllCourses,
-  UploadThumbnail
+  UploadThumbnail,
+  PublishedCourse,
 };

@@ -31,7 +31,7 @@ export const GetChapterById = async (chapterId: string) => {
 
 export const DeleteChapter = async (data: any) => {
   const response = await apiConnector({
-    method: "POST",
+    method: "DELETE",
     url: chapterApiEndpoints.DELETE_CHAPTER,
     bodyData: data,
   });

@@ -6,41 +6,10 @@ import { errorMiddleware } from "./middlewares/error.middleware.js";
 import { httpLogger } from "./middlewares/logger.middleware.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import type { CorsOptions } from "cors";
 import passport from "passport";
 import muxWebhookRoutes from "./modules/chapter/mux.routes.js";
 const app = express();
 
-const parseOrigins = (value?: string) =>
-  value
-    ?.split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean)
-    .map((origin) => {
-      try {
-        return new URL(origin).origin;
-      } catch {
-        return origin.replace(/\/$/, "");
-      }
-    }) ?? [];
-
-const allowedOrigins = new Set([
-  "http://localhost:3000",
-  ...parseOrigins(process.env.CLIENT_URL),
-  ...parseOrigins(process.env.CORS_ORIGIN),
-]);
-
-const corsOptions: CorsOptions = {
-  origin(origin, callback) {
-    if (!origin || allowedOrigins.has(origin)) {
-      callback(null, true);
-      return;
-    }
-
-    callback(new Error(`Origin ${origin} is not allowed by CORS`));
-  },
-  credentials: true,
-};
 
 app.use(
   "/api/webhook/mux",
@@ -56,7 +25,12 @@ app.use(passport.initialize());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(httpLogger);
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin:[ "http://localhost:3000","https://next-projects-8oog.vercel.app"],
+    credentials: true,
+  }),
+);
 
 //------------------------- mux webhook --------------------------
 
