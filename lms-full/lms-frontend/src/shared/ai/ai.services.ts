@@ -8,8 +8,26 @@ import {
   chapterDescriptionPrompt,
 } from "./prompts";
 
+const PUTER_REQUEST_TIMEOUT_MS = 60_000;
+
 const getTextContent = (content: unknown) => {
   return typeof content === "string" ? content : "";
+};
+
+const withTimeout = async <T>(promise: Promise<T>, label: string) => {
+  let timeoutId: ReturnType<typeof setTimeout>;
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new Error(`${label} timed out. Please try again.`));
+    }, PUTER_REQUEST_TIMEOUT_MS);
+  });
+
+  try {
+    return await Promise.race([promise, timeoutPromise]);
+  } finally {
+    clearTimeout(timeoutId!);
+  }
 };
 
 /* -------------------------------------------------------------------------- */
@@ -18,12 +36,11 @@ const getTextContent = (content: unknown) => {
 
 export const generateCourseTitles = async (text: string): Promise<string[]> => {
   try {
-    const response = await puter.ai.chat(
-      courseTitlePrompt(text),
-
-      {
+    const response = await withTimeout(
+      puter.ai.chat(courseTitlePrompt(text), {
         model: "gpt-4o-mini",
-      },
+      }),
+      "AI title generation",
     );
 
     const textResponse = getTextContent(response.message?.content);
@@ -49,19 +66,18 @@ export const generateCourseDescription = async (
   title: string,
 ): Promise<string> => {
   try {
-    const response = await puter.ai.chat(
-      courseDescriptionPrompt(title),
-
-      {
+    const response = await withTimeout(
+      puter.ai.chat(courseDescriptionPrompt(title), {
         model: "gpt-4o-mini",
-      },
+      }),
+      "AI description generation",
     );
 
     return getTextContent(response.message?.content) ?? "";
   } catch (error) {
     console.log("Description AI Error:", error);
 
-    return "";
+    throw error;
   }
 };
 
@@ -80,21 +96,23 @@ export const generateChapterDescription = async ({
   chapterTitle,
 }: GenerateChapterDescriptionProps): Promise<string> => {
   try {
-    const response = await puter.ai.chat(
-      chapterDescriptionPrompt({
-        courseTitle,
-        chapterTitle,
-      }),
-
-      {
-        model: "gpt-4o-mini",
-      },
+    const response = await withTimeout(
+      puter.ai.chat(
+        chapterDescriptionPrompt({
+          courseTitle,
+          chapterTitle,
+        }),
+        {
+          model: "gpt-4o-mini",
+        },
+      ),
+      "AI chapter description generation",
     );
 
     return getTextContent(response.message?.content) ?? "";
   } catch (error) {
     console.log("Chapter Description AI Error:", error);
 
-    return "";
+    throw error;
   }
 };
