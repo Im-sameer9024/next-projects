@@ -1,9 +1,9 @@
 import passport from "passport";
 
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { prisma } from "./prisma";
-import type { User } from "@/generated/prisma/client";
-import { Roles } from "@/generated/prisma/enums";
+import { prisma } from "./prisma.js";
+import type { User } from "../generated/prisma/client.js";
+import { Roles } from "../generated/prisma/enums.js";
 
 passport.use(
   new GoogleStrategy(

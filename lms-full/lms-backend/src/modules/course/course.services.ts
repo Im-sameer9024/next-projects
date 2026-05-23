@@ -1,4 +1,4 @@
-import { prisma } from "@/config/prisma";
+import { prisma } from "../../config/prisma.js";
 
 export const FindUniqueCourseById = async (courseId: string,teacherId:string) => {
   return await prisma.course.findUnique({

@@ -1,7 +1,7 @@
-import mux from "@/config/mux.config";
-import { prisma } from "@/config/prisma";
-import { asyncHandler } from "@/shared/utils/async-handler";
-import { SendResponse } from "@/shared/utils/response";
+import mux from "../../config/mux.config.js";
+import { prisma } from "../../config/prisma.js";
+import { asyncHandler } from "../../shared/utils/async-handler.js";
+import { SendResponse } from "../../shared/utils/response.js";
 import type { Request, Response } from "express";
 
 export const CreateChapter = asyncHandler(

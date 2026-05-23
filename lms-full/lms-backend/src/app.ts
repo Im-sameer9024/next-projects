@@ -1,13 +1,13 @@
 import "dotenv/config";
-import "./config/passport";
+import "./config/passport.js";
 import express from "express";
-import routes from "./routes";
-import { errorMiddleware } from "./middlewares/error.middleware";
-import { httpLogger } from "./middlewares/logger.middleware";
+import routes from "./routes/index.js";
+import { errorMiddleware } from "./middlewares/error.middleware.js";
+import { httpLogger } from "./middlewares/logger.middleware.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import passport from "passport";
-import muxWebhookRoutes from "@/modules/chapter/mux.routes";
+import muxWebhookRoutes from "./modules/chapter/mux.routes.js";
 const app = express();
 
 

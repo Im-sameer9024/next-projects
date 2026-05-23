@@ -1,7 +1,7 @@
-import { auth, isTeacher } from "@/middlewares/auth.middleware";
-import { validate } from "@/middlewares/validate.middleware";
+import { auth, isTeacher } from "../../middlewares/auth.middleware.js";
+import { validate } from "../../middlewares/validate.middleware.js";
 import express from "express";
-import { CreateCourseSchema } from "./course.validation";
+import { CreateCourseSchema } from "./course.validation.js";
 import {
   CreateCourse,
   DeleteCourseById,
@@ -9,9 +9,9 @@ import {
   GetCourseByTeacherId,
   UpdateSingleCourse,
   UploadThumbnail,
-} from "./course.controllers";
-import { AiCourseTitles } from "./ai.controllers";
-import { upload } from "@/middlewares/multer.middleware";
+} from "./course.controllers.js";
+import { AiCourseTitles } from "./ai.controllers.js";
+import { upload } from "../../middlewares/multer.middleware.js";
 
 const route = express.Router();
 

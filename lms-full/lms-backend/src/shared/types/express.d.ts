@@ -1,4 +1,4 @@
-import type { PayloadProps } from "@/modules/auth/auth";
+import type { PayloadProps } from "../../modules/auth/auth.js";
 
 declare global {
   namespace Express {

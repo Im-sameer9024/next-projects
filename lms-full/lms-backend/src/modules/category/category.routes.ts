@@ -1,8 +1,8 @@
-import { validate } from '@/middlewares/validate.middleware';
-import { auth, isTeacher } from "@/middlewares/auth.middleware";
+import { validate } from "../../middlewares/validate.middleware.js";
+import { auth, isTeacher } from "../../middlewares/auth.middleware.js";
 import express from "express";
-import { CreateCategory, GetAllCategories } from "./category.controllers";
-import { CreateCategorySchema } from './category.validation';
+import { CreateCategory, GetAllCategories } from "./category.controllers.js";
+import { CreateCategorySchema } from "./category.validation.js";
 
 const route = express.Router();
 

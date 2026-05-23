@@ -5,14 +5,14 @@ import {
   LogOut,
   RefreshAccessToken,
   SignUp,
-} from "./auth.controllers";
-import { validate } from "@/middlewares/validate.middleware";
+} from "./auth.controllers.js";
+import { validate } from "../../middlewares/validate.middleware.js";
 import {
   LoginValidationSchema,
   SignUpValidationSchema,
-} from "./auth.validation";
+} from "./auth.validation.js";
 import passport from "passport";
-import { auth } from "@/middlewares/auth.middleware";
+import { auth } from "../../middlewares/auth.middleware.js";
 
 const route = express.Router();
 

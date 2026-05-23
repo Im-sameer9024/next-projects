@@ -1,4 +1,4 @@
-import { SendResponse } from "@/shared/utils/response";
+import { SendResponse } from "../shared/utils/response.js";
 import type { NextFunction, Request, Response } from "express";
 import { ZodObject, ZodError } from "zod";
 

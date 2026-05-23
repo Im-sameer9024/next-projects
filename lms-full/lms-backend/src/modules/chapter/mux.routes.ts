@@ -1,5 +1,5 @@
 import express from "express";
-import { ChapterVideoWebhook } from "./chapter.controllers";
+import { ChapterVideoWebhook } from "./chapter.controllers.js";
 
 const route = express.Router();
 

@@ -1,8 +1,8 @@
-import { cloudinary } from "@/config/cloudinary";
-import { prisma } from "@/config/prisma";
-import { asyncHandler } from "@/shared/utils/async-handler";
-import { SendResponse } from "@/shared/utils/response";
-import { UploadFileToCloudinary } from "@/shared/utils/upload";
+import { cloudinary } from "../../config/cloudinary.js";
+import { prisma } from "../../config/prisma.js";
+import { asyncHandler } from "../../shared/utils/async-handler.js";
+import { SendResponse } from "../../shared/utils/response.js";
+import { UploadFileToCloudinary } from "../../shared/utils/upload.js";
 import type { Request, Response } from "express";
 
 export const CreateAttachment = asyncHandler(

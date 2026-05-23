@@ -1,9 +1,9 @@
 import { Router } from "express";
-import authRoutes from "@/modules/auth/auth.routes";
-import courseRoutes from "@/modules/course/course.routes";
-import categoryRoutes from "@/modules/category/category.routes";
-import attachmentRoutes from "@/modules/attachments/attachment.routes";
-import chapterRoutes from "@/modules/chapter/chapter.routes";
+import authRoutes from "../modules/auth/auth.routes.js";
+import courseRoutes from "../modules/course/course.routes.js";
+import categoryRoutes from "../modules/category/category.routes.js";
+import attachmentRoutes from "../modules/attachments/attachment.routes.js";
+import chapterRoutes from "../modules/chapter/chapter.routes.js";
 
 const routes = Router();
 

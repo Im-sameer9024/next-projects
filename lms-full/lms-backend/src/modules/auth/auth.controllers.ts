@@ -1,20 +1,20 @@
-import { prisma } from "@/config/prisma";
-import { cookieOptions } from "@/constants";
-import { registerEmailTemplate } from "@/shared/templates/registerEmailTemplate";
-import { asyncHandler } from "@/shared/utils/async-handler";
+import { prisma } from "../../config/prisma.js";
+import { cookieOptions } from "../../constants/index.js";
+import { registerEmailTemplate } from "../../shared/templates/registerEmailTemplate.js";
+import { asyncHandler } from "../../shared/utils/async-handler.js";
 import {
   ComparePassword,
   DecodeToken,
   GenerateAccessToken,
   GenerateRefreshToken,
   HashedPassword,
-} from "@/shared/utils/helpers";
-import { SendResponse } from "@/shared/utils/response";
-import { SendEmail } from "@/shared/utils/send-email";
+} from "../../shared/utils/helpers.js";
+import { SendResponse } from "../../shared/utils/response.js";
+import { SendEmail } from "../../shared/utils/send-email.js";
 import type { CookieOptions, NextFunction, Request, Response } from "express";
-import { FindUniqueUserByEmail, FindUniqueUserById } from "./auth.services";
-import { logger } from "@/middlewares/logger.middleware";
-import { Roles } from "@/generated/prisma/enums";
+import { FindUniqueUserByEmail, FindUniqueUserById } from "./auth.services.js";
+import { logger } from "../../middlewares/logger.middleware.js";
+import { Roles } from "../../generated/prisma/enums.js";
 
 const SignUp = asyncHandler(async (req: Request, res: Response) => {
   const { name, email, password, role } = req.body;

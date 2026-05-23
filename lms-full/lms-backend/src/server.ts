@@ -1,7 +1,7 @@
-import app from "./app";
-import { ConnectCloudinary } from "./config/cloudinary";
-import { prisma } from "./config/prisma";
-import { logger } from "./middlewares/logger.middleware";
+import app from "./app.js";
+import { ConnectCloudinary } from "./config/cloudinary.js";
+import { prisma } from "./config/prisma.js";
+import { logger } from "./middlewares/logger.middleware.js";
 
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || "development";

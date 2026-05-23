@@ -1,4 +1,4 @@
-import type { PayloadProps } from "@/modules/auth/auth";
+import type { PayloadProps } from "../../modules/auth/auth.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import type { JwtPayload, Secret, SignOptions } from "jsonwebtoken";

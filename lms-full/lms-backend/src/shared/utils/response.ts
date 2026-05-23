@@ -1,4 +1,4 @@
-import type { ApiResponseType } from "@/shared/types/response";
+import type { ApiResponseType } from "../types/response.js";
 import type { Response } from "express";
 
 export const SendResponse = <T>(

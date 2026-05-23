@@ -1,5 +1,5 @@
 import pino from "pino";
-import pinoHttp from "pino-http";
+import { pinoHttp } from "pino-http";
 
 export const logger = pino({
   transport: {

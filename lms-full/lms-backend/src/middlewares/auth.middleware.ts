@@ -1,8 +1,15 @@
-import { Roles } from "@/generated/prisma/enums";
-import { DecodeToken } from "@/shared/utils/helpers";
-import { SendResponse } from "@/shared/utils/response";
+import { Roles } from "../generated/prisma/enums.js";
+import { DecodeToken } from "../shared/utils/helpers.js";
+import { SendResponse } from "../shared/utils/response.js";
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+declare module "express-serve-static-core" {
+  interface Request {
+    user?: {
+      role?: string;
+    };
+  }
+}
 
 const { JsonWebTokenError, TokenExpiredError } = jwt;
 

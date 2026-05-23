@@ -1,13 +1,13 @@
-import { prisma } from "@/config/prisma";
-import { asyncHandler } from "@/shared/utils/async-handler";
+import { prisma } from "../../config/prisma.js";
+import { asyncHandler } from "../../shared/utils/async-handler.js";
 import type { Request, Response } from "express";
-import type { PayloadProps } from "../auth/auth";
-import { SendResponse } from "@/shared/utils/response";
+import type { PayloadProps } from "../auth/auth.js";
+import { SendResponse } from "../../shared/utils/response.js";
 import {
   DeleteUniqueCourseById,
   FindUniqueCourseById,
-} from "./course.services";
-import { UploadFileToCloudinary } from "@/shared/utils/upload";
+} from "./course.services.js";
+import { UploadFileToCloudinary } from "../../shared/utils/upload.js";
 
 //------------------------------- TEACHER ROLE CONTROLLERS -------------------------------------------------
 

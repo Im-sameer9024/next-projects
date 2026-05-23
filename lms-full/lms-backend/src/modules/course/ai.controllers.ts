@@ -1,12 +1,12 @@
-import { CourseTitlePrompt } from "@/constants";
+import { CourseTitlePrompt } from "../../constants/index.js";
 
-import { asyncHandler } from "@/shared/utils/async-handler";
+import { asyncHandler } from "../../shared/utils/async-handler.js";
 
 import type { Request, Response } from "express";
 
-import { GenerateAiResult } from "../genai/genai.services";
+import { GenerateAiResult } from "../genai/genai.services.js";
 
-import { SendResponse } from "@/shared/utils/response";
+import { SendResponse } from "../../shared/utils/response.js";
 
 export const AiCourseTitles = asyncHandler(
   async (req: Request, res: Response) => {

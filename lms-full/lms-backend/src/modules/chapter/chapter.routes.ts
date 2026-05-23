@@ -1,7 +1,7 @@
-import { auth, isTeacher } from "@/middlewares/auth.middleware";
-import { validate } from "@/middlewares/validate.middleware";
+import { auth, isTeacher } from "../../middlewares/auth.middleware.js";
+import { validate } from "../../middlewares/validate.middleware.js";
 import express from "express";
-import { CreateChapterSchema } from "./chapter.validation";
+import { CreateChapterSchema } from "./chapter.validation.js";
 import {
   ChapterVideoWebhook,
   CreateChapter,
@@ -13,7 +13,7 @@ import {
   UnPublishChapter,
   UpdateChapter,
   UploadChapterVideo,
-} from "./chapter.controllers";
+} from "./chapter.controllers.js";
 
 const route = express.Router();
 

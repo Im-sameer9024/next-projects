@@ -8,13 +8,13 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/User'
-export type * from './models/Course'
-export type * from './models/Category'
-export type * from './models/Attachment'
-export type * from './models/Chapter'
-export type * from './models/MuxData'
-export type * from './models/Purchase'
-export type * from './models/StripeCustomer'
-export type * from './models/UserProgress'
-export type * from './commonInputTypes'
+export type * from "./models/User.js"
+export type * from "./models/Course.js"
+export type * from "./models/Category.js"
+export type * from "./models/Attachment.js"
+export type * from "./models/Chapter.js"
+export type * from "./models/MuxData.js"
+export type * from "./models/Purchase.js"
+export type * from "./models/StripeCustomer.js"
+export type * from "./models/UserProgress.js"
+export type * from "./commonInputTypes.js"

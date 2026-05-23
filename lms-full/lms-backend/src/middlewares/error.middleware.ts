@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 
-import { logger } from "./logger.middleware";
+import { logger } from "./logger.middleware.js";
 
 export const errorMiddleware = (
   err: Error & { statusCode?: number },
