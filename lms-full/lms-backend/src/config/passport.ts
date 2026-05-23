@@ -2,6 +2,8 @@ import passport from "passport";
 
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { prisma } from "./prisma";
+import type { User } from "@/generated/prisma/client";
+import { Roles } from "@/generated/prisma/enums";
 
 passport.use(
   new GoogleStrategy(
@@ -23,7 +25,7 @@ passport.use(
 
         // FIND USER
 
-        let user = await prisma.user.findUnique({
+        let user: User | null = await prisma.user.findUnique({
           where: {
             email,
           },
@@ -38,20 +40,20 @@ passport.use(
 
               email,
 
-              avatar: profile.photos?.[0]?.value,
+              avatar: profile.photos?.[0]?.value || "",
 
               googleId: profile.id,
 
               isVerified: true,
 
-              role: "USER",
+              role: Roles.USER,
             },
           });
         }
 
         // UPDATE GOOGLE ID IF MISSING
 
-        if (!user.googleId) {
+        if (!user?.googleId) {
           user = await prisma.user.update({
             where: {
               id: user.id,
@@ -63,7 +65,13 @@ passport.use(
           });
         }
 
-        return done(null, user);
+        return done(null, {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          avatar: user.avatar ?? "",
+        });
       } catch (error) {
         return done(error as Error, false);
       }

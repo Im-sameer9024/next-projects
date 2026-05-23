@@ -244,6 +244,9 @@ export const GetChapterById = asyncHandler(
       where: {
         id: chapterId as string,
       },
+      include:{
+        muxData:true
+      }
     });
 
     if (!chapter) {

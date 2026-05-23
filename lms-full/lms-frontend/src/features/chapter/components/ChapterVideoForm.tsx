@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { toast } from "sonner";
 
-import { CheckCircle2, Edit, Trash2, UploadCloud, X } from "lucide-react";
+import { Edit, Trash2, UploadCloud, X } from "lucide-react";
 
 import CustomButton from "@/shared/components/custom/CustomButton";
 

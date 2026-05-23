@@ -8,7 +8,6 @@ import {
   DeleteAttachment,
   GetSingleCourseForTeacher,
   UpdateCourseByTeacher,
-  UploadThumbnail,
 } from "../apiOperations";
 import { Attachment, Course } from "../course";
 import { toast } from "sonner";
@@ -20,10 +19,8 @@ export const useCreateCourse = () => {
   return useMutation({
     mutationFn: CreateCourse,
     onSuccess: (data) => {
-      const CourseData = data.data as Course;
-
       queryClient.invalidateQueries({
-        queryKey: ["courses", CourseData.teacherId],
+        queryKey: ["course", "list"],
       });
 
       toast.success(GetApiResponseMessage(data));
@@ -38,7 +35,7 @@ export const useCreateCourse = () => {
 
 export const useGetCourseForTeacher = (courseId: string) => {
   return useQuery({
-    queryKey: ["course", courseId],
+    queryKey: ["course", "detail", courseId],
     queryFn: () => GetSingleCourseForTeacher(courseId),
     enabled: !!courseId,
   });
@@ -55,14 +52,8 @@ export const useUpdateCourseByTeacher = () => {
       const CourseData = data.data as Course;
 
       queryClient.setQueryData(
-        ["course", CourseData.id],
-        (
-          old:
-            | {
-                data: Course;
-              }
-            | undefined,
-        ) => {
+        ["course", "detail", CourseData.id],
+        (old: { data: Course } | undefined) => {
           if (!old) return old;
 
           return {
@@ -74,32 +65,10 @@ export const useUpdateCourseByTeacher = () => {
           };
         },
       );
-
-      queryClient.invalidateQueries({
-        queryKey: ["courses", CourseData.teacherId],
-      });
     },
 
     onError: (error) => {
       console.log("Error occur in update course", error);
-    },
-  });
-};
-
-export const useUploadThumbnail = () => {
-  return useMutation({
-    mutationFn: async (formData: FormData) => {
-      return UploadThumbnail(formData);
-    },
-
-    onSuccess: () => {
-      toast.success("Thumbnail uploaded successfully");
-    },
-
-    onError: (error) => {
-      console.log(error);
-
-      toast.error("Upload failed");
     },
   });
 };
@@ -113,7 +82,7 @@ export const useCreateAttachment = () => {
       const attachmentData = data.data as Attachment;
 
       queryClient.setQueryData(
-        ["course", attachmentData.courseId],
+        ["course", "detail", attachmentData.courseId],
         (
           old:
             | {
@@ -123,16 +92,15 @@ export const useCreateAttachment = () => {
         ) => {
           if (!old) return old;
 
+          const currentAttachments = Array.isArray(old.data?.attachments)
+            ? old.data.attachments
+            : [];
+
           return {
             ...old,
             data: {
               ...old.data,
-              attachments: [
-                ...(Array.isArray(old.data?.attachments)
-                  ? old.data?.attachments
-                  : []),
-                attachmentData,
-              ],
+              attachments: [...currentAttachments, attachmentData],
             },
           };
         },
@@ -150,27 +118,54 @@ export const useDeleteAttachment = () => {
       const attachmentData = data.data as Attachment;
 
       queryClient.setQueryData(
-        ["course", attachmentData?.courseId],
+        ["course", "detail", attachmentData?.courseId],
         (
           old:
             | {
                 data: Course;
               }
-            | undefined
+            | undefined,
         ) => {
           if (!old) return old;
+
+          const updatedAttachments = Array.isArray(old.data?.attachments)
+            ? old.data.attachments.filter(
+                (attachment: Attachment) => attachment.id !== attachmentData.id,
+              )
+            : [];
 
           return {
             ...old,
             data: {
               ...old.data,
-              attachments: old.data?.attachments.filter(
-                (attachment: Attachment) => attachment.id !== attachmentData.id,
-              ),
+              attachments: updatedAttachments,
             },
           };
         },
       );
+
+      toast.success("Attachment deleted successfully");
     },
   });
+};
+
+export const useInvalidateCourseCache = () => {
+  const queryClient = useQueryClient();
+
+  const invalidateCourseList = () => {
+    return queryClient.invalidateQueries({
+      queryKey: ["course", "list"],
+    });
+  };
+
+  const invalidateCourse = (courseId: string) => {
+    return queryClient.invalidateQueries({
+      queryKey: ["course", "detail", courseId],
+    });
+  };
+
+  return {
+    invalidateCourse,
+    invalidateCourseList,
+  };
 };

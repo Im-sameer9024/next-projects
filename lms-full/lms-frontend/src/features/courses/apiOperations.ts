@@ -28,7 +28,7 @@ export const GetSingleCourseForTeacher = async (courseId: string) => {
   return response.data;
 };
 
-export const UpdateCourseByTeacher = async (courseId: string, data: Course) => {
+export const UpdateCourseByTeacher = async (courseId: string, data:any) => {
   const response = await apiConnector({
     method: "PATCH",
     url: courseApiEndpoints.UPDATE_COURSE_BY_TEACHER(courseId),

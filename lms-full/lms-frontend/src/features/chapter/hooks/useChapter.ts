@@ -13,40 +13,27 @@ import {
 } from "../apiOperations";
 import { Chapter } from "../chapter";
 import { Course } from "@/features/courses/course";
+import { useInvalidateCourseCache } from "@/features/courses/hooks/useCourse";
 
 export const useChapterCreate = () => {
-  const queryClient = useQueryClient();
+  const { invalidateCourse } = useInvalidateCourseCache();
 
   return useMutation({
     mutationFn: CreateChapter,
     onSuccess: (data) => {
       const ChapterData = data.data as Chapter;
 
-      queryClient.setQueryData(
-        ["course", ChapterData.courseId],
-        (old: { data: Course } | undefined) => {
-          if (!old) return old;
-
-          return {
-            ...old,
-            data: {
-              ...old.data,
-              chapters: [
-                ...(Array.isArray(old.data?.chapters)
-                  ? old.data?.chapters
-                  : []),
-                ChapterData,
-              ],
-            },
-          };
-        },
-      );
+      invalidateCourse(ChapterData.courseId);
+    },
+    onError: (err) => {
+      console.log("Error in chapter create", err);
     },
   });
 };
 
 export const useUpdateChapter = () => {
   const queryClient = useQueryClient();
+  const { invalidateCourse } = useInvalidateCourseCache();
 
   return useMutation({
     mutationFn: UpdateChapter,
@@ -54,32 +41,17 @@ export const useUpdateChapter = () => {
       const ChapterData = data.data as Chapter;
 
       queryClient.invalidateQueries({
-        queryKey: ["chapter", ChapterData.id],
+        queryKey: ["chapter", "detail", ChapterData.id],
       });
 
-      queryClient.setQueryData(
-        ["course", ChapterData.courseId],
-        (old: { data: Course } | undefined) => {
-          if (!old) return old;
-
-          return {
-            ...old,
-            data: {
-              ...old.data,
-              chapters: old.data?.chapters.map((chapter) =>
-                chapter.id === ChapterData.id ? ChapterData : chapter,
-              ),
-            },
-          };
-        },
-      );
+      invalidateCourse(ChapterData.courseId);
     },
   });
 };
 
 export const useGetChapter = (chapterId: string) => {
   return useQuery({
-    queryKey: ["chapter", chapterId],
+    queryKey: ["chapter", "detail", chapterId],
     queryFn: () => GetChapterById(chapterId),
 
     // ✅ keep checking until video ready
@@ -106,40 +78,17 @@ export const useUploadChapterVideo = () => {
 
 export const useSaveChapterVideo = () => {
   const queryClient = useQueryClient();
+  const { invalidateCourse } = useInvalidateCourseCache();
 
   return useMutation({
     mutationFn: SaveChapterVideo,
 
-    onSuccess: (response: any, variables) => {
-      const muxData = response.data;
-
-      // ✅ update chapter cache immediately
-      queryClient.setQueryData(["chapter", variables.chapterId], (old: any) => {
-        if (!old) return old;
-
-        return {
-          ...old,
-
-          data: {
-            ...old.data,
-
-            muxData: muxData,
-
-            // processing started
-            isProcessingVideo: true,
-          },
-        };
-      });
-
-      // ✅ refetch chapter after webhook processing
+    onSuccess: (variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["chapter", variables.chapterId],
+        queryKey: ["chapter", "detail", variables.chapterId],
       });
 
-      // ✅ refetch course data
-      queryClient.invalidateQueries({
-        queryKey: ["course", variables.courseId],
-      });
+      invalidateCourse(variables.courseId);
     },
 
     onError: (error) => {
@@ -150,39 +99,16 @@ export const useSaveChapterVideo = () => {
 
 export const useDeleteChapterVideo = () => {
   const queryClient = useQueryClient();
+  const { invalidateCourse } = useInvalidateCourseCache();
 
   return useMutation({
     mutationFn: DeleteChapterVideo,
 
     onSuccess: (_: unknown, variables) => {
-      // ✅ update chapter cache immediately
-      queryClient.setQueryData(["chapter", variables.chapterId], (old: any) => {
-        if (!old) return old;
-
-        return {
-          ...old,
-
-          data: {
-            ...old.data,
-
-            videoUrl: null,
-
-            muxData: null,
-
-            isProcessingVideo: false,
-          },
-        };
-      });
-
-      // ✅ invalidate latest chapter
       queryClient.invalidateQueries({
-        queryKey: ["chapter", variables.chapterId],
+        queryKey: ["chapter", "detail", variables.chapterId],
       });
-
-      // ✅ invalidate course cache
-      queryClient.invalidateQueries({
-        queryKey: ["course", variables.courseId],
-      });
+      invalidateCourse(variables.courseId);
     },
 
     onError: (error) => {
@@ -193,99 +119,53 @@ export const useDeleteChapterVideo = () => {
 
 export const useDeleteChapter = () => {
   const queryClient = useQueryClient();
+
+  const { invalidateCourse } = useInvalidateCourseCache();
+
   return useMutation({
     mutationFn: DeleteChapter,
     onSuccess: (data) => {
       const ChapterData = data.data as Chapter;
 
       queryClient.removeQueries({
-        queryKey: ["chapter", ChapterData.id],
+        queryKey: ["chapter", "detail", ChapterData.id],
       });
 
-      queryClient.invalidateQueries({
-        queryKey: ["course", ChapterData.courseId],
-      });
+      invalidateCourse(ChapterData.courseId);
     },
   });
 };
 
 export const usePublishChapter = () => {
   const queryClient = useQueryClient();
+  const { invalidateCourse } = useInvalidateCourseCache();
 
   return useMutation({
     mutationFn: PublishChapter,
     onSuccess: (data) => {
       const ChapterData = data.data as Chapter;
 
-      queryClient.setQueryData(
-        ["chapter", ChapterData.id],
-        (old: { data: Chapter } | undefined) => {
-          if (!old) return old;
-
-          return {
-            ...old.data,
-            isPublished: ChapterData.isPublished,
-          };
-        },
-      );
-
-      queryClient.setQueryData(
-        ["course", ChapterData.courseId],
-        (old: { data: Course } | undefined) => {
-          if (!old) return old;
-
-          return {
-            ...old,
-            data: {
-              ...old.data,
-              chapters: old.data?.chapters.map((chapter) =>
-                chapter.id === ChapterData.id ? ChapterData : chapter,
-              ),
-            },
-          };
-        },
-      );
+      queryClient.invalidateQueries({
+        queryKey: ["chapter", "detail", ChapterData.id],
+      });
+      invalidateCourse(ChapterData.courseId);
     },
   });
 };
 
 export const useUnPublishChapter = () => {
   const queryClient = useQueryClient();
-
+  const { invalidateCourse } = useInvalidateCourseCache();
   return useMutation({
     mutationFn: UnPublishChapter,
 
     onSuccess: (data) => {
       const ChapterData = data.data as Chapter;
 
-      queryClient.setQueryData(
-        ["chapter", ChapterData.id],
-        (old: { data: Chapter } | undefined) => {
-          if (!old) return old;
-
-          return {
-            ...old.data,
-            isPublished: ChapterData.isPublished,
-          };
-        },
-      );
-
-      queryClient.setQueryData(
-        ["course", ChapterData.courseId],
-        (old: { data: Course } | undefined) => {
-          if (!old) return old;
-
-          return {
-            ...old,
-            data: {
-              ...old.data,
-              chapters: old.data?.chapters.map((chapter) =>
-                chapter.id === ChapterData.id ? ChapterData : chapter,
-              ),
-            },
-          };
-        },
-      );
+      queryClient.invalidateQueries({
+        queryKey: ["chapter", "detail", ChapterData.id],
+      });
+      invalidateCourse(ChapterData.courseId);
     },
   });
 };

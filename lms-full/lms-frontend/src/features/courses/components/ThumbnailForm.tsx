@@ -7,10 +7,8 @@ import { Edit, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { AspectRatio } from "@/shared/components/ui/aspect-ratio";
 import CustomButton from "@/shared/components/custom/CustomButton";
-import {
-  useUpdateCourseByTeacher,
-  useUploadThumbnail,
-} from "../hooks/useCourse";
+import { useUpdateCourseByTeacher } from "../hooks/useCourse";
+import { UploadThumbnail } from "../apiOperations";
 
 const ThumbnailForm = ({
   image,
@@ -22,12 +20,10 @@ const ThumbnailForm = ({
   const [isEdit, setIsEdit] = useState(false);
   const [preview, setPreview] = useState<string | null>(image);
   const [uploadedImage, setUploadedImage] = useState<any>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const { mutateAsync: UpdateCourse, isPending: isUpdating } =
     useUpdateCourseByTeacher();
-
-  const { mutateAsync: UploadImage, isPending: isUploading } =
-    useUploadThumbnail();
 
   const toggleEdit = () => {
     setIsEdit((prev) => !prev);
@@ -36,6 +32,7 @@ const ThumbnailForm = ({
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsUploading(true);
     const file = e.target.files?.[0];
 
     if (!file) {
@@ -49,11 +46,13 @@ const ThumbnailForm = ({
     try {
       const formData = new FormData();
       formData.append("image", file);
-      const res = await UploadImage(formData);
+      const res = await UploadThumbnail(formData);
 
       setUploadedImage(res.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsUploading(false);
     }
   };
 

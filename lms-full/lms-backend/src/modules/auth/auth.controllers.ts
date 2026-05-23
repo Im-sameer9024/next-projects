@@ -79,10 +79,23 @@ const LogIn = asyncHandler(async (req: Request, res: Response) => {
     });
   }
 
-  const isPasswordValid = await ComparePassword(
-    password,
-    user.password as string,
-  );
+  if (!user.password) {
+    return SendResponse(res, {
+      statusCode: 400,
+      success: false,
+      message: "Please login with Google",
+    });
+  }
+
+  const isPasswordValid = await ComparePassword(password, user.password);
+
+  if (!isPasswordValid) {
+    return SendResponse(res, {
+      statusCode: 401,
+      success: false,
+      message: "Invalid email or password",
+    });
+  }
 
   const payload = {
     id: user.id,
@@ -94,22 +107,20 @@ const LogIn = asyncHandler(async (req: Request, res: Response) => {
 
   const createdUser = await FindUniqueUserById(user.id);
 
-  if (isPasswordValid) {
-    const accessToken = await GenerateAccessToken(payload);
-    const refreshToken = await GenerateRefreshToken(payload);
+  const accessToken = await GenerateAccessToken(payload);
+  const refreshToken = await GenerateRefreshToken(payload);
 
-    res.cookie("refreshToken", refreshToken, cookieOptions as CookieOptions);
+  res.cookie("refreshToken", refreshToken, cookieOptions as CookieOptions);
 
-    return SendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: "User logged in successfully",
-      data: {
-        accessToken,
-        user: createdUser,
-      },
-    });
-  }
+  return SendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User logged in successfully",
+    data: {
+      accessToken,
+      user: createdUser,
+    },
+  });
 });
 
 const RefreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
@@ -226,10 +237,10 @@ const googleCallback = asyncHandler(async (req: Request, res: Response) => {
   res.cookie("refreshToken", refreshToken, cookieOptions as CookieOptions);
 
   if (user.role === Roles.TEACHER) {
-    res.redirect(`${process.env.CLIENT_URL}/teacher}`);
+    return res.redirect(`${process.env.CLIENT_URL}/teacher`);
   }
 
-  res.redirect(`${process.env.CLIENT_URL}/user`);
+  return res.redirect(`${process.env.CLIENT_URL}/user`);
 });
 
 export { SignUp, LogIn, RefreshAccessToken, LogOut, googleCallback };

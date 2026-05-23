@@ -1,5 +1,4 @@
 import { cloudinary } from "@/config/cloudinary";
-import type { File as UploadFileType } from "multer";
 import type { UploadApiResponse, UploadApiErrorResponse } from "cloudinary";
 
 /* -------------------------------------------------------------------------- */
@@ -73,9 +72,7 @@ export const UploadFileToCloudinary = async (
 
             resource_type: resourceType,
 
-            public_id: `${Date.now()}-${file.originalname
-              .split(".")[0]
-              .replace(/\s+/g, "-")}`,
+            public_id: `${Date.now()}-${(file.originalname.split(".")[0] ?? "file").replace(/\s+/g, "-")}`,
 
             /* IMAGE OPTIMIZATION */
 

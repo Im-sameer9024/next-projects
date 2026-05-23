@@ -11,7 +11,7 @@ export const createQueryClient = () => {
         staleTime: 1000 * 60 * 5, // 5 minutes
 
         // 🧠 Cache time (garbage collection)
-        gcTime: 1000 * 60 * 30, // 30 minutes
+        gcTime: 1000 * 60 * 10, // 10 minutes
 
         // 🚫 Avoid refetch on tab switch (optional)
         refetchOnWindowFocus: false,
