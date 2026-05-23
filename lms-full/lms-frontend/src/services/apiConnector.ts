@@ -1,4 +1,5 @@
 import { useAuthStore } from "@/shared/store/auth.store";
+import { API_BASE_URL } from "@/services/apiUrl";
 
 import axios, {
   AxiosError,
@@ -38,7 +39,7 @@ interface RefreshTokenResponse {
 /* -------------------------------------------------------------------------- */
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: API_BASE_URL,
   withCredentials: true,
   timeout: 30000,
 });

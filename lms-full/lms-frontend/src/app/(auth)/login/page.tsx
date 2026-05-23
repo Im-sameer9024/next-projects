@@ -3,13 +3,14 @@
 import LoginForm from "@/features/auth/components/LoginForm";
 import CustomButton from "@/shared/components/custom/CustomButton";
 import { Separator } from "@/shared/components/ui/separator";
+import { getApiUrl } from "@/services/apiUrl";
 import Link from "next/link";
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
 
 function LogInPage() {
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8000/api/auth/google";
+    window.location.href = getApiUrl("/auth/google");
   };
 
   return (

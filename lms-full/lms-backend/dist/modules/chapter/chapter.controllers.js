@@ -200,8 +200,8 @@ export const GetChapterById = asyncHandler(async (req, res) => {
             id: chapterId,
         },
         include: {
-            muxData: true
-        }
+            muxData: true,
+        },
     });
     if (!chapter) {
         return SendResponse(res, {
@@ -302,6 +302,7 @@ export const SaveChapterVideo = asyncHandler(async (req, res) => {
         },
         data: {
             isProcessingVideo: true,
+            videoUrl: null,
         },
     });
     return SendResponse(res, {

@@ -124,12 +124,14 @@ const ChapterUpdate = ({
                 title={chapter?.title || ""}
                 courseId={chapter?.courseId || ""}
                 chapterId={chapter?.id || ""}
+                isPublished={chapter?.isPublished}
               />
               <ChapterDescriptionForm
                 title={chapter?.title || ""}
                 description={chapter.description || ""}
                 courseId={chapter?.courseId || ""}
                 chapterId={chapter?.id || ""}
+                isPublished={chapter?.isPublished}
               />
 
               {/*-------------- chapter access form ---------- */}
@@ -148,6 +150,7 @@ const ChapterUpdate = ({
                 isFree={chapter.isFree}
                 chapterId={chapter.id}
                 courseId={courseId}
+                isPublished={chapter.isPublished}
               />
             </section>
           </section>
@@ -166,6 +169,7 @@ const ChapterUpdate = ({
               videoUrl={chapter.videoUrl || ""}
               chapterId={chapter.id || ""}
               courseId={courseId || ""}
+              isPublished={chapter.isPublished}
               isProcessingVideo={chapter?.isProcessingVideo || false}
             />
           </section>

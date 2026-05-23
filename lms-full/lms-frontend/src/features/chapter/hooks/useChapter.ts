@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CreateChapter,
@@ -12,7 +11,6 @@ import {
   UploadChapterVideo,
 } from "../apiOperations";
 import { Chapter } from "../chapter";
-import { Course } from "@/features/courses/course";
 import { useInvalidateCourseCache } from "@/features/courses/hooks/useCourse";
 
 export const useChapterCreate = () => {
@@ -53,17 +51,11 @@ export const useGetChapter = (chapterId: string) => {
   return useQuery({
     queryKey: ["chapter", "detail", chapterId],
     queryFn: () => GetChapterById(chapterId),
-
     // ✅ keep checking until video ready
     refetchInterval: (query) => {
       const chapter = query.state.data?.data;
 
-      // only poll while processing
-      if (chapter?.isProcessingVideo) {
-        return 5000;
-      }
-
-      return false;
+      return chapter?.isProcessingVideo ? 5000 : false;
     },
 
     enabled: !!chapterId,

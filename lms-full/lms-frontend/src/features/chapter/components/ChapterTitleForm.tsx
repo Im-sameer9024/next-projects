@@ -18,10 +18,12 @@ const ChapterTitleForm = ({
   title,
   chapterId,
   courseId,
+  isPublished,
 }: {
   title: string;
   chapterId: string;
   courseId: string;
+  isPublished: boolean;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
 
@@ -50,7 +52,7 @@ const ChapterTitleForm = ({
       });
 
       setIsEdit(false);
-      toast.success("Chapter updated successfully")
+      toast.success("Chapter updated successfully");
     } catch (error) {
       console.error("Chapter update failed:", error);
     }
@@ -73,6 +75,7 @@ const ChapterTitleForm = ({
         <h3 className="font-semibold text-sm text-slate-700">Chapter Title</h3>
 
         <CustomButton
+          disabled={isPublished}
           leftIcon={!isEdit && <Edit size={16} />}
           size="sm"
           variant={isEdit ? "outline" : "default"}

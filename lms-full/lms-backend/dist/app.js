@@ -9,18 +9,42 @@ import cors from "cors";
 import passport from "passport";
 import muxWebhookRoutes from "./modules/chapter/mux.routes.js";
 const app = express();
+const parseOrigins = (value) => value
+    ?.split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+    .map((origin) => {
+    try {
+        return new URL(origin).origin;
+    }
+    catch {
+        return origin.replace(/\/$/, "");
+    }
+}) ?? [];
+const allowedOrigins = new Set([
+    "http://localhost:3000",
+    ...parseOrigins(process.env.CLIENT_URL),
+    ...parseOrigins(process.env.CORS_ORIGIN),
+]);
+const corsOptions = {
+    origin(origin, callback) {
+        if (!origin || allowedOrigins.has(origin)) {
+            callback(null, true);
+            return;
+        }
+        callback(new Error(`Origin ${origin} is not allowed by CORS`));
+    },
+    credentials: true,
+};
 app.use("/api/webhook/mux", express.raw({
     type: "application/json",
 }), muxWebhookRoutes);
 app.use(express.json());
+app.use(passport.initialize());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(httpLogger);
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-}));
-app.use(passport.initialize());
+app.use(cors(corsOptions));
 //------------------------- mux webhook --------------------------
 //--------------- health check -------------------
 app.get("/", (req, res) => {

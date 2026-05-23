@@ -21,6 +21,7 @@ interface ChapterDescriptionFormProps {
   title: string;
   chapterId: string;
   courseId: string;
+  isPublished:boolean
 }
 
 const isHtmlEmpty = (html: string | null | undefined): boolean => {
@@ -34,6 +35,7 @@ const ChapterDescriptionForm = ({
   title,
   chapterId,
   courseId,
+  isPublished
 }: ChapterDescriptionFormProps) => {
   const [isEdit, setIsEdit] = useState(false);
 
@@ -166,6 +168,7 @@ const ChapterDescriptionForm = ({
         </h3>
 
         <CustomButton
+        disabled={isPublished}
           leftIcon={!isEdit ? <Edit size={16} /> : undefined}
           size="sm"
           variant={isEdit ? "outline" : "default"}

@@ -244,9 +244,9 @@ export const GetChapterById = asyncHandler(
       where: {
         id: chapterId as string,
       },
-      include:{
-        muxData:true
-      }
+      include: {
+        muxData: true,
+      },
     });
 
     if (!chapter) {
@@ -373,6 +373,7 @@ export const SaveChapterVideo = asyncHandler(
       },
       data: {
         isProcessingVideo: true,
+        videoUrl: null,
       },
     });
 

@@ -27,10 +27,12 @@ const ChapterVideoForm = ({
   chapterId,
   courseId,
   isProcessingVideo,
+  isPublished,
 }: {
   videoUrl: string | null;
   chapterId: string;
   courseId: string;
+  isPublished: boolean;
   isProcessingVideo: boolean;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
@@ -39,6 +41,8 @@ const ChapterVideoForm = ({
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadComplete, setIsUploadComplete] = useState(false);
+
+  console.log("isprocessing video", isProcessingVideo);
 
   const { mutateAsync: createUpload } = useUploadChapterVideo();
 
@@ -154,11 +158,6 @@ const ChapterVideoForm = ({
       return toast.error("Upload video before saving");
     }
 
-    console.log(
-      "-------------------- upload id -------------------------",
-      uploadId,
-    );
-
     try {
       await saveVideo({
         uploadId,
@@ -220,6 +219,7 @@ const ChapterVideoForm = ({
 
         <div className="flex items-center gap-2">
           <CustomButton
+            disabled={isPublished}
             type="button"
             size="sm"
             variant={isEdit ? "outline" : "default"}
@@ -232,6 +232,7 @@ const ChapterVideoForm = ({
 
           {videoUrl && (
             <CustomButton
+              disabled={isPublished}
               type="button"
               size="sm"
               variant="outline"

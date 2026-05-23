@@ -8,6 +8,7 @@ passport.use(new GoogleStrategy({
     callbackURL: process.env.GOOGLE_CALLBACK_URL,
 }, async (accessToken, refreshToken, profile, done) => {
     try {
+        console.log("Profile", profile);
         const email = profile.emails?.[0]?.value;
         if (!email) {
             return done(new Error("No email found"), false);

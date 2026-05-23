@@ -20,10 +20,12 @@ const ChapterAccessForm = ({
   isFree,
   chapterId,
   courseId,
+  isPublished,
 }: {
   isFree: boolean;
   chapterId: string;
   courseId: string;
+  isPublished: boolean;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
 
@@ -83,6 +85,7 @@ const ChapterAccessForm = ({
         <h3 className="text-sm font-semibold text-slate-700">Chapter Access</h3>
 
         <CustomButton
+          disabled={isPublished}
           leftIcon={!isEdit && <Edit size={16} />}
           size="sm"
           variant={isEdit ? "outline" : "default"}
