@@ -237,10 +237,10 @@ const googleCallback = asyncHandler(async (req: Request, res: Response) => {
   res.cookie("refreshToken", refreshToken, cookieOptions as CookieOptions);
 
   if (user.role === Roles.TEACHER) {
-    return res.redirect(`${process.env.CLIENT_URL}/teacher`);
+    return res.redirect(`${process.env.CLIENT_URL}/teacher/courses`);
   }
 
-  return res.redirect(`${process.env.CLIENT_URL}/user`);
+  return res.redirect(`${process.env.CLIENT_URL}/user/dashboard`);
 });
 
 export { SignUp, LogIn, RefreshAccessToken, LogOut, googleCallback };

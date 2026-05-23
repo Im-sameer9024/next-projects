@@ -191,9 +191,9 @@ const googleCallback = asyncHandler(async (req, res) => {
     const refreshToken = await GenerateRefreshToken(payload);
     res.cookie("refreshToken", refreshToken, cookieOptions);
     if (user.role === Roles.TEACHER) {
-        return res.redirect(`${process.env.CLIENT_URL}/teacher`);
+        return res.redirect(`${process.env.CLIENT_URL}/teacher/courses`);
     }
-    return res.redirect(`${process.env.CLIENT_URL}/user`);
+    return res.redirect(`${process.env.CLIENT_URL}/user/dashboard`);
 });
 export { SignUp, LogIn, RefreshAccessToken, LogOut, googleCallback };
 //# sourceMappingURL=auth.controllers.js.map
