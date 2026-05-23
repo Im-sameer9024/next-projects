@@ -14,6 +14,7 @@ import {
   UpdateChapter,
   UploadChapterVideo,
 } from "./chapter.controllers.js";
+import { AiChapterDescription } from "./ai.controllers.js";
 
 const route = express.Router();
 
@@ -26,15 +27,16 @@ route.post(
 );
 route.delete("/delete", auth, isTeacher, DeleteChapter);
 route.post("/update", auth, isTeacher, UpdateChapter);
-route.get("/get/:chapterId",auth, isTeacher, GetChapterById);
+route.get("/get/:chapterId", auth, isTeacher, GetChapterById);
 
-route.post("/mux/upload",auth,isTeacher,UploadChapterVideo)
-route.post("/mux/save-video",auth,isTeacher,SaveChapterVideo)
-route.post("/mux/delete-video",auth,isTeacher,DeleteChapterVideo)
+route.post("/mux/upload", auth, isTeacher, UploadChapterVideo);
+route.post("/mux/save-video", auth, isTeacher, SaveChapterVideo);
+route.post("/mux/delete-video", auth, isTeacher, DeleteChapterVideo);
 
-route.post("/publish",auth,isTeacher,PublishChapter)
-route.post("/unpublish",auth,isTeacher,UnPublishChapter)
+route.post("/publish", auth, isTeacher, PublishChapter);
+route.post("/unpublish", auth, isTeacher, UnPublishChapter);
+route.post("/ai/description", auth, isTeacher, AiChapterDescription);
 
-route.post("/",ChapterVideoWebhook)
+route.post("/", ChapterVideoWebhook);
 
 export default route;

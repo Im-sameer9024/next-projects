@@ -4,11 +4,7 @@ import {
   attachmentApiEndpoints,
   courseApiEndpoints,
 } from "@/services/apiEndPoints";
-import {
-  CourseImageSchemaType,
-  CreateCourseSchemaType,
-} from "./course.validation";
-import { Course } from "./course";
+import { CreateCourseSchemaType } from "./course.validation";
 
 export const CreateCourse = async (data: CreateCourseSchemaType) => {
   const response = await apiConnector({
@@ -28,7 +24,7 @@ export const GetSingleCourseForTeacher = async (courseId: string) => {
   return response.data;
 };
 
-export const UpdateCourseByTeacher = async (courseId: string, data:any) => {
+export const UpdateCourseByTeacher = async (courseId: string, data: any) => {
   const response = await apiConnector({
     method: "PATCH",
     url: courseApiEndpoints.UPDATE_COURSE_BY_TEACHER(courseId),
@@ -62,12 +58,48 @@ export const CrateAttachment = async (data: FormData) => {
   return response.data;
 };
 
-export const DeleteAttachment = async (data:any) => {
+export const DeleteAttachment = async (data: any) => {
   const response = await apiConnector({
     method: "POST",
     url: attachmentApiEndpoints.DELETE_ATTACHMENT,
     bodyData: data,
-    
   });
+  return response.data;
+};
+
+
+/* -------------------------------------------------------------------------- */
+/*                      GENERATE COURSE TITLE                            */
+/* -------------------------------------------------------------------------- */
+
+export const GenerateCourseTitles = async (text: string) => {
+  const response = await apiConnector({
+    method: "POST",
+
+    url: courseApiEndpoints.GENERATE_TITLES,
+
+    bodyData: {
+      text,
+    },
+  });
+
+  return response.data;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                      GENERATE COURSE DESCRIPTION                            */
+/* -------------------------------------------------------------------------- */
+
+export const GenerateCourseDescription = async (title: string) => {
+  const response = await apiConnector({
+    method: "POST",
+
+    url: courseApiEndpoints.GENERATE_DESCRIPTION,
+
+    bodyData: {
+      title,
+    },
+  });
+
   return response.data;
 };

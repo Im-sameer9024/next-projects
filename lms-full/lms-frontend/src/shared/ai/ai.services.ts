@@ -1,12 +1,10 @@
 "use client";
 
-import puter from "./puter";
+import puter from "@heyputer/puter.js";
+import { chapterDescriptionPrompt, courseDescriptionPrompt, courseTitlePrompt } from "./prompts";
 
-import {
-  courseTitlePrompt,
-  courseDescriptionPrompt,
-  chapterDescriptionPrompt,
-} from "./prompts";
+
+
 
 const PUTER_REQUEST_TIMEOUT_MS = 60_000;
 

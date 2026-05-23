@@ -1,23 +1,5 @@
 import type { NextConfig } from "next";
 
-const getOrigin = (value?: string) => {
-  if (!value) {
-    return null;
-  }
-
-  try {
-    return new URL(value).origin;
-  } catch {
-    return null;
-  }
-};
-
-const connectSources = [
-  "'self'",
-  "https://api.puter.com",
-  getOrigin(process.env.NEXT_PUBLIC_API_URL),
-].filter(Boolean);
-
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
@@ -37,17 +19,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  headers: () => [
-    {
-      source: "/:path*",
-      headers: [
-        {
-          key: "Content-Security-Policy",
-          value: `connect-src ${connectSources.join(" ")};`,
-        },
-      ],
-    },
-  ],
 };
 
 export default nextConfig;

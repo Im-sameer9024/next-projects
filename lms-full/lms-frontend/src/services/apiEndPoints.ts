@@ -13,6 +13,7 @@ export const courseApiEndpoints = {
 
   // ---------------  ai base api------------
   GENERATE_TITLES: "/course/ai/title",
+  GENERATE_DESCRIPTION: "/course/ai/description",
 };
 
 export const categoryApiEndpoints = {
@@ -34,8 +35,9 @@ export const chapterApiEndpoints = {
   SAVE_VIDEO: "/chapter/mux/save-video",
   DELETE_VIDEO: "/chapter/mux/delete-video",
 
-  PUBLISH_CHAPTER:"/chapter/publish",
-  UNPUBLISH_CHAPTER:"/chapter/unpublish",
+  PUBLISH_CHAPTER: "/chapter/publish",
+  UNPUBLISH_CHAPTER: "/chapter/unpublish",
+  GENERATE_DESCRIPTION: "/chapter/ai/description",
 
   GET_CHAPTERS_BY_COURSE_ID: (courseId: string) => `/chapter/${courseId}`,
   DELETE_CHAPTER_BY_TEACHER: (chapterId: string) =>

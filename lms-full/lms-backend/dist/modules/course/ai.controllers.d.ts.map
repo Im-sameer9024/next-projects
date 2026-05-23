@@ -1,1 +1,1 @@
-{"version":3,"file":"ai.controllers.d.ts","sourceRoot":"","sources":["../../../src/modules/course/ai.controllers.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAMjD,eAAO,MAAM,cAAc,6EAwB1B,CAAC"}
+{"version":3,"file":"ai.controllers.d.ts","sourceRoot":"","sources":["../../../src/modules/course/ai.controllers.ts"],"names":[],"mappings":"AAOA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAMjD,eAAO,MAAM,cAAc,6EAwB1B,CAAC;AAEF,eAAO,MAAM,mBAAmB,6EAqB/B,CAAC"}

@@ -6,4 +6,9 @@ export declare const cookieOptions: {
     path: string;
 };
 export declare const CourseTitlePrompt: (text: string) => string;
+export declare const CourseDescriptionPrompt: (title: string) => string;
+export declare const ChapterDescriptionPrompt: ({ courseTitle, chapterTitle, }: {
+    courseTitle: string;
+    chapterTitle: string;
+}) => string;
 //# sourceMappingURL=index.d.ts.map

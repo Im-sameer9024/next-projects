@@ -36,7 +36,7 @@ export const DeleteChapter = async (data: any) => {
     bodyData: data,
   });
   return response.data;
-}
+};
 
 export const UploadChapterVideo = async (data: any) => {
   const response = await apiConnector({
@@ -55,7 +55,7 @@ export const DeleteChapterVideo = async (data: any) => {
     bodyData: data,
   });
   return response.data;
-}
+};
 
 export const SaveChapterVideo = async (data: any) => {
   const response = await apiConnector({
@@ -73,7 +73,7 @@ export const PublishChapter = async (data: any) => {
     bodyData: data,
   });
   return response.data;
-}
+};
 
 export const UnPublishChapter = async (data: any) => {
   const response = await apiConnector({
@@ -82,4 +82,13 @@ export const UnPublishChapter = async (data: any) => {
     bodyData: data,
   });
   return response.data;
-}
+};
+
+export const GenerateChapterDescription = async (data: any) => {
+  const response = await apiConnector({
+    method: "POST",
+    url: chapterApiEndpoints.GENERATE_DESCRIPTION,
+    bodyData: data,
+  });
+  return response.data;
+};

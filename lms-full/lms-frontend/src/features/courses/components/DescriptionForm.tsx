@@ -20,8 +20,7 @@ import {
 } from "../course.validation";
 
 import { useUpdateCourseByTeacher } from "../hooks/useCourse";
-
-import { useAiCourseDescription } from "../hooks/useAiCourseDescription";
+import { useAiCourseDescription } from "../hooks/useAiCourse";
 
 const DescriptionForm = ({
   description,
@@ -37,7 +36,7 @@ const DescriptionForm = ({
   const [isEdit, setIsEdit] = useState(false);
 
   /* -------------------------------------------------------------------------- */
-  /*                                  HOOKS                                     */
+  /*                                   HOOKS                                    */
   /* -------------------------------------------------------------------------- */
 
   const {
@@ -53,7 +52,7 @@ const DescriptionForm = ({
   } = useAiCourseDescription();
 
   /* -------------------------------------------------------------------------- */
-  /*                                   FORM                                     */
+  /*                                    FORM                                    */
   /* -------------------------------------------------------------------------- */
 
   const { handleSubmit, control, reset, setValue } =
@@ -72,7 +71,7 @@ const DescriptionForm = ({
   });
 
   /* -------------------------------------------------------------------------- */
-  /*                               SUBMIT                                       */
+  /*                                   SUBMIT                                   */
   /* -------------------------------------------------------------------------- */
 
   const onSubmit = async (data: CourseDescriptionSchemaType) => {
@@ -88,11 +87,13 @@ const DescriptionForm = ({
       toast.success("Course description updated successfully");
     } catch (error) {
       console.error("Update failed:", error);
+
+      toast.error("Failed to update course description");
     }
   };
 
   /* -------------------------------------------------------------------------- */
-  /*                              GENERATE AI                                   */
+  /*                               GENERATE AI                                  */
   /* -------------------------------------------------------------------------- */
 
   const handleGenerateAI = async () => {
@@ -105,7 +106,17 @@ const DescriptionForm = ({
     try {
       const generated = await GenerateDescription(title);
 
-      setValue("description", generated);
+      if (!generated) {
+        toast.error("No description generated");
+
+        return;
+      }
+
+      setValue("description", generated, {
+        shouldDirty: true,
+
+        shouldValidate: true,
+      });
 
       toast.success("AI description generated");
     } catch (error) {
@@ -130,11 +141,31 @@ const DescriptionForm = ({
   };
 
   return (
-    <section className="bg-white border p-4 border-slate-200 rounded">
+    <section
+      className="
+        bg-white
+        border
+        p-4
+        border-slate-200
+        rounded
+      "
+    >
       {/* HEADER */}
 
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-sm text-slate-700">
+      <div
+        className="
+          flex
+          justify-between
+          items-center
+        "
+      >
+        <h3
+          className="
+            font-semibold
+            text-sm
+            text-slate-700
+          "
+        >
           Course Description
         </h3>
 
@@ -146,7 +177,7 @@ const DescriptionForm = ({
             isEdit
               ? "bg-transparent text-slate-500"
               : "bg-blue-500 hover:bg-blue-600"
-          } transition-all duration-200`}
+          }`}
           onClick={toggleEdit}
         >
           {isEdit ? "Cancel" : "Edit"}
@@ -156,14 +187,24 @@ const DescriptionForm = ({
       {/* BODY */}
 
       <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isEdit
-            ? "max-h-125 opacity-100 mt-3"
-            : "max-h-fit opacity-100 mt-2"
-        }`}
+        className={`
+          overflow-hidden
+          transition-all
+          duration-300
+          ease-in-out
+          ${
+            isEdit ? "max-h-125 opacity-100 mt-3" : "max-h-fit opacity-100 mt-2"
+          }
+        `}
       >
         {isEdit ? (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 p-1">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="
+              space-y-3
+              p-1
+            "
+          >
             {/* TEXTAREA */}
 
             <CustomTextarea
@@ -171,12 +212,20 @@ const DescriptionForm = ({
               disabled={isUpdatingCourse || isGeneratingAI}
               loading={isGeneratingAI}
               name="description"
-              placeholder="e.g. This course teaches..."
+              placeholder="
+                e.g. This course teaches...
+              "
             />
 
             {/* ACTIONS */}
 
-            <div className="flex items-center gap-3">
+            <div
+              className="
+                flex
+                items-center
+                gap-3
+              "
+            >
               {/* SAVE */}
 
               <CustomButton
@@ -185,7 +234,10 @@ const DescriptionForm = ({
                   isUpdatingCourse || watchedDescription === description
                 }
                 loadingText="Saving..."
-                className="bg-blue-500 hover:bg-blue-600"
+                className="
+                  bg-blue-500
+                  hover:bg-blue-600
+                "
                 type="submit"
               >
                 Save
@@ -206,7 +258,13 @@ const DescriptionForm = ({
             </div>
           </form>
         ) : (
-          <p className="text-sm text-slate-600 whitespace-pre-line">
+          <p
+            className="
+              text-sm
+              text-slate-600
+              whitespace-pre-line
+            "
+          >
             {description || "No description"}
           </p>
         )}

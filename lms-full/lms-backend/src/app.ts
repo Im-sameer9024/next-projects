@@ -19,7 +19,6 @@ app.use(
   muxWebhookRoutes,
 );
 
-
 app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());
@@ -27,13 +26,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(httpLogger);
 app.use(
   cors({
-    origin:[ "http://localhost:3000","https://next-projects-8oog.vercel.app","https://api.puter.com"],
+    origin: "http://localhost:3000",
     credentials: true,
   }),
 );
 
 //------------------------- mux webhook --------------------------
-
 
 //--------------- health check -------------------
 app.get("/", (req, res) => {

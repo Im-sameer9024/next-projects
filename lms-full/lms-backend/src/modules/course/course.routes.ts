@@ -10,7 +10,7 @@ import {
   UpdateSingleCourse,
   UploadThumbnail,
 } from "./course.controllers.js";
-import { AiCourseTitles } from "./ai.controllers.js";
+import { AiCourseDescription, AiCourseTitles } from "./ai.controllers.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 
 const route = express.Router();
@@ -25,9 +25,9 @@ route.post(
   CreateCourse,
 );
 route.patch("/update/:courseId", auth, isTeacher, UpdateSingleCourse);
-route.get("/all", auth, isTeacher, GetAllCourses)
+route.get("/all", auth, isTeacher, GetAllCourses);
 route.get("/:courseId", auth, isTeacher, GetCourseByTeacherId);
-route.delete("/delete/:courseId",auth,isTeacher,DeleteCourseById)
+route.delete("/delete/:courseId", auth, isTeacher, DeleteCourseById);
 route.post(
   "/upload-image",
   auth,
@@ -36,6 +36,7 @@ route.post(
   UploadThumbnail,
 );
 
-
+route.post("/ai/title", auth, isTeacher, AiCourseTitles);
+route.post("/ai/description", auth, isTeacher, AiCourseDescription);
 
 export default route;

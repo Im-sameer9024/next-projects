@@ -33,3 +33,49 @@ Example:
 ]
 `;
 };
+
+export const CourseDescriptionPrompt = (title: string) => {
+  return `
+Generate a professional online course description for:
+
+"${title}"
+
+Rules:
+- Write in professional tone
+- Keep it concise
+- 2 short paragraphs maximum
+- Make it engaging for students
+- No markdown
+- No headings
+- Length should be 100 - 450 characters
+`;
+};
+
+export const ChapterDescriptionPrompt = ({
+  courseTitle,
+  chapterTitle,
+}: {
+  courseTitle: string;
+  chapterTitle: string;
+}) => {
+  return `
+Generate a professional and engaging chapter description for an online course.
+
+Course Title:
+"${courseTitle}"
+
+Chapter Title:
+"${chapterTitle}"
+
+Rules:
+- Write in a professional and beginner-friendly tone
+- Explain what students will learn in this chapter
+- Keep it concise and engaging
+- Maximum 2 short paragraphs
+- Use markdown
+- Use headings
+- Use bullet points
+- Length should be between 120 - 500 characters
+- Make the chapter feel practical and valuable
+`;
+};

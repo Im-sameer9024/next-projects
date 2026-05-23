@@ -4,12 +4,7 @@ const genAI = new GoogleGenAI({
 });
 export const GenerateAiResult = async (prompt) => {
     try {
-        const result = await genAI.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: prompt,
-        });
-        // EXTRACT TEXT
-        const text = result.text;
+        const text = await GenerateAiText(prompt);
         if (!text) {
             return [];
         }
@@ -20,6 +15,19 @@ export const GenerateAiResult = async (prompt) => {
     catch (error) {
         console.log("AI Error", error);
         return [];
+    }
+};
+export const GenerateAiText = async (prompt) => {
+    try {
+        const result = await genAI.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+        });
+        return result.text?.trim() ?? "";
+    }
+    catch (error) {
+        console.log("AI Text Error", error);
+        return "";
     }
 };
 //# sourceMappingURL=genai.services.js.map

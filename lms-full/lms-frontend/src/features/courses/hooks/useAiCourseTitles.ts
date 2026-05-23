@@ -55,3 +55,8 @@ export const useCreateCourseTitleSuggestions = (title: string) => {
       (debouncer.state.isPending || query.isFetching),
   };
 };
+
+
+
+
+
