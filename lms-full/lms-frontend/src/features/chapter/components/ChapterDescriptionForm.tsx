@@ -196,7 +196,6 @@ const ChapterDescriptionForm = ({
               render={({ field, fieldState }) => (
                 <div className="space-y-1">
                   <SlateEditor
-                    key={watchedDescription}
                     value={field.value}
                     onChange={field.onChange}
                     placeholder="Write chapter description..."

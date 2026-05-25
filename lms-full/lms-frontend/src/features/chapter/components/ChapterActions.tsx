@@ -3,13 +3,11 @@
 import CustomButton from "@/shared/components/custom/CustomButton";
 import { Trash } from "lucide-react";
 import { useDeleteChapter } from "../hooks/useChapter";
-import {
-  usePublishChapter,
-  useUnPublishChapter,
-} from "../hooks/useChapter";
+import { usePublishChapter, useUnPublishChapter } from "../hooks/useChapter";
 import { useRouter } from "next/navigation";
 import ConfirmModal from "../modals/ConfirmModal";
-
+import { Spinner } from "@/shared/components/ui/spinner";
+import { toast } from "sonner";
 
 interface ChapterActionsProps {
   disabled: boolean;
@@ -27,22 +25,16 @@ const ChapterActions = ({
   const router = useRouter();
 
   // ✅ delete
-  const {
-    mutateAsync: deleteChapter,
-    isPending: isDeleting,
-  } = useDeleteChapter();
+  const { mutateAsync: deleteChapter, isPending: isDeleting } =
+    useDeleteChapter();
 
   // ✅ publish
-  const {
-    mutateAsync: publishChapter,
-    isPending: isPublishing,
-  } = usePublishChapter();
+  const { mutateAsync: publishChapter, isPending: isPublishing } =
+    usePublishChapter();
 
   // ✅ unpublish
-  const {
-    mutateAsync: unPublishChapter,
-    isPending: isUnPublishing,
-  } = useUnPublishChapter();
+  const { mutateAsync: unPublishChapter, isPending: isUnPublishing } =
+    useUnPublishChapter();
 
   const isUpdating = isPublishing || isUnPublishing;
 
@@ -51,6 +43,8 @@ const ChapterActions = ({
     try {
       await deleteChapter({ courseId, chapterId });
       router.push(`/teacher/courses/${courseId}`);
+
+      toast.success("Chapter deleted successfully")
     } catch {}
   };
 
@@ -59,8 +53,10 @@ const ChapterActions = ({
     try {
       if (isPublished) {
         await unPublishChapter({ courseId, chapterId });
+        toast.success("Chapter unpublished successfully")
       } else {
         await publishChapter({ courseId, chapterId });
+        toast.success("Chapter published successfully")
       }
     } catch {}
   };
@@ -83,16 +79,12 @@ const ChapterActions = ({
         <div
           className={`
             border p-1 rounded cursor-pointer
-            ${
-              isDeleting
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-red-200"
-            }
+            ${isDeleting ? "opacity-50 cursor-not-allowed" : "hover:bg-red-200"}
             text-red-400 border-red-200 bg-red-50
           `}
         >
           {isDeleting ? (
-            <span className="text-xs px-1">...</span>
+              <Spinner />
           ) : (
             <Trash size={14} />
           )}

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -20,7 +21,13 @@ import escapeHtml from "escape-html";
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 
-type MarkFormat = "bold" | "italic" | "underline" | "strike" | "subscript" | "superscript";
+type MarkFormat =
+  | "bold"
+  | "italic"
+  | "underline"
+  | "strike"
+  | "subscript"
+  | "superscript";
 type BlockFormat =
   | "paragraph"
   | "heading"
@@ -67,11 +74,11 @@ const EMPTY_SLATE: Descendant[] = [
 const serializeNode = (node: any): string => {
   if (Text.isText(node)) {
     let text = escapeHtml(node.text);
-    if (node.bold)        text = `<strong>${text}</strong>`;
-    if (node.italic)      text = `<em>${text}</em>`;
-    if (node.underline)   text = `<u>${text}</u>`;
-    if (node.strike)      text = `<s>${text}</s>`;
-    if (node.subscript)   text = `<sub>${text}</sub>`;
+    if (node.bold) text = `<strong>${text}</strong>`;
+    if (node.italic) text = `<em>${text}</em>`;
+    if (node.underline) text = `<u>${text}</u>`;
+    if (node.strike) text = `<s>${text}</s>`;
+    if (node.subscript) text = `<sub>${text}</sub>`;
     if (node.superscript) text = `<sup>${text}</sup>`;
     return text;
   }
@@ -80,13 +87,19 @@ const serializeNode = (node: any): string => {
   const align = node.align ? ` style="text-align:${node.align}"` : "";
 
   switch (node.type as BlockFormat) {
-    case "heading":       return `<h2${align}>${children}</h2>`;
-    case "blockquote":    return `<blockquote${align}>${children}</blockquote>`;
-    case "bulleted-list": return `<ul${align}>${children}</ul>`;
-    case "numbered-list": return `<ol${align}>${children}</ol>`;
-    case "list-item":     return `<li>${children}</li>`;
+    case "heading":
+      return `<h2${align}>${children}</h2>`;
+    case "blockquote":
+      return `<blockquote${align}>${children}</blockquote>`;
+    case "bulleted-list":
+      return `<ul${align}>${children}</ul>`;
+    case "numbered-list":
+      return `<ol${align}>${children}</ol>`;
+    case "list-item":
+      return `<li>${children}</li>`;
     case "paragraph":
-    default:              return `<p${align}>${children}</p>`;
+    default:
+      return `<p${align}>${children}</p>`;
   }
 };
 
@@ -95,7 +108,9 @@ export const serializeToHtml = (nodes: Descendant[]): string =>
 
 // ─── DESERIALIZER: HTML string → Slate Descendant[] ──────────────────────────
 
-const deserializeElement = (el: HTMLElement): Descendant | Descendant[] | null => {
+const deserializeElement = (
+  el: HTMLElement,
+): Descendant | Descendant[] | null => {
   if (el.nodeType === Node.TEXT_NODE) {
     return { text: el.textContent ?? "" } as any;
   }
@@ -108,7 +123,9 @@ const deserializeElement = (el: HTMLElement): Descendant | Descendant[] | null =
 
   const safeChildren = children.length > 0 ? children : [{ text: "" }];
 
-  const alignAttr = (el as HTMLElement).style?.textAlign as AlignValue | undefined;
+  const alignAttr = (el as HTMLElement).style?.textAlign as
+    | AlignValue
+    | undefined;
   const align = alignAttr || undefined;
 
   // Handle inline marks — these come as nested elements inside a block
@@ -161,7 +178,9 @@ export const deserializeFromHtml = (html: string): Descendant[] => {
   const document = new DOMParser().parseFromString(html, "text/html");
   const result = deserializeElement(document.body);
 
-  const nodes = (Array.isArray(result) ? result : [result]).filter(Boolean) as Descendant[];
+  const nodes = (Array.isArray(result) ? result : [result]).filter(
+    Boolean,
+  ) as Descendant[];
 
   // Ensure every top-level node is a block element (not a raw text node)
   const wrapped = nodes.map((node: any) => {
@@ -185,12 +204,14 @@ const withLists = (editor: Editor): Editor => {
 
     const [listItemEntry] = Editor.nodes(editor, {
       match: (n) =>
-        !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === "list-item",
+        !Editor.isEditor(n) &&
+        SlateElement.isElement(n) &&
+        n.type === "list-item",
     });
 
     if (listItemEntry) {
       const [node] = listItemEntry;
-        const isEmpty = SlateNode.string(node) === "";
+      const isEmpty = SlateNode.string(node) === "";
       if (isEmpty) {
         Transforms.unwrapNodes(editor, {
           match: (n) =>
@@ -202,7 +223,10 @@ const withLists = (editor: Editor): Editor => {
         Transforms.setNodes(editor, { type: "paragraph" });
         return;
       }
-      Transforms.insertNodes(editor, { type: "list-item", children: [{ text: "" }] });
+      Transforms.insertNodes(editor, {
+        type: "list-item",
+        children: [{ text: "" }],
+      });
       return;
     }
 
@@ -215,7 +239,9 @@ const withLists = (editor: Editor): Editor => {
 
     const [listItemEntry] = Editor.nodes(editor, {
       match: (n) =>
-        !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === "list-item",
+        !Editor.isEditor(n) &&
+        SlateElement.isElement(n) &&
+        n.type === "list-item",
     });
 
     if (listItemEntry) {
@@ -298,7 +324,7 @@ const setAlign = (editor: Editor, align: AlignValue): void => {
         !Editor.isEditor(n) &&
         SlateElement.isElement(n) &&
         (n as CustomElement).type !== "list-item",
-    }
+    },
   );
 };
 
@@ -306,11 +332,11 @@ const setAlign = (editor: Editor, align: AlignValue): void => {
 
 const Leaf = ({ attributes, children, leaf }: any) => {
   let content = children;
-  if (leaf.bold)        content = <strong>{content}</strong>;
-  if (leaf.italic)      content = <em>{content}</em>;
-  if (leaf.underline)   content = <u>{content}</u>;
-  if (leaf.strike)      content = <s>{content}</s>;
-  if (leaf.subscript)   content = <sub>{content}</sub>;
+  if (leaf.bold) content = <strong>{content}</strong>;
+  if (leaf.italic) content = <em>{content}</em>;
+  if (leaf.underline) content = <u>{content}</u>;
+  if (leaf.strike) content = <s>{content}</s>;
+  if (leaf.subscript) content = <sub>{content}</sub>;
   if (leaf.superscript) content = <sup>{content}</sup>;
   return <span {...attributes}>{content}</span>;
 };
@@ -319,21 +345,45 @@ const Element = ({ attributes, children, element }: any) => {
   const style: React.CSSProperties = { textAlign: element.align };
   switch (element.type as BlockFormat) {
     case "heading":
-      return <h2 style={style} className="text-xl font-bold my-1" {...attributes}>{children}</h2>;
+      return (
+        <h2 style={style} className="text-xl font-bold my-1" {...attributes}>
+          {children}
+        </h2>
+      );
     case "blockquote":
       return (
-        <blockquote style={style} className="border-l-4 border-slate-300 pl-3 italic text-slate-500 my-1" {...attributes}>
+        <blockquote
+          style={style}
+          className="border-l-4 border-slate-300 pl-3 italic text-slate-500 my-1"
+          {...attributes}
+        >
           {children}
         </blockquote>
       );
     case "bulleted-list":
-      return <ul style={style} className="list-disc pl-6 my-1" {...attributes}>{children}</ul>;
+      return (
+        <ul style={style} className="list-disc pl-6 my-1" {...attributes}>
+          {children}
+        </ul>
+      );
     case "numbered-list":
-      return <ol style={style} className="list-decimal pl-6 my-1" {...attributes}>{children}</ol>;
+      return (
+        <ol style={style} className="list-decimal pl-6 my-1" {...attributes}>
+          {children}
+        </ol>
+      );
     case "list-item":
-      return <li className="my-0.5" {...attributes}>{children}</li>;
+      return (
+        <li className="my-0.5" {...attributes}>
+          {children}
+        </li>
+      );
     default:
-      return <p style={style} className="my-0.5 min-h-[1.5em]" {...attributes}>{children}</p>;
+      return (
+        <p style={style} className="my-0.5 min-h-[1.5em]" {...attributes}>
+          {children}
+        </p>
+      );
   }
 };
 
@@ -367,21 +417,43 @@ const ToolbarButton = ({
   </button>
 );
 
-const Divider = () => <div className="w-px h-5 bg-slate-200 mx-0.5 self-center shrink-0" />;
+const Divider = () => (
+  <div className="w-px h-5 bg-slate-200 mx-0.5 self-center shrink-0" />
+);
 
-const MARK_BUTTONS: { format: MarkFormat; label: React.ReactNode; title: string }[] = [
-  { format: "bold",        label: <strong>B</strong>,                    title: "Bold" },
-  { format: "italic",      label: <em>I</em>,                            title: "Italic" },
-  { format: "underline",   label: <u>U</u>,                              title: "Underline" },
-  { format: "strike",      label: <s>S</s>,                              title: "Strikethrough" },
-  { format: "subscript",   label: <span>X<sub>2</sub></span>,            title: "Subscript" },
-  { format: "superscript", label: <span>X<sup>2</sup></span>,            title: "Superscript" },
+const MARK_BUTTONS: {
+  format: MarkFormat;
+  label: React.ReactNode;
+  title: string;
+}[] = [
+  { format: "bold", label: <strong>B</strong>, title: "Bold" },
+  { format: "italic", label: <em>I</em>, title: "Italic" },
+  { format: "underline", label: <u>U</u>, title: "Underline" },
+  { format: "strike", label: <s>S</s>, title: "Strikethrough" },
+  {
+    format: "subscript",
+    label: (
+      <span>
+        X<sub>2</sub>
+      </span>
+    ),
+    title: "Subscript",
+  },
+  {
+    format: "superscript",
+    label: (
+      <span>
+        X<sup>2</sup>
+      </span>
+    ),
+    title: "Superscript",
+  },
 ];
 
 const ALIGN_BUTTONS: { align: AlignValue; label: string; title: string }[] = [
-  { align: "left",    label: "≡←", title: "Align Left" },
-  { align: "center",  label: "≡↔", title: "Align Center" },
-  { align: "right",   label: "≡→", title: "Align Right" },
+  { align: "left", label: "≡←", title: "Align Left" },
+  { align: "center", label: "≡↔", title: "Align Center" },
+  { align: "right", label: "≡→", title: "Align Right" },
   { align: "justify", label: "≡≡", title: "Justify" },
 ];
 
@@ -400,13 +472,43 @@ const Toolbar = () => {
         </ToolbarButton>
       ))}
       <Divider />
-      <ToolbarButton title="Heading" active={isBlockActive(editor, "heading")} onMouseDown={() => toggleBlock(editor, "heading")}>H</ToolbarButton>
-      <ToolbarButton title="Blockquote" active={isBlockActive(editor, "blockquote")} onMouseDown={() => toggleBlock(editor, "blockquote")}>❝</ToolbarButton>
-      <ToolbarButton title="Bulleted List" active={isBlockActive(editor, "bulleted-list")} onMouseDown={() => toggleBlock(editor, "bulleted-list")}>• List</ToolbarButton>
-      <ToolbarButton title="Numbered List" active={isBlockActive(editor, "numbered-list")} onMouseDown={() => toggleBlock(editor, "numbered-list")}>1. List</ToolbarButton>
+      <ToolbarButton
+        title="Heading"
+        active={isBlockActive(editor, "heading")}
+        onMouseDown={() => toggleBlock(editor, "heading")}
+      >
+        H
+      </ToolbarButton>
+      <ToolbarButton
+        title="Blockquote"
+        active={isBlockActive(editor, "blockquote")}
+        onMouseDown={() => toggleBlock(editor, "blockquote")}
+      >
+        ❝
+      </ToolbarButton>
+      <ToolbarButton
+        title="Bulleted List"
+        active={isBlockActive(editor, "bulleted-list")}
+        onMouseDown={() => toggleBlock(editor, "bulleted-list")}
+      >
+        • List
+      </ToolbarButton>
+      <ToolbarButton
+        title="Numbered List"
+        active={isBlockActive(editor, "numbered-list")}
+        onMouseDown={() => toggleBlock(editor, "numbered-list")}
+      >
+        1. List
+      </ToolbarButton>
       <Divider />
       {ALIGN_BUTTONS.map(({ align, label, title }) => (
-        <ToolbarButton key={align} title={title} onMouseDown={() => setAlign(editor, align)}>{label}</ToolbarButton>
+        <ToolbarButton
+          key={align}
+          title={title}
+          onMouseDown={() => setAlign(editor, align)}
+        >
+          {label}
+        </ToolbarButton>
       ))}
     </div>
   );
@@ -435,45 +537,82 @@ const SlateEditor = ({
 }: SlateEditorProps) => {
   const editor = useMemo(
     () => withLists(withHistory(withReact(createEditor()))),
-    []
+    [],
   );
 
-  // Deserialize HTML string → Slate JSON once for initialValue
-  const initialSlateValue = useMemo(
-    () => deserializeFromHtml(value ?? ""),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [] // Only on mount — Slate is uncontrolled internally
-  );
+  // Initial value only once
+
+  const initialValue = useMemo(() => deserializeFromHtml(value ?? ""), []);
+
+  // Sync external updates
+  // like AI generated content
+
+  React.useEffect(() => {
+    const newValue = deserializeFromHtml(value ?? "");
+
+    const currentValue = editor.children;
+
+    // Prevent unnecessary updates
+
+    if (JSON.stringify(currentValue) === JSON.stringify(newValue)) {
+      return;
+    }
+
+    editor.children = newValue;
+
+    editor.onChange();
+  }, [value, editor]);
 
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
+
   const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
 
   const handleChange = useCallback(
     (slateValue: Descendant[]) => {
-      // Serialize Slate JSON → HTML string and pass up
       onChange?.(serializeToHtml(slateValue));
     },
-    [onChange]
+
+    [onChange],
   );
 
   return (
-    <Slate
-      editor={editor}
-      initialValue={initialSlateValue}
-      onChange={handleChange}
-    >
-      <div className="border border-slate-200 rounded-lg bg-white shadow-sm focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-100 transition-all">
+    <Slate editor={editor} initialValue={initialValue} onChange={handleChange}>
+      <div
+        className="
+          border border-slate-200
+          rounded-lg
+          bg-white
+          shadow-sm
+          focus-within:border-blue-400
+          focus-within:ring-1
+          focus-within:ring-blue-100
+          transition-all
+        "
+      >
         {!readOnly && <Toolbar />}
+
         <Editable
           readOnly={readOnly}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           placeholder={placeholder}
           spellCheck
-          style={{ minHeight, maxHeight }}
-          className="p-3 text-slate-700 text-sm focus:outline-none overflow-y-auto overflow-x-hidden"
+          style={{
+            minHeight,
+            maxHeight,
+          }}
+          className="
+            p-3
+            text-slate-700
+            text-sm
+            focus:outline-none
+            overflow-y-auto
+            overflow-x-hidden
+          "
           onKeyDown={(event) => {
-            if (event.key === "Tab") event.preventDefault();
+            if (event.key === "Tab") {
+              event.preventDefault();
+            }
           }}
         />
       </div>

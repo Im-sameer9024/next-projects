@@ -32,15 +32,23 @@ export const DeleteChapter = asyncHandler(
   async (req: Request, res: Response) => {
     const { chapterId, courseId } = req.body;
 
-    const chapter = await prisma.chapter.findUnique({
-      where: {
-        id: chapterId,
-        courseId: courseId,
-      },
-      include: {
-        muxData: true,
-      },
-    });
+    const [chapter, publishedChapterInCourse] = await Promise.all([
+      prisma.chapter.findUnique({
+        where: {
+          id: chapterId,
+          courseId: courseId,
+        },
+        include: {
+          muxData: true,
+        },
+      }),
+      prisma.chapter.findMany({
+        where: {
+          courseId: courseId,
+          isPublished: true,
+        },
+      }),
+    ]);
 
     if (!chapter) {
       return SendResponse(res, {
@@ -65,6 +73,17 @@ export const DeleteChapter = asyncHandler(
         courseId: courseId,
       },
     });
+
+    if (!publishedChapterInCourse.length) {
+      await prisma.course.update({
+        where: {
+          id: courseId,
+        },
+        data: {
+          isPublished: false,
+        },
+      });
+    }
 
     return SendResponse(res, {
       statusCode: 200,
