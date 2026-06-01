@@ -18,13 +18,7 @@ import { Eye, Video } from "lucide-react";
 import ChapterVideoForm from "./ChapterVideoForm";
 import ChapterActions from "./ChapterActions";
 
-const ChapterUpdate = ({
-  courseId,
-  chapterId,
-}: {
-  courseId: string;
-  chapterId: string;
-}) => {
+const ChapterUpdate = ({ courseId, chapterId }: { courseId: string; chapterId: string }) => {
   const { data, isPending, isError, error } = useGetChapter(chapterId);
 
   if (isPending) {
@@ -68,10 +62,10 @@ const ChapterUpdate = ({
 
       <section aria-label="chapter-update-page">
         {/* BACK BUTTON */}
-        <div className="w-fit mt-4">
+        <div className="mt-4 w-fit">
           <Link
             href={`/teacher/courses/${courseId}`}
-            className="flex items-center gap-2 text-sm hover:text-blue-500 transition"
+            className="flex items-center gap-2 text-sm transition hover:text-blue-500"
           >
             <FaArrowLeftLong />
 
@@ -82,11 +76,9 @@ const ChapterUpdate = ({
         {/* HEADER */}
         <section className="mt-4 flex items-center justify-between">
           <div>
-            <h2 className="font-heading font-semibold text-xl text-slate-700">
-              Chapter Setup
-            </h2>
+            <h2 className="font-heading text-xl font-semibold text-slate-700">Chapter Setup</h2>
 
-            <p className="font-light text-xs text-slate-500 flex items-center gap-1">
+            <p className="flex items-center gap-1 text-xs font-light text-slate-500">
               Complete all fields
               {isPending ? <Spinner /> : completionText}
               {isComplete && (
@@ -107,13 +99,13 @@ const ChapterUpdate = ({
         </section>
 
         {/* CONTENT */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+        <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Left side  */}
-          <section className=" space-y-4">
+          <section className="space-y-4">
             <div className="flex items-center gap-2">
-              <MdOutlineDashboard className="text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+              <MdOutlineDashboard className="h-10 w-10 rounded-full bg-blue-100 p-2 text-4xl text-blue-500" />
 
-              <p className="font-heading font-semibold text-md text-slate-700">
+              <p className="font-heading text-md font-semibold text-slate-700">
                 Customize your chapter
               </p>
             </div>
@@ -137,11 +129,9 @@ const ChapterUpdate = ({
               {/*-------------- chapter access form ---------- */}
 
               <div className="flex items-center gap-2">
-                <Eye className="text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+                <Eye className="h-10 w-10 rounded-full bg-blue-100 p-2 text-4xl text-blue-500" />
 
-                <p className="font-heading font-semibold text-md text-slate-700">
-                  Access Setting
-                </p>
+                <p className="font-heading text-md font-semibold text-slate-700">Access Setting</p>
               </div>
 
               {/* Forms */}
@@ -156,14 +146,12 @@ const ChapterUpdate = ({
           </section>
 
           {/* right side  */}
-          <section className=" space-y-4">
-            <div className=" flex  items-center gap-2">
+          <section className="space-y-4">
+            <div className="flex items-center gap-2">
               <div>
-                <Video className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+                <Video className="h-10 w-10 rounded-full bg-blue-100 p-2 text-4xl text-blue-500" />
               </div>
-              <p className=" font-heading font-semibold text-md text-slate-700">
-                Add a Video
-              </p>
+              <p className="font-heading text-md font-semibold text-slate-700">Add a Video</p>
             </div>
             <ChapterVideoForm
               videoUrl={chapter.videoUrl || ""}

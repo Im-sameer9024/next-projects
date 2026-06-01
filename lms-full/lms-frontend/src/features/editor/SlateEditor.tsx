@@ -21,13 +21,7 @@ import escapeHtml from "escape-html";
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 
-type MarkFormat =
-  | "bold"
-  | "italic"
-  | "underline"
-  | "strike"
-  | "subscript"
-  | "superscript";
+type MarkFormat = "bold" | "italic" | "underline" | "strike" | "subscript" | "superscript";
 type BlockFormat =
   | "paragraph"
   | "heading"
@@ -65,9 +59,7 @@ declare module "slate" {
 
 const LIST_TYPES: BlockFormat[] = ["bulleted-list", "numbered-list"];
 
-const EMPTY_SLATE: Descendant[] = [
-  { type: "paragraph", children: [{ text: "" }] },
-];
+const EMPTY_SLATE: Descendant[] = [{ type: "paragraph", children: [{ text: "" }] }];
 
 // ─── SERIALIZER: Slate → HTML string ─────────────────────────────────────────
 
@@ -103,14 +95,11 @@ const serializeNode = (node: any): string => {
   }
 };
 
-export const serializeToHtml = (nodes: Descendant[]): string =>
-  nodes.map(serializeNode).join("");
+export const serializeToHtml = (nodes: Descendant[]): string => nodes.map(serializeNode).join("");
 
 // ─── DESERIALIZER: HTML string → Slate Descendant[] ──────────────────────────
 
-const deserializeElement = (
-  el: HTMLElement,
-): Descendant | Descendant[] | null => {
+const deserializeElement = (el: HTMLElement): Descendant | Descendant[] | null => {
   if (el.nodeType === Node.TEXT_NODE) {
     return { text: el.textContent ?? "" } as any;
   }
@@ -123,9 +112,7 @@ const deserializeElement = (
 
   const safeChildren = children.length > 0 ? children : [{ text: "" }];
 
-  const alignAttr = (el as HTMLElement).style?.textAlign as
-    | AlignValue
-    | undefined;
+  const alignAttr = (el as HTMLElement).style?.textAlign as AlignValue | undefined;
   const align = alignAttr || undefined;
 
   // Handle inline marks — these come as nested elements inside a block
@@ -178,9 +165,7 @@ export const deserializeFromHtml = (html: string): Descendant[] => {
   const document = new DOMParser().parseFromString(html, "text/html");
   const result = deserializeElement(document.body);
 
-  const nodes = (Array.isArray(result) ? result : [result]).filter(
-    Boolean,
-  ) as Descendant[];
+  const nodes = (Array.isArray(result) ? result : [result]).filter(Boolean) as Descendant[];
 
   // Ensure every top-level node is a block element (not a raw text node)
   const wrapped = nodes.map((node: any) => {
@@ -203,10 +188,7 @@ const withLists = (editor: Editor): Editor => {
     if (!selection) return insertBreak();
 
     const [listItemEntry] = Editor.nodes(editor, {
-      match: (n) =>
-        !Editor.isEditor(n) &&
-        SlateElement.isElement(n) &&
-        n.type === "list-item",
+      match: (n) => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === "list-item",
     });
 
     if (listItemEntry) {
@@ -238,19 +220,13 @@ const withLists = (editor: Editor): Editor => {
     if (!selection) return deleteBackward(unit);
 
     const [listItemEntry] = Editor.nodes(editor, {
-      match: (n) =>
-        !Editor.isEditor(n) &&
-        SlateElement.isElement(n) &&
-        n.type === "list-item",
+      match: (n) => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === "list-item",
     });
 
     if (listItemEntry) {
       const [, listItemPath] = listItemEntry;
       const start = Editor.start(editor, listItemPath);
-      if (
-        Path.equals(selection.anchor.path, start.path) &&
-        selection.anchor.offset === 0
-      ) {
+      if (Path.equals(selection.anchor.path, start.path) && selection.anchor.offset === 0) {
         Transforms.unwrapNodes(editor, {
           match: (n) =>
             !Editor.isEditor(n) &&
@@ -288,9 +264,7 @@ const isBlockActive = (editor: Editor, format: BlockFormat): boolean => {
   const [match] = Editor.nodes(editor, {
     at: Editor.unhangRange(editor, selection),
     match: (n) =>
-      !Editor.isEditor(n) &&
-      SlateElement.isElement(n) &&
-      (n as CustomElement).type === format,
+      !Editor.isEditor(n) && SlateElement.isElement(n) && (n as CustomElement).type === format,
   });
   return !!match;
 };
@@ -346,7 +320,7 @@ const Element = ({ attributes, children, element }: any) => {
   switch (element.type as BlockFormat) {
     case "heading":
       return (
-        <h2 style={style} className="text-xl font-bold my-1" {...attributes}>
+        <h2 style={style} className="my-1 text-xl font-bold" {...attributes}>
           {children}
         </h2>
       );
@@ -354,7 +328,7 @@ const Element = ({ attributes, children, element }: any) => {
       return (
         <blockquote
           style={style}
-          className="border-l-4 border-slate-300 pl-3 italic text-slate-500 my-1"
+          className="my-1 border-l-4 border-slate-300 pl-3 text-slate-500 italic"
           {...attributes}
         >
           {children}
@@ -362,13 +336,13 @@ const Element = ({ attributes, children, element }: any) => {
       );
     case "bulleted-list":
       return (
-        <ul style={style} className="list-disc pl-6 my-1" {...attributes}>
+        <ul style={style} className="my-1 list-disc pl-6" {...attributes}>
           {children}
         </ul>
       );
     case "numbered-list":
       return (
-        <ol style={style} className="list-decimal pl-6 my-1" {...attributes}>
+        <ol style={style} className="my-1 list-decimal pl-6" {...attributes}>
           {children}
         </ol>
       );
@@ -407,19 +381,17 @@ const ToolbarButton = ({
       e.preventDefault(); // Critical: keeps editor focus
       onMouseDown();
     }}
-    className={`min-w-7 h-7 px-1.5 rounded text-sm font-medium transition-colors ${
+    className={`h-7 min-w-7 rounded px-1.5 text-sm font-medium transition-colors ${
       active
-        ? "bg-blue-100 text-blue-700 border border-blue-400"
-        : "text-slate-600 border border-transparent hover:border-slate-200 hover:bg-slate-100"
+        ? "border border-blue-400 bg-blue-100 text-blue-700"
+        : "border border-transparent text-slate-600 hover:border-slate-200 hover:bg-slate-100"
     }`}
   >
     {children}
   </button>
 );
 
-const Divider = () => (
-  <div className="w-px h-5 bg-slate-200 mx-0.5 self-center shrink-0" />
-);
+const Divider = () => <div className="mx-0.5 h-5 w-px shrink-0 self-center bg-slate-200" />;
 
 const MARK_BUTTONS: {
   format: MarkFormat;
@@ -460,7 +432,7 @@ const ALIGN_BUTTONS: { align: AlignValue; label: string; title: string }[] = [
 const Toolbar = () => {
   const editor = useSlate();
   return (
-    <div className="flex gap-0.5 flex-wrap items-center border-b border-slate-200 px-2 py-1.5 bg-slate-50 rounded-t-lg">
+    <div className="flex flex-wrap items-center gap-0.5 rounded-t-lg border-b border-slate-200 bg-slate-50 px-2 py-1.5">
       {MARK_BUTTONS.map(({ format, label, title }) => (
         <ToolbarButton
           key={format}
@@ -502,11 +474,7 @@ const Toolbar = () => {
       </ToolbarButton>
       <Divider />
       {ALIGN_BUTTONS.map(({ align, label, title }) => (
-        <ToolbarButton
-          key={align}
-          title={title}
-          onMouseDown={() => setAlign(editor, align)}
-        >
+        <ToolbarButton key={align} title={title} onMouseDown={() => setAlign(editor, align)}>
           {label}
         </ToolbarButton>
       ))}
@@ -535,10 +503,7 @@ const SlateEditor = ({
   minHeight = "120px",
   maxHeight = "320px",
 }: SlateEditorProps) => {
-  const editor = useMemo(
-    () => withLists(withHistory(withReact(createEditor()))),
-    [],
-  );
+  const editor = useMemo(() => withLists(withHistory(withReact(createEditor()))), []);
 
   // Initial value only once
 
@@ -577,18 +542,7 @@ const SlateEditor = ({
 
   return (
     <Slate editor={editor} initialValue={initialValue} onChange={handleChange}>
-      <div
-        className="
-          border border-slate-200
-          rounded-lg
-          bg-white
-          shadow-sm
-          focus-within:border-blue-400
-          focus-within:ring-1
-          focus-within:ring-blue-100
-          transition-all
-        "
-      >
+      <div className="rounded-lg border border-slate-200 bg-white shadow-sm transition-all focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-100">
         {!readOnly && <Toolbar />}
 
         <Editable
@@ -601,14 +555,7 @@ const SlateEditor = ({
             minHeight,
             maxHeight,
           }}
-          className="
-            p-3
-            text-slate-700
-            text-sm
-            focus:outline-none
-            overflow-y-auto
-            overflow-x-hidden
-          "
+          className="overflow-x-hidden overflow-y-auto p-3 text-sm text-slate-700 focus:outline-none"
           onKeyDown={(event) => {
             if (event.key === "Tab") {
               event.preventDefault();

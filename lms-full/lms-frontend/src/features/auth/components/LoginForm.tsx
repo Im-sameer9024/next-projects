@@ -2,16 +2,15 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  LoginSchemaValidationTypes,
-  LoginValidationSchema,
-} from "../auth.validation";
+import { LoginSchemaValidationTypes, LoginValidationSchema } from "../auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomInput from "@/shared/components/custom/CustomInput";
 import CustomButton from "@/shared/components/custom/CustomButton";
 import { useAuthStore } from "@/shared/store/auth.store";
 import { LoginUser } from "../apiOperations";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { GetApiErrorMessage, GetApiResponseMessage } from "@/shared/utils/apiMessages";
 const LoginForm = () => {
   const { setLoading, setAuth } = useAuthStore();
 
@@ -41,10 +40,9 @@ const LoginForm = () => {
           router.push("/user/dashboard");
         }
       }
-
-      console.log("res in login component", res);
+      toast.success(GetApiResponseMessage(res));
     } catch (error) {
-      console.log(error);
+      toast.error(GetApiErrorMessage(error));
     } finally {
       setLoginLoading(false);
       setLoading(false);
@@ -72,12 +70,7 @@ const LoginForm = () => {
         placeholder="Enter your password"
         disabled={loginLoading}
       />
-      <CustomButton
-        type="submit"
-        fullWidth
-        loading={loginLoading}
-        className=" mt-4"
-      >
+      <CustomButton type="submit" fullWidth loading={loginLoading} className="mt-4">
         Login
       </CustomButton>
     </form>

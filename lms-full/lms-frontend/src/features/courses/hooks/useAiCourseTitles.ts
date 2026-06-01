@@ -8,10 +8,7 @@ import { generateCourseTitles } from "@/shared/ai/ai.services";
 const getTitleSuggestions = (value: unknown) => {
   if (!Array.isArray(value)) return [];
 
-  return value.filter(
-    (item): item is string =>
-      typeof item === "string" && item.trim().length > 0,
-  );
+  return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
 };
 
 export const useAiCourseTitles = (text: string) => {
@@ -50,13 +47,6 @@ export const useCreateCourseTitleSuggestions = (title: string) => {
   return {
     ...query,
     suggestions: normalizedTitle.length >= 3 ? (query.data ?? []) : [],
-    isGenerating:
-      normalizedTitle.length >= 3 &&
-      (debouncer.state.isPending || query.isFetching),
+    isGenerating: normalizedTitle.length >= 3 && (debouncer.state.isPending || query.isFetching),
   };
 };
-
-
-
-
-

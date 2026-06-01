@@ -66,11 +66,11 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="flex h-screen flex-col">
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
 
-        <section className="flex-1 overflow-y-auto bg-slate-50 w-full h-full">
+        <section className="h-full w-full flex-1 overflow-y-auto bg-slate-50">
           <Navbar />
 
           <main className="p-4">{children}</main>

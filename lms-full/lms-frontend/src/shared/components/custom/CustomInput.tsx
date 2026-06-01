@@ -42,7 +42,7 @@ const CustomInput = <T extends FieldValues>({
   const isPassword = type === "password";
 
   return (
-    <div className="space-y-1 w-full">
+    <div className="w-full space-y-1">
       {/* 🔹 Label */}
       {label && (
         <label htmlFor={id} className="text-sm font-semibold text-slate-700">
@@ -56,12 +56,10 @@ const CustomInput = <T extends FieldValues>({
         control={control}
         render={({ field, fieldState }) => (
           <>
-            <div className="relative flex items-center ">
+            <div className="relative flex items-center">
               {/* Left Icon */}
               {leftIcon && (
-                <span className="absolute left-3 text-muted-foreground">
-                  {leftIcon}
-                </span>
+                <span className="text-muted-foreground absolute left-3">{leftIcon}</span>
               )}
 
               <Input
@@ -71,11 +69,10 @@ const CustomInput = <T extends FieldValues>({
                 placeholder={placeholder}
                 disabled={disabled || loading}
                 className={cn(
-                  "w-full text-slate-500 ",
+                  "w-full text-slate-500",
                   leftIcon && "pl-10",
                   (rightIcon || isPassword || loading) && "pr-10",
-                  fieldState.error &&
-                    "border-red-500 focus-visible:ring-red-500",
+                  fieldState.error && "border-red-500 focus-visible:ring-red-500",
                   className,
                 )}
               />
@@ -105,9 +102,7 @@ const CustomInput = <T extends FieldValues>({
             </div>
 
             {/* 🔴 Error */}
-            {fieldState.error && (
-              <p className="text-xs text-red-500">{fieldState.error.message}</p>
-            )}
+            {fieldState.error && <p className="text-xs text-red-500">{fieldState.error.message}</p>}
           </>
         )}
       />

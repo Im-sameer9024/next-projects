@@ -2,13 +2,13 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 
 const LoginSkeleton = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-2xl rounded-3xl bg-white shadow-xl p-8 md:p-10 space-y-8">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-2xl space-y-8 rounded-3xl bg-white p-8 shadow-xl md:p-10">
         {/* Heading */}
         <div className="space-y-3 text-center">
-          <Skeleton className="h-10 w-72 mx-auto rounded-md" />
+          <Skeleton className="mx-auto h-10 w-72 rounded-md" />
 
-          <Skeleton className="h-5 w-56 mx-auto rounded-md" />
+          <Skeleton className="mx-auto h-5 w-56 rounded-md" />
         </div>
 
         {/* Google Button */}

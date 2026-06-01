@@ -8,10 +8,12 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import passport from "passport";
 import muxWebhookRoutes from "./modules/chapter/mux.routes.js";
+import stripeWebhookRoutes from "./modules/stripe/stripe.webhook.route.js";
 const app = express();
 app.use("/api/webhook/mux", express.raw({
     type: "application/json",
 }), muxWebhookRoutes);
+app.use("/api", stripeWebhookRoutes);
 app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());

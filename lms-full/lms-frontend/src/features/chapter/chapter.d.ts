@@ -1,9 +1,5 @@
 import { Course, UserProgress } from "../courses/course";
 
-
-
-
-
 export interface Chapter {
   id: string;
   title: string;
@@ -12,7 +8,7 @@ export interface Chapter {
   videoUrl?: string | null;
   isPublished: boolean;
   isFree: boolean;
-isProcessingVideo: boolean;
+  isProcessingVideo: boolean;
   courseId: string;
   course: Course;
 

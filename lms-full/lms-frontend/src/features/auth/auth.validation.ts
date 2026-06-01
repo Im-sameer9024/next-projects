@@ -1,10 +1,7 @@
 import z from "zod";
 
 export const SignUpValidationSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .max(25, "Name must be at most 25 characters"),
+  name: z.string().min(1, "Name is required").max(25, "Name must be at most 25 characters"),
   email: z.string().email("Invalid email"),
   password: z
     .string()
@@ -21,7 +18,5 @@ export const LoginValidationSchema = z.object({
     .max(20, "Password must be at most 20 characters"),
 });
 
-export type SignUpSchemaValidationTypes = z.infer<
-  typeof SignUpValidationSchema
->;
+export type SignUpSchemaValidationTypes = z.infer<typeof SignUpValidationSchema>;
 export type LoginSchemaValidationTypes = z.infer<typeof LoginValidationSchema>;

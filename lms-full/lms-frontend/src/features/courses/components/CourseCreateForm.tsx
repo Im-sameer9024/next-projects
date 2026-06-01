@@ -13,14 +13,10 @@ import CustomInput from "@/shared/components/custom/CustomInput";
 
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
-import {
-  CreateCourseSchema,
-  CreateCourseSchemaType,
-} from "../course.validation";
+import { CreateCourseSchema, CreateCourseSchemaType } from "../course.validation";
 
 import { useCreateCourse } from "../hooks/useCourse";
 import { useAiCourseTitles } from "../hooks/useAiCourse";
-
 
 const CourseCreateForm = () => {
   const router = useRouter();
@@ -127,14 +123,7 @@ const CourseCreateForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="
-        mt-4
-        space-y-5
-        max-w-2xl
-      "
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-4 max-w-2xl space-y-5">
       {/* INPUT */}
 
       <CustomInput
@@ -151,74 +140,25 @@ const CourseCreateForm = () => {
       {/* AI Suggestions */}
 
       {(isGenerating || suggestions.length > 0) && (
-        <div
-          className="
-            rounded-2xl
-            border
-            bg-white
-            p-4
-            shadow-sm
-            space-y-4
-          "
-        >
-          <div
-            className="
-              flex
-              items-center
-              justify-between
-            "
-          >
-            <h3
-              className="
-                text-sm
-                font-medium
-                text-slate-700
-              "
-            >
-              AI Suggestions
-            </h3>
+        <div className="space-y-4 rounded-2xl border bg-white p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-medium text-slate-700">AI Suggestions</h3>
 
             {isGenerating && (
-              <span
-                className="
-                  text-xs
-                  text-slate-500
-                  animate-pulse
-                "
-              >
-                Generating...
-              </span>
+              <span className="animate-pulse text-xs text-slate-500">Generating...</span>
             )}
           </div>
 
           {isGenerating ? (
-            <div
-              className="
-                grid
-                grid-cols-2
-                gap-4
-              "
-            >
+            <div className="grid grid-cols-2 gap-4">
               {Array.from({
                 length: 4,
               }).map((_, index) => (
-                <Skeleton
-                  key={index}
-                  className="
-                    h-16
-                    rounded-xl
-                  "
-                />
+                <Skeleton key={index} className="h-16 rounded-xl" />
               ))}
             </div>
           ) : (
-            <div
-              className="
-                grid
-                grid-cols-2
-                gap-4
-              "
-            >
+            <div className="grid grid-cols-2 gap-4">
               {suggestions.map((item, index) => (
                 <button
                   key={index}
@@ -230,18 +170,7 @@ const CourseCreateForm = () => {
                       shouldValidate: true,
                     })
                   }
-                  className="
-                      rounded-xl
-                      border
-                      p-4
-                      text-left
-                      text-sm
-                      font-medium
-                      transition-all
-                      hover:border-blue-500
-                      hover:bg-blue-50
-                      hover:text-blue-600
-                    "
+                  className="rounded-xl border p-4 text-left text-sm font-medium transition-all hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600"
                 >
                   {item}
                 </button>
@@ -253,21 +182,13 @@ const CourseCreateForm = () => {
 
       {/* BUTTONS */}
 
-      <div
-        className="
-          flex
-          items-center
-          gap-4
-        "
-      >
+      <div className="flex items-center gap-4">
         <CustomButton
           disabled={isCreatingCourse}
           type="button"
           variant="ghost"
           onClick={handleCancel}
-          className="
-            text-slate-500
-          "
+          className="text-slate-500"
         >
           Cancel
         </CustomButton>
@@ -276,10 +197,7 @@ const CourseCreateForm = () => {
           type="submit"
           loading={isSubmitting || isCreatingCourse}
           disabled={isCreatingCourse}
-          className="
-            bg-blue-500
-            hover:bg-blue-600
-          "
+          className="bg-blue-500 hover:bg-blue-600"
         >
           Continue
         </CustomButton>

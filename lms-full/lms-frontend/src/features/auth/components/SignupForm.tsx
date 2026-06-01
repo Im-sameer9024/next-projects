@@ -1,10 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import {
-  SignUpSchemaValidationTypes,
-  SignUpValidationSchema,
-} from "../auth.validation";
+import { SignUpSchemaValidationTypes, SignUpValidationSchema } from "../auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomInput from "@/shared/components/custom/CustomInput";
 import CustomButton from "@/shared/components/custom/CustomButton";
@@ -12,21 +9,22 @@ import { Label } from "@/shared/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { useRouter } from "next/navigation";
 import { SignupUser } from "../apiOperations";
+import { toast } from "sonner";
+import { GetApiErrorMessage, GetApiResponseMessage } from "@/shared/utils/apiMessages";
 
 const SignupForm = () => {
   const [signupLoading, setSignupLoading] = useState(false);
   const router = useRouter();
 
-  const { handleSubmit, control, setValue } =
-    useForm<SignUpSchemaValidationTypes>({
-      resolver: zodResolver(SignUpValidationSchema),
-      defaultValues: {
-        name: "",
-        email: "",
-        password: "",
-        role: "USER",
-      },
-    });
+  const { handleSubmit, control, setValue } = useForm<SignUpSchemaValidationTypes>({
+    resolver: zodResolver(SignUpValidationSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      role: "USER",
+    },
+  });
 
   const role = useWatch({ control, name: "role" });
 
@@ -38,8 +36,9 @@ const SignupForm = () => {
       if (res.success) {
         router.push("/login");
       }
+      toast.success(GetApiResponseMessage(res));
     } catch (error) {
-      console.log(error);
+      toast.error(GetApiErrorMessage(error));
     } finally {
       setSignupLoading(false);
     }
@@ -102,12 +101,7 @@ const SignupForm = () => {
         </RadioGroup>
       </div>
 
-      <CustomButton
-        type="submit"
-        fullWidth
-        loading={signupLoading}
-        className=" mt-4"
-      >
+      <CustomButton type="submit" fullWidth loading={signupLoading} className="mt-4">
         Sign Up
       </CustomButton>
     </form>

@@ -2,8 +2,7 @@
 
 export const GetApiErrorMessage = (error: any) => {
   const messages = [];
-  const message =
-    error?.response?.data?.message || error?.message || "Error Message";
+  const message = error?.response?.data?.message || error?.message || "Error Message";
   messages.push(message);
   if (error?.response?.data?.error) {
     const values = Object.values(error?.response?.data?.error);
@@ -21,7 +20,6 @@ export const GetApiErrorMessage = (error: any) => {
 };
 
 export const GetApiResponseMessage = (response: any) => {
-  const message =
-    response?.data?.message || response?.message || "Response Message";
+  const message = response?.data?.message || response?.message || "Response Message";
   return message;
 };

@@ -8,10 +8,7 @@ import CustomButton from "@/shared/components/custom/CustomButton";
 import CustomInput from "@/shared/components/custom/CustomInput";
 import { cn } from "@/shared/lib/utils";
 import { useUpdateChapter } from "../hooks/useChapter";
-import {
-  CreateChapterSchema,
-  CreateChapterSchemaTypes,
-} from "../chapter.validation";
+import { CreateChapterSchema, CreateChapterSchemaTypes } from "../chapter.validation";
 import { toast } from "sonner";
 
 const ChapterTitleForm = ({
@@ -27,8 +24,7 @@ const ChapterTitleForm = ({
 }) => {
   const [isEdit, setIsEdit] = useState(false);
 
-  const { mutateAsync: updateChapter, isPending: isUpdatingChapter } =
-    useUpdateChapter();
+  const { mutateAsync: updateChapter, isPending: isUpdatingChapter } = useUpdateChapter();
 
   const { handleSubmit, control, reset } = useForm<CreateChapterSchemaTypes>({
     resolver: zodResolver(CreateChapterSchema),
@@ -69,10 +65,10 @@ const ChapterTitleForm = ({
   };
 
   return (
-    <section className="bg-white border p-4 border-slate-200 rounded">
+    <section className="rounded border border-slate-200 bg-white p-4">
       {/* HEADER */}
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-sm text-slate-700">Chapter Title</h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-slate-700">Chapter Title</h3>
 
         <CustomButton
           disabled={isPublished}
@@ -82,9 +78,7 @@ const ChapterTitleForm = ({
           className={cn(
             "transition-all duration-200",
 
-            isEdit
-              ? "bg-transparent text-slate-500"
-              : "bg-blue-500 hover:bg-blue-600",
+            isEdit ? "bg-transparent text-slate-500" : "bg-blue-500 hover:bg-blue-600",
           )}
           onClick={toggleEdit}
         >
@@ -97,7 +91,7 @@ const ChapterTitleForm = ({
         className={cn(
           "overflow-hidden transition-all duration-300 ease-in-out",
 
-          isEdit ? "max-h-40 opacity-100 mt-3" : "max-h-10 opacity-100 mt-2",
+          isEdit ? "mt-3 max-h-40 opacity-100" : "mt-2 max-h-10 opacity-100",
         )}
       >
         {isEdit ? (

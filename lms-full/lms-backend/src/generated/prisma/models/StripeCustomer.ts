@@ -194,14 +194,14 @@ export type StripeCustomerOrderByWithRelationInput = {
 
 export type StripeCustomerWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  userId?: string
   AND?: Prisma.StripeCustomerWhereInput | Prisma.StripeCustomerWhereInput[]
   OR?: Prisma.StripeCustomerWhereInput[]
   NOT?: Prisma.StripeCustomerWhereInput | Prisma.StripeCustomerWhereInput[]
-  userId?: Prisma.StringFilter<"StripeCustomer"> | string
   stripeCustomerId?: Prisma.StringFilter<"StripeCustomer"> | string
   createdAt?: Prisma.DateTimeFilter<"StripeCustomer"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StripeCustomer"> | Date | string
-}, "id">
+}, "id" | "userId">
 
 export type StripeCustomerOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

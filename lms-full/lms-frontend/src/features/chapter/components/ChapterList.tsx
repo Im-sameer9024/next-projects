@@ -20,48 +20,32 @@ const ChapterList = ({ chapters }: { chapters?: Chapter[] }) => {
 
   // ✅ Empty state (important UX)
   if (safeChapters.length === 0) {
-    return (
-      <p className="text-sm text-gray-500">
-        No chapters created yet
-      </p>
-    );
+    return <p className="text-sm text-gray-500">No chapters created yet</p>;
   }
 
   return (
-    <div className="space-y-2 max-h-50 overflow-auto">
+    <div className="max-h-50 space-y-2 overflow-auto">
       {safeChapters.map((chapter) => (
         <div
           key={chapter.id}
-          className="flex items-center justify-between p-2 border border-slate-200 rounded hover:bg-slate-50 transition"
+          className="flex items-center justify-between rounded border border-slate-200 p-2 transition hover:bg-slate-50"
         >
           {/* LEFT */}
           <div className="flex items-center space-x-2">
             <Menu size={16} className="text-gray-400" />
-            <span className="text-sm font-medium">
-              {chapter.title || "Untitled Chapter"}
-            </span>
+            <span className="text-sm font-medium">{chapter.title || "Untitled Chapter"}</span>
           </div>
 
           {/* RIGHT */}
           <div className="flex items-center space-x-2">
-            {chapter.isFree && (
-              <Kbd className="text-blue-500">Free</Kbd>
-            )}
+            {chapter.isFree && <Kbd className="text-blue-500">Free</Kbd>}
 
-            <Kbd
-              className={`${
-                chapter.isPublished
-                  ? "text-green-500"
-                  : "text-gray-500"
-              }`}
-            >
+            <Kbd className={`${chapter.isPublished ? "text-green-500" : "text-gray-500"}`}>
               {chapter.isPublished ? "Published" : "Draft"}
             </Kbd>
 
             <CustomButton
-              onClick={() =>
-                handleEdit(chapter.id, chapter.courseId)
-              }
+              onClick={() => handleEdit(chapter.id, chapter.courseId)}
               size="sm"
               variant="outline"
             >

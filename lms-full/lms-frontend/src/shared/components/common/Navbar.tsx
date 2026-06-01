@@ -2,13 +2,7 @@ import { useAuthStore } from "@/shared/store/auth.store";
 import { RolesObject, teacherRoutes, userRoutes } from "@/shared/utils/data";
 import { redirect, usePathname } from "next/navigation";
 import React from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { LogOut, Menu } from "lucide-react";
 import SidebarLink from "./SidebarLink";
 import Logo from "./Logo";
@@ -47,7 +41,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className=" bg-white py-4 px-4 border border-gray-200 flex justify-between items-center">
+    <div className="flex items-center justify-between border border-gray-200 bg-white px-4 py-4">
       {/*--------------------------- Mobile menu -------------------- */}
       <Sheet>
         <SheetTrigger asChild>
@@ -60,7 +54,7 @@ const Navbar = () => {
           <SheetHeader className="sr-only">
             <SheetTitle>Mobile Navigation Menu</SheetTitle>
           </SheetHeader>
-          <div className="px-4 py-4 border-b border-gray-200 flex items-center gap-2">
+          <div className="flex items-center gap-2 border-b border-gray-200 px-4 py-4">
             <Logo />
             <span className="font-semibold">LMS</span>
           </div>
@@ -87,13 +81,13 @@ const Navbar = () => {
       )} */}
 
       {/* ---------------- RIGHT SIDE ---------------- */}
-      <div className="flex gap-2 ml-auto ">
+      <div className="ml-auto flex gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             {isLoading ? (
-              <div className="w-9 h-9 bg-gray-200 animate-pulse rounded-full" />
+              <div className="h-9 w-9 animate-pulse rounded-full bg-gray-200" />
             ) : user ? (
-              <Avatar className="h-9 w-9 border cursor-pointer">
+              <Avatar className="h-9 w-9 cursor-pointer border">
                 <AvatarImage src={user.avatar || ""} alt="User" />
                 <AvatarFallback>
                   {user?.name
@@ -109,10 +103,7 @@ const Navbar = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
             {/* Logout */}
-            <DropdownMenuItem
-              onClick={handleLogout}
-              className="text-red-500 cursor-pointer"
-            >
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500">
               <LogOut size={16} className="mr-2" />
               Logout
             </DropdownMenuItem>
@@ -122,9 +113,9 @@ const Navbar = () => {
           {isLoading ? (
             <span>Loading...</span>
           ) : (
-            <div className=" -space-y-2">
-              <p className=" text-sm">{user?.email as string}</p>
-              <span className=" text-gray-400 text-xs">{role}</span>
+            <div className="-space-y-2">
+              <p className="text-sm">{user?.email as string}</p>
+              <span className="text-xs text-gray-400">{role}</span>
             </div>
           )}
         </div>

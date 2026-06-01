@@ -7,6 +7,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createQueryClient } from "./reactQuery";
 import AuthProvider from "./AuthProvider";
 import { PacerProvider } from "@tanstack/react-pacer";
+import ConfettiProvider from "./ConfettiProvider";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => createQueryClient());
@@ -15,8 +17,12 @@ const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <PacerProvider>
-          <Toaster richColors position="top-right" closeButton />
-          {children}
+          <NuqsAdapter>
+            <Toaster richColors position="top-right" closeButton />
+            <ConfettiProvider />
+
+            {children}
+          </NuqsAdapter>
 
           <ReactQueryDevtools initialIsOpen={false} />
         </PacerProvider>

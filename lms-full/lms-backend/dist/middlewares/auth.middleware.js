@@ -56,7 +56,7 @@ const isUser = async (req, res, next) => {
             return SendResponse(res, {
                 statusCode: 401,
                 success: false,
-                message: "You are not authorized to access this route",
+                message: "You are not authorized to access this route, It is for User",
             });
         }
         next();
@@ -76,7 +76,7 @@ const isTeacher = async (req, res, next) => {
             return SendResponse(res, {
                 statusCode: 401,
                 success: false,
-                message: "You are not authorized to access this route",
+                message: "You are not authorized to access this route , It is only for Teacher",
             });
         }
         next();

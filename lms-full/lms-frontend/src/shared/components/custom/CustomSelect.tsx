@@ -4,13 +4,7 @@ import React from "react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 
 import { cn } from "@/shared/lib/utils";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 type Option = {
   label: string;
@@ -43,13 +37,9 @@ const CustomSelect = <T extends FieldValues>({
   className,
 }: CustomSelectProps<T>) => {
   return (
-    <div className="space-y-1 w-full">
+    <div className="w-full space-y-1">
       {/* 🔹 Label */}
-      {label && (
-        <label className="text-sm font-semibold text-text-slate-500">
-          {label}
-        </label>
-      )}
+      {label && <label className="text-text-slate-500 text-sm font-semibold">{label}</label>}
 
       {/* 🔹 Select */}
       <Controller
@@ -64,7 +54,7 @@ const CustomSelect = <T extends FieldValues>({
             >
               <SelectTrigger
                 className={cn(
-                  "w-full text-text-slate-500",
+                  "text-text-slate-500 w-full",
                   fieldState.error && "border-red-500",
                   className,
                 )}
@@ -82,9 +72,7 @@ const CustomSelect = <T extends FieldValues>({
             </Select>
 
             {/* 🔴 Error */}
-            {fieldState.error && (
-              <p className="text-xs text-red-500">{fieldState.error.message}</p>
-            )}
+            {fieldState.error && <p className="text-xs text-red-500">{fieldState.error.message}</p>}
           </>
         )}
       />

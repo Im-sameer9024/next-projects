@@ -14,10 +14,7 @@ import CustomButton from "@/shared/components/custom/CustomButton";
 
 import CustomTextarea from "@/shared/components/custom/CustomTextarea";
 
-import {
-  CourseDescriptionSchema,
-  CourseDescriptionSchemaType,
-} from "../course.validation";
+import { CourseDescriptionSchema, CourseDescriptionSchemaType } from "../course.validation";
 
 import { useUpdateCourseByTeacher } from "../hooks/useCourse";
 import { useAiCourseDescription } from "../hooks/useAiCourse";
@@ -28,16 +25,10 @@ const DescriptionForm = ({
   title,
 }: {
   description: string;
-
   courseId: string;
-
   title: string;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
-
-  /* -------------------------------------------------------------------------- */
-  /*                                   HOOKS                                    */
-  /* -------------------------------------------------------------------------- */
 
   const {
     mutateAsync: UpdateCourse,
@@ -45,24 +36,14 @@ const DescriptionForm = ({
     isPending: isUpdatingCourse,
   } = useUpdateCourseByTeacher();
 
-  const {
-    mutateAsync: GenerateDescription,
+  const { mutateAsync: GenerateDescription, isPending: isGeneratingAI } = useAiCourseDescription();
 
-    isPending: isGeneratingAI,
-  } = useAiCourseDescription();
-
-  /* -------------------------------------------------------------------------- */
-  /*                                    FORM                                    */
-  /* -------------------------------------------------------------------------- */
-
-  const { handleSubmit, control, reset, setValue } =
-    useForm<CourseDescriptionSchemaType>({
-      resolver: zodResolver(CourseDescriptionSchema),
-
-      defaultValues: {
-        description: description || "",
-      },
-    });
+  const { handleSubmit, control, reset, setValue } = useForm<CourseDescriptionSchemaType>({
+    resolver: zodResolver(CourseDescriptionSchema),
+    defaultValues: {
+      description: description || "",
+    },
+  });
 
   const watchedDescription = useWatch({
     control,
@@ -70,15 +51,10 @@ const DescriptionForm = ({
     name: "description",
   });
 
-  /* -------------------------------------------------------------------------- */
-  /*                                   SUBMIT                                   */
-  /* -------------------------------------------------------------------------- */
-
   const onSubmit = async (data: CourseDescriptionSchemaType) => {
     try {
       await UpdateCourse({
         courseId,
-
         data,
       });
 
@@ -92,43 +68,30 @@ const DescriptionForm = ({
     }
   };
 
-  /* -------------------------------------------------------------------------- */
-  /*                               GENERATE AI                                  */
-  /* -------------------------------------------------------------------------- */
-
   const handleGenerateAI = async () => {
     if (!title) {
       toast.error("Course title is required");
-
       return;
     }
 
     try {
       const generated = await GenerateDescription(title);
-
       if (!generated) {
         toast.error("No description generated");
-
         return;
       }
 
       setValue("description", generated, {
         shouldDirty: true,
-
         shouldValidate: true,
       });
 
       toast.success("AI description generated");
     } catch (error) {
       console.log(error);
-
       toast.error("Failed to generate description");
     }
   };
-
-  /* -------------------------------------------------------------------------- */
-  /*                               TOGGLE EDIT                                  */
-  /* -------------------------------------------------------------------------- */
 
   const toggleEdit = () => {
     if (isEdit) {
@@ -136,47 +99,22 @@ const DescriptionForm = ({
         description: description || "",
       });
     }
-
     setIsEdit((prev) => !prev);
   };
 
   return (
-    <section
-      className="
-        bg-white
-        border
-        p-4
-        border-slate-200
-        rounded
-      "
-    >
+    <section className="rounded border border-slate-200 bg-white p-4">
       {/* HEADER */}
 
-      <div
-        className="
-          flex
-          justify-between
-          items-center
-        "
-      >
-        <h3
-          className="
-            font-semibold
-            text-sm
-            text-slate-700
-          "
-        >
-          Course Description
-        </h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-slate-700">Course Description</h3>
 
         <CustomButton
           leftIcon={!isEdit && <Edit size={16} />}
           size="sm"
           variant={isEdit ? "outline" : "default"}
           className={`${
-            isEdit
-              ? "bg-transparent text-slate-500"
-              : "bg-blue-500 hover:bg-blue-600"
+            isEdit ? "bg-transparent text-slate-500" : "bg-blue-500 hover:bg-blue-600"
           }`}
           onClick={toggleEdit}
         >
@@ -187,24 +125,12 @@ const DescriptionForm = ({
       {/* BODY */}
 
       <div
-        className={`
-          overflow-hidden
-          transition-all
-          duration-300
-          ease-in-out
-          ${
-            isEdit ? "max-h-125 opacity-100 mt-3" : "max-h-fit opacity-100 mt-2"
-          }
-        `}
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          isEdit ? "mt-3 max-h-125 opacity-100" : "mt-2 max-h-fit opacity-100"
+        } `}
       >
         {isEdit ? (
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="
-              space-y-3
-              p-1
-            "
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 p-1">
             {/* TEXTAREA */}
 
             <CustomTextarea
@@ -219,25 +145,14 @@ const DescriptionForm = ({
 
             {/* ACTIONS */}
 
-            <div
-              className="
-                flex
-                items-center
-                gap-3
-              "
-            >
+            <div className="flex items-center gap-3">
               {/* SAVE */}
 
               <CustomButton
                 loading={isUpdatingCourse}
-                disabled={
-                  isUpdatingCourse || watchedDescription === description
-                }
+                disabled={isUpdatingCourse || watchedDescription === description}
                 loadingText="Saving..."
-                className="
-                  bg-blue-500
-                  hover:bg-blue-600
-                "
+                className="bg-blue-500 hover:bg-blue-600"
                 type="submit"
               >
                 Save
@@ -258,13 +173,7 @@ const DescriptionForm = ({
             </div>
           </form>
         ) : (
-          <p
-            className="
-              text-sm
-              text-slate-600
-              whitespace-pre-line
-            "
-          >
+          <p className="text-sm whitespace-pre-line text-slate-600">
             {description || "No description"}
           </p>
         )}

@@ -1,12 +1,16 @@
 import { User } from "../auth/auth";
 
-
 export enum Roles {
   USER = "USER",
   TEACHER = "TEACHER",
 }
 
-
+type paginationProps = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+};
 
 export interface Course {
   id: string;
@@ -49,7 +53,6 @@ export interface Attachment {
   createdAt: Date;
   updatedAt: Date;
 }
-
 
 export interface MuxData {
   id: string;

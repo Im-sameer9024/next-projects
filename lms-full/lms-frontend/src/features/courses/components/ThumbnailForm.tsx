@@ -10,20 +10,13 @@ import CustomButton from "@/shared/components/custom/CustomButton";
 import { useUpdateCourseByTeacher } from "../hooks/useCourse";
 import { UploadThumbnail } from "../apiOperations";
 
-const ThumbnailForm = ({
-  image,
-  courseId,
-}: {
-  image: string | null;
-  courseId: string;
-}) => {
+const ThumbnailForm = ({ image, courseId }: { image: string | null; courseId: string }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [preview, setPreview] = useState<string | null>(image);
   const [uploadedImage, setUploadedImage] = useState<any>(null);
   const [isUploading, setIsUploading] = useState(false);
 
-  const { mutateAsync: UpdateCourse, isPending: isUpdating } =
-    useUpdateCourseByTeacher();
+  const { mutateAsync: UpdateCourse, isPending: isUpdating } = useUpdateCourseByTeacher();
 
   const toggleEdit = () => {
     setIsEdit((prev) => !prev);
@@ -91,22 +84,18 @@ const ThumbnailForm = ({
   }, [preview]);
 
   return (
-    <section className="bg-white border p-4 border-slate-200 rounded">
+    <section className="rounded border border-slate-200 bg-white p-4">
       {/* HEADER */}
 
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-sm text-slate-700">
-          Course Thumbnail
-        </h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-slate-700">Course Thumbnail</h3>
 
         <CustomButton
           leftIcon={!isEdit && <Edit size={16} />}
           size="sm"
           variant={isEdit ? "outline" : "default"}
           className={`${
-            isEdit
-              ? "bg-transparent text-slate-500"
-              : "bg-blue-500 hover:bg-blue-600"
+            isEdit ? "bg-transparent text-slate-500" : "bg-blue-500 hover:bg-blue-600"
           } transition-all duration-200`}
           onClick={toggleEdit}
         >
@@ -118,18 +107,19 @@ const ThumbnailForm = ({
 
       <div className="mt-3">
         <AspectRatio ratio={16 / 9}>
-          <div className="relative w-full h-full group rounded-md overflow-hidden ">
+          <div className="group relative h-full w-full overflow-hidden rounded-md">
             {preview ? (
               <Image
                 src={preview}
                 alt="thumbnail"
+                loading="eager"
                 fill
                 sizes="(max-width: 768px) 100vw, 800px"
                 className="object-cover"
               />
             ) : (
-              <div className="flex flex-col items-center justify-center h-full bg-gray-100">
-                <Upload className="w-8 h-8 text-gray-400 mb-2" />
+              <div className="flex h-full flex-col items-center justify-center bg-gray-100">
+                <Upload className="mb-2 h-8 w-8 text-gray-400" />
 
                 <p className="text-sm text-gray-500">No image uploaded</p>
               </div>
@@ -138,12 +128,10 @@ const ThumbnailForm = ({
             {/* EDIT OVERLAY */}
 
             {isEdit && (
-              <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center cursor-pointer">
-                <Upload className="w-6 h-6 text-white mb-1" />
+              <label className="absolute inset-0 flex cursor-pointer flex-col items-center justify-center bg-black/40 opacity-0 transition group-hover:opacity-100">
+                <Upload className="mb-1 h-6 w-6 text-white" />
 
-                <p className="text-sm text-white font-medium">
-                  Change Thumbnail
-                </p>
+                <p className="text-sm font-medium text-white">Change Thumbnail</p>
 
                 <input
                   type="file"
@@ -159,7 +147,7 @@ const ThumbnailForm = ({
         {/* ACTIONS */}
 
         {isEdit && (
-          <div className="flex gap-4 mt-4">
+          <div className="mt-4 flex gap-4">
             <CustomButton
               onClick={handleSave}
               disabled={!uploadedImage || isUploading || isUpdating}

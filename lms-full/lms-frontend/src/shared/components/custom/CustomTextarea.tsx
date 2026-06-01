@@ -32,11 +32,9 @@ const CustomTextarea = <T extends FieldValues>({
   rows = 4,
 }: CustomTextareaProps<T>) => {
   return (
-    <div className="space-y-1 w-full">
+    <div className="w-full space-y-1">
       {/* 🔹 Label */}
-      {label && (
-        <label className="text-sm font-semibold text-slate-500">{label}</label>
-      )}
+      {label && <label className="text-sm font-semibold text-slate-500">{label}</label>}
 
       {/* 🔹 Textarea */}
       <Controller
@@ -50,16 +48,14 @@ const CustomTextarea = <T extends FieldValues>({
               placeholder={placeholder}
               disabled={disabled || loading}
               className={cn(
-                "w-full text-slate-500 resize-none h-30",
+                "min-h-30 w-full resize-none text-slate-500",
                 fieldState.error && "border-red-500",
                 className,
               )}
             />
 
             {/* 🔴 Error */}
-            {fieldState.error && (
-              <p className="text-xs text-red-500">{fieldState.error.message}</p>
-            )}
+            {fieldState.error && <p className="text-xs text-red-500">{fieldState.error.message}</p>}
 
             {/* 🔹 Description */}
             {description && <p className="text-xs">{description}</p>}

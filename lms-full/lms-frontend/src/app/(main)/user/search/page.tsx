@@ -1,7 +1,12 @@
+import BrowsePage from "@/features/search/pages/BrowsePage";
 import React from "react";
 
 const SearchPage = () => {
-  return <div>SearchPage</div>;
+  return (
+    <>
+      <BrowsePage />
+    </>
+  );
 };
 
 export default SearchPage;

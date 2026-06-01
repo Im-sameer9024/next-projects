@@ -3,6 +3,7 @@ import { prisma } from "../../config/prisma.js";
 import { asyncHandler } from "../../shared/utils/async-handler.js";
 import { SendResponse } from "../../shared/utils/response.js";
 import type { Request, Response } from "express";
+import type { PayloadProps } from "../auth/auth.js";
 
 export const CreateChapter = asyncHandler(
   async (req: Request, res: Response) => {
@@ -116,7 +117,6 @@ export const UpdateChapter = asyncHandler(
     const updateChapter = await prisma.chapter.update({
       where: {
         id: chapterId,
-        courseId: courseId,
       },
       data: {
         ...values,
@@ -295,15 +295,30 @@ export const UploadChapterVideo = asyncHandler(
       },
     });
 
-    if (existingMuxData?.assetId) {
+    if (existingMuxData) {
       try {
         await mux.video.assets.delete(existingMuxData.assetId);
+        await prisma.muxData.delete({
+          where: {
+            chapterId,
+          },
+        });
 
         console.log("Old mux asset deleted");
       } catch (error) {
         console.log("Failed to delete old mux asset", error);
       }
     }
+
+    await prisma.chapter.update({
+      where: {
+        id: chapterId,
+      },
+      data: {
+        isProcessingVideo: true,
+        videoUrl: null,
+      },
+    });
 
     const upload = await mux.video.uploads.create({
       new_asset_settings: {
@@ -377,6 +392,8 @@ export const SaveChapterVideo = asyncHandler(
 
     const assetId = upload.asset_id;
 
+    console.log("Upload in save ---------------------------------- ", upload);
+
     if (!assetId) {
       return SendResponse(res, {
         statusCode: 400,
@@ -400,28 +417,17 @@ export const SaveChapterVideo = asyncHandler(
       },
     });
 
-    const updatedChapter = await prisma.chapter.update({
-      where: {
-        id: chapterId,
-      },
-      data: {
-        isProcessingVideo: true,
-        videoUrl: null,
-      },
-    });
-
     return SendResponse(res, {
       statusCode: 200,
       success: true,
       message: "Chapter video saved successfully",
-      data: updatedChapter,
     });
   },
 );
 
 export const ChapterVideoWebhook = asyncHandler(
   async (req: Request, res: Response) => {
-    const rawBody = req.body.toString("utf8");
+    const rawBody = req.body.toString();
 
     try {
       // ✅ Verify webhook signature
@@ -441,81 +447,162 @@ export const ChapterVideoWebhook = asyncHandler(
 
     const event = JSON.parse(rawBody);
 
-    // ✅ Video processing completed
-    if (event.type === "video.asset.ready") {
-      const asset = event.data;
-
-      const playbackId = asset.playback_ids?.[0]?.id;
-      const assetId = asset.id;
-      const chapterId = asset.passthrough;
-
-      if (!playbackId) {
-        return res.status(400).json({
-          success: false,
-          message: "PlaybackId not found",
-        });
-      }
-
-      // ✅ Find existing muxData
-      const existingMuxData = await prisma.muxData.findFirst({
-        where: {
-          assetId,
-        },
-      });
-
-      // ✅ Create or update muxData
-      const muxData =
-        existingMuxData ??
-        (chapterId
-          ? await prisma.muxData.upsert({
-              where: {
-                chapterId,
-              },
-
-              update: {
-                assetId,
-              },
-
-              create: {
-                assetId,
-                chapterId,
-              },
-            })
-          : null);
-
-      if (!muxData) {
-        return res.status(200).json({
-          success: true,
-          message: "No muxData found",
-        });
-      }
-
-      // ✅ Save playbackId
-      await prisma.muxData.update({
-        where: {
-          id: muxData.id,
-        },
-
-        data: {
-          playbackId,
-        },
-      });
-
-      // ✅ Update chapter video url
-      await prisma.chapter.update({
-        where: {
-          id: muxData.chapterId,
-        },
-
-        data: {
-          videoUrl: playbackId,
-          isProcessingVideo: false,
-        },
+    // only handle ready event
+    if (event.type !== "video.asset.ready") {
+      return res.status(200).json({
+        received: true,
       });
     }
 
+    const asset = event.data;
+
+    const playbackId = asset.playback_ids?.[0]?.id;
+    const assetId = asset.id;
+    const chapterId = asset.passthrough;
+
+    if (!playbackId || !chapterId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing data",
+      });
+    }
+
+    // save mux data
+    await prisma.muxData.upsert({
+      where: {
+        chapterId,
+      },
+
+      update: {
+        assetId,
+        playbackId,
+      },
+
+      create: {
+        assetId,
+        playbackId,
+        chapterId,
+      },
+    });
+
+    // update chapter
+    await prisma.chapter.update({
+      where: {
+        id: chapterId,
+      },
+
+      data: {
+        videoUrl: playbackId,
+        isProcessingVideo: false,
+      },
+    });
+
     return res.status(200).json({
       received: true,
+    });
+  },
+);
+
+export const GetChapterByIdForUser = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { chapterId } = req.params;
+    const { id } = req.user as PayloadProps;
+
+    if (!chapterId) {
+      return SendResponse(res, {
+        statusCode: 400,
+        success: false,
+        message: "Chapter id is required",
+      });
+    }
+
+    const chapter = await prisma.chapter.findUnique({
+      where: {
+        id: chapterId as string,
+      },
+      include: {
+        course: {
+          include:{
+            purchases:{
+              where:{
+                userId:id as string,
+              }
+            }
+          }
+        },
+        muxData: true,
+        userProgresses: {
+          where: {
+            userId: id as string,
+          
+          },
+        },
+      },
+    });
+
+    if (!chapter) {
+      return SendResponse(res, {
+        statusCode: 404,
+        success: false,
+        message: "Chapter not found",
+      });
+    }
+
+    return SendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Chapter fetched successfully",
+      data: chapter,
+    });
+  },
+);
+
+export const CompleteChapter = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { chapterId } = req.body;
+
+    const { id } = req.user as PayloadProps;
+
+    if (!chapterId) {
+      return SendResponse(res, {
+        statusCode: 400,
+        success: false,
+        message: "Chapter id is required",
+      });
+    }
+
+    const completedChapter = await prisma.userProgress.upsert({
+      where: {
+        userId_chapterId: {
+          userId: id,
+          chapterId: chapterId as string,
+        },
+      },
+      update: {
+        isCompleted: true,
+      },
+      create: {
+        userId: id,
+        chapterId,
+        isCompleted: true,
+      },
+    });
+
+    const updateChapter = await prisma.chapter.findUnique({
+      where:{
+        id: chapterId as string,
+      },
+      include:{
+        muxData:true,
+        userProgresses:true,
+      }
+    })
+
+    return SendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Chapter completed successfully",
+      data: updateChapter,
     });
   },
 );

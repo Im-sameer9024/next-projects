@@ -6,7 +6,12 @@ import {
   CrateAttachment,
   CreateCourse,
   DeleteAttachment,
+  DeleteCourseByTeacher,
+  GetAllCoursesOfTeacher,
   GetSingleCourseForTeacher,
+  PublishCourse,
+  searchParamsProps,
+  UnpublishCourse,
   UpdateCourseByTeacher,
 } from "../apiOperations";
 import { Attachment, Course } from "../course";
@@ -38,6 +43,22 @@ export const useGetCourseForTeacher = (courseId: string) => {
     queryKey: ["course", "detail", courseId],
     queryFn: () => GetSingleCourseForTeacher(courseId),
     enabled: !!courseId,
+  });
+};
+
+export const useGetAllCoursesOfTeacher = (searchParams: searchParamsProps, teacherId: string) => {
+  return useQuery({
+    queryKey: [
+      "course",
+      "list",
+      teacherId,
+      searchParams.page,
+      searchParams.limit,
+      searchParams.search,
+    ],
+    queryFn: () => GetAllCoursesOfTeacher(searchParams),
+    enabled: !!teacherId,
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -145,6 +166,84 @@ export const useDeleteAttachment = () => {
       );
 
       toast.success("Attachment deleted successfully");
+    },
+  });
+};
+
+export const useDeleteCourse = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ courseId }: { courseId: string }) => {
+      return await DeleteCourseByTeacher(courseId);
+    },
+
+    onSuccess: (data) => {
+      console.log("delete course response:", data);
+      queryClient.removeQueries({
+        queryKey: ["course", "detail", data.data?.id],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["course", "list"],
+      });
+      toast.success("Course deleted successfully");
+    },
+
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to delete course");
+    },
+  });
+};
+
+export const usePublishCourse = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ courseId }: { courseId: string }) => {
+      return await PublishCourse(courseId);
+    },
+
+    onSuccess: (data, variables) => {
+      toast.success("Course published successfully");
+
+      queryClient.invalidateQueries({
+        queryKey: ["course", "detail", variables.courseId],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["course", "list"],
+      });
+    },
+
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to publish course");
+    },
+  });
+};
+
+export const useUnPublishCourse = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ courseId }: { courseId: string }) => {
+      return await UnpublishCourse(courseId);
+    },
+
+    onSuccess: (data, variables) => {
+      toast.success("Course unpublished successfully");
+
+      queryClient.invalidateQueries({
+        queryKey: ["course", "detail", variables.courseId],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["course", "list"],
+      });
+    },
+
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to unpublish course");
     },
   });
 };

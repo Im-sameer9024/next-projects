@@ -1,24 +1,17 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-
 import { toast } from "sonner";
-
-import { Edit, Trash2, UploadCloud, X } from "lucide-react";
-
+import { Edit, Trash2, UploadCloud } from "lucide-react";
 import CustomButton from "@/shared/components/custom/CustomButton";
-
 import { AspectRatio } from "@/shared/components/ui/aspect-ratio";
-
 import MuxVideoPlayer from "@/shared/components/common/MuxVideoPlayer";
 
-import {
-  useDeleteChapterVideo,
-  useSaveChapterVideo,
-  useUploadChapterVideo,
-} from "../hooks/useChapter";
+import { useDeleteChapterVideo, useUploadChapterVideo } from "../hooks/useChapter";
 
 import { cn } from "@/shared/lib/utils";
+
+import { useQueryClient } from "@tanstack/react-query";
 
 const MAX_FILE_SIZE = 1024 * 1024 * 1024;
 
@@ -35,21 +28,19 @@ const ChapterVideoForm = ({
   isPublished: boolean;
   isProcessingVideo: boolean;
 }) => {
-  const [isEdit, setIsEdit] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [uploadId, setUploadId] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
-  const [isUploadComplete, setIsUploadComplete] = useState(false);
+  const queryClient = useQueryClient();
 
-  console.log("isprocessing video", isProcessingVideo);
+  const [isEdit, setIsEdit] = useState(false);
+
+  const [file, setFile] = useState<File | null>(null);
+
+  const [progress, setProgress] = useState(0);
+
+  const [isUploading, setIsUploading] = useState(false);
 
   const { mutateAsync: createUpload } = useUploadChapterVideo();
 
-  const { mutateAsync: saveVideo, isPending: isSaving } = useSaveChapterVideo();
-
-  const { mutateAsync: deleteVideo, isPending: isDeleting } =
-    useDeleteChapterVideo();
+  const { mutateAsync: deleteVideo, isPending: isDeleting } = useDeleteChapterVideo();
 
   const previewUrl = useMemo(() => {
     if (!file) return null;
@@ -67,10 +58,10 @@ const ChapterVideoForm = ({
 
   const resetState = () => {
     setFile(null);
-    setUploadId(null);
+
     setProgress(0);
+
     setIsUploading(false);
-    setIsUploadComplete(false);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,11 +77,7 @@ const ChapterVideoForm = ({
 
     setFile(selectedFile);
 
-    setUploadId(null);
-
     setProgress(0);
-
-    setIsUploadComplete(false);
   };
 
   const handleUpload = async () => {
@@ -103,9 +90,7 @@ const ChapterVideoForm = ({
         chapterId,
       });
 
-      console.log("response of upload", response);
-
-      const { uploadUrl, uploadId: createdUploadId } = response.data;
+      const { uploadUrl } = response.data;
 
       const xhr = new XMLHttpRequest();
 
@@ -119,17 +104,21 @@ const ChapterVideoForm = ({
         }
       };
 
-      xhr.onload = () => {
+      xhr.onload = async () => {
         setIsUploading(false);
 
         if (xhr.status >= 200 && xhr.status < 300) {
           setProgress(100);
 
-          setUploadId(createdUploadId);
+          toast.success("Video uploaded. Processing started...");
 
-          setIsUploadComplete(true);
+          await queryClient.invalidateQueries({
+            queryKey: ["chapter", "detail", chapterId],
+          });
 
-          toast.success("Video uploaded successfully");
+          resetState();
+
+          setIsEdit(false);
 
           return;
         }
@@ -153,34 +142,11 @@ const ChapterVideoForm = ({
     }
   };
 
-  const handleSave = async () => {
-    if (!uploadId) {
-      return toast.error("Upload video before saving");
-    }
-
-    try {
-      await saveVideo({
-        uploadId,
-        chapterId,
-        courseId,
-      });
-
-      toast.success("Video saved. Processing started...");
-
-      setIsEdit(false);
-
-      resetState();
-    } catch (error) {
-      console.error(error);
-
-      toast.error("Failed to save video");
-    }
-  };
-
   const handleDelete = async () => {
     try {
       await deleteVideo({
         chapterId,
+        courseId,
       });
 
       toast.success("Video deleted");
@@ -188,6 +154,10 @@ const ChapterVideoForm = ({
       resetState();
 
       setIsEdit(false);
+
+      await queryClient.invalidateQueries({
+        queryKey: ["chapter", "detail", chapterId],
+      });
     } catch (error) {
       console.error(error);
 
@@ -204,16 +174,18 @@ const ChapterVideoForm = ({
   };
 
   return (
-    <section className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+    <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-semibold text-slate-700">
-            Chapter Video
-          </h3>
+          <h3 className="text-sm font-semibold text-slate-700">Chapter Video</h3>
 
           <p className="text-xs text-slate-400">
-            {videoUrl ? "Video ready" : "No video uploaded"}
+            {videoUrl
+              ? "Video ready"
+              : isProcessingVideo
+                ? "Video processing"
+                : "No video uploaded"}
           </p>
         </div>
 
@@ -222,9 +194,13 @@ const ChapterVideoForm = ({
             disabled={isPublished}
             type="button"
             size="sm"
+            className={cn(
+              "transition-all duration-200",
+
+              isEdit ? "bg-transparent text-slate-500" : "bg-blue-500 hover:bg-blue-600",
+            )}
             variant={isEdit ? "outline" : "default"}
             leftIcon={!isEdit && <Edit size={16} />}
-            rightIcon={isEdit && <X size={16} />}
             onClick={toggleEdit}
           >
             {isEdit ? "Cancel" : "Edit"}
@@ -249,17 +225,18 @@ const ChapterVideoForm = ({
       </div>
 
       {isEdit ? (
-        <div className="space-y-4 mt-4">
+        <div className="mt-4 space-y-4">
           {/* Upload Box */}
           <label
             className={cn(
-              "border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition",
+              "flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition",
+
               isUploading
                 ? "cursor-not-allowed bg-slate-50"
                 : "cursor-pointer hover:border-blue-400 hover:bg-blue-50",
             )}
           >
-            <UploadCloud className="w-6 h-6 text-slate-400 mb-2" />
+            <UploadCloud className="mb-2 h-6 w-6 text-slate-400" />
 
             <p className="text-sm font-medium text-slate-600">Select Video</p>
 
@@ -275,18 +252,12 @@ const ChapterVideoForm = ({
           </label>
 
           {/* Preview */}
-          {previewUrl && (
-            <video
-              controls
-              src={previewUrl}
-              className="w-full rounded-md border"
-            />
-          )}
+          {previewUrl && <video controls src={previewUrl} className="w-full rounded-md border" />}
 
-          {/* Progress */}
-          {(isUploading || isUploadComplete) && (
+          {/* Upload Progress */}
+          {isUploading && (
             <div className="space-y-1">
-              <div className="w-full h-2 rounded-full bg-slate-200">
+              <div className="h-2 w-full rounded-full bg-slate-200">
                 <div
                   className="h-2 rounded-full bg-blue-500 transition-all"
                   style={{
@@ -295,36 +266,20 @@ const ChapterVideoForm = ({
                 />
               </div>
 
-              <p className="text-xs text-slate-500">
-                {isUploadComplete
-                  ? "Upload complete"
-                  : `Uploading ${progress}%`}
-              </p>
+              <p className="text-xs text-slate-500">Uploading {progress}%</p>
             </div>
           )}
 
-          {/* Buttons */}
-          <div className="flex gap-2">
-            <CustomButton
-              type="button"
-              onClick={handleUpload}
-              disabled={!file || isUploading}
-              loading={isUploading}
-              loadingText="Uploading..."
-            >
-              Upload
-            </CustomButton>
-
-            <CustomButton
-              type="button"
-              onClick={handleSave}
-              disabled={!uploadId || !isUploadComplete}
-              loading={isSaving}
-              loadingText="Saving..."
-            >
-              Save
-            </CustomButton>
-          </div>
+          {/* Upload Button */}
+          <CustomButton
+            type="button"
+            onClick={handleUpload}
+            disabled={!file || isUploading}
+            loading={isUploading}
+            loadingText="Uploading..."
+          >
+            Upload Video
+          </CustomButton>
         </div>
       ) : (
         <div className="mt-4">
@@ -332,17 +287,13 @@ const ChapterVideoForm = ({
             {videoUrl ? (
               <MuxVideoPlayer playbackId={videoUrl} />
             ) : isProcessingVideo ? (
-              <div className="h-full flex flex-col items-center justify-center bg-slate-100 rounded-md border border-dashed">
-                <p className="text-sm text-blue-500 font-medium">
-                  Video is processing...
-                </p>
+              <div className="flex h-full flex-col items-center justify-center rounded-md border border-dashed bg-slate-100">
+                <p className="text-sm font-medium text-blue-500">Video is processing...</p>
 
-                <p className="text-xs text-slate-500 mt-1">
-                  This may take a few minutes
-                </p>
+                <p className="mt-1 text-xs text-slate-500">This may take a few minutes</p>
               </div>
             ) : (
-              <div className="h-full flex items-center justify-center bg-slate-100 rounded-md border border-dashed">
+              <div className="flex h-full items-center justify-center rounded-md border border-dashed bg-slate-100">
                 <p className="text-sm text-slate-500">No video uploaded</p>
               </div>
             )}

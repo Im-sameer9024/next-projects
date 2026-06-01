@@ -7,7 +7,11 @@ export const FindUniqueCourseById = async (courseId, teacherId) => {
         },
         include: {
             attachments: true,
-            chapters: true,
+            chapters: {
+                orderBy: {
+                    createdAt: "asc"
+                }
+            },
             purchases: true,
         },
     });

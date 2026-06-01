@@ -58,9 +58,7 @@ export const DeleteAttachmentSchema = z.object({
 });
 
 export type CreateCourseSchemaType = z.infer<typeof CreateCourseSchema>;
-export type CourseDescriptionSchemaType = z.infer<
-  typeof CourseDescriptionSchema
->;
+export type CourseDescriptionSchemaType = z.infer<typeof CourseDescriptionSchema>;
 export type CourseImageSchemaType = z.infer<typeof CourseImageSchema>;
 export type CoursePriceSchemaType = z.infer<typeof CoursePriceSchema>;
 

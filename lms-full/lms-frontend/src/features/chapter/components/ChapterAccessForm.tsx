@@ -11,10 +11,7 @@ import { cn } from "@/shared/lib/utils";
 import { useUpdateChapter } from "../hooks/useChapter";
 
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import {
-  ChapterAccessSchema,
-  ChapterAccessSchemaTypes,
-} from "../chapter.validation";
+import { ChapterAccessSchema, ChapterAccessSchemaTypes } from "../chapter.validation";
 
 const ChapterAccessForm = ({
   isFree,
@@ -79,7 +76,7 @@ const ChapterAccessForm = ({
   };
 
   return (
-    <section className="bg-white border border-slate-200 rounded p-4 ">
+    <section className="rounded border border-slate-200 bg-white p-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-700">Chapter Access</h3>
@@ -92,9 +89,7 @@ const ChapterAccessForm = ({
           onClick={toggleEdit}
           className={cn(
             "transition-all duration-200",
-            isEdit
-              ? "bg-transparent text-slate-500"
-              : "bg-blue-500 hover:bg-blue-600",
+            isEdit ? "bg-transparent text-slate-500" : "bg-blue-500 hover:bg-blue-600",
           )}
         >
           {isEdit ? "Cancel" : "Edit"}
@@ -106,7 +101,7 @@ const ChapterAccessForm = ({
         className={cn(
           "overflow-hidden transition-all duration-300 ease-in-out",
 
-          isEdit ? "max-h-40 opacity-100 mt-3" : "max-h-10 opacity-100 mt-2",
+          isEdit ? "mt-3 max-h-40 opacity-100" : "mt-2 max-h-10 opacity-100",
         )}
       >
         {isEdit ? (
@@ -118,15 +113,11 @@ const ChapterAccessForm = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     checked={field.value}
-                    onCheckedChange={(checked) =>
-                      field.onChange(checked === true)
-                    }
+                    onCheckedChange={(checked) => field.onChange(checked === true)}
                     disabled={isPending}
                   />
 
-                  <label className="text-sm text-slate-600">
-                    Make this chapter free
-                  </label>
+                  <label className="text-sm text-slate-600">Make this chapter free</label>
                 </div>
               )}
             />
@@ -143,9 +134,7 @@ const ChapterAccessForm = ({
           </form>
         ) : (
           <p className="text-sm text-slate-600">
-            {watchedIsFree
-              ? "🟢 This chapter is free"
-              : "🔒 This chapter is paid"}
+            {watchedIsFree ? "🟢 This chapter is free" : "🔒 This chapter is paid"}
           </p>
         )}
       </div>

@@ -16,25 +16,20 @@ const SidebarLink = ({
   isCollapsed: boolean;
   isMobile?: boolean;
 }) => {
-  const isActive =
-    pathname === data?.link || pathname.startsWith(`${data?.link}/`);
+  const isActive = pathname === data?.link || pathname.startsWith(`${data?.link}/`);
 
   const content = (
     <motion.div
       layout
       whileHover={{ scale: 1.02 }}
-      className={`flex items-center gap-3 p-2 rounded-md text-sm transition-colors
-        ${
-          isActive
-            ? "bg-blue-100 text-blue-500 font-semibold"
-            : "text-slate-500 hover:text-blue-500 hover:bg-blue-100"
-        }`}
+      className={`flex items-center gap-3 rounded-md p-2 text-sm transition-colors ${
+        isActive
+          ? "bg-blue-100 font-semibold text-blue-500"
+          : "text-slate-500 hover:bg-blue-100 hover:text-blue-500"
+      }`}
     >
       {/* ICON */}
-      <motion.span
-        animate={{ scale: isActive ? 1.1 : 1 }}
-        transition={{ duration: 0.2 }}
-      >
+      <motion.span animate={{ scale: isActive ? 1.1 : 1 }} transition={{ duration: 0.2 }}>
         {data.icon}
       </motion.span>
 

@@ -29,12 +29,12 @@ const Sidebar = () => {
         initial={false}
         animate={{ width: isCollapsed ? 72 : 240 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="bg-white  border-r border-gray-200 h-screen relative  flex-col items-center hidden md:flex"
+        className="relative hidden h-screen flex-col items-center border-r border-gray-200 bg-white md:flex"
       >
         {/*----------------------- Toggle Button------------------ */}
         <button
           onClick={() => setIsCollapsed((prev) => !prev)}
-          className="absolute -right-3 top-3 bg-white hover:cursor-pointer text-slate-500 border rounded-full p-0.5 shadow hover:bg-slate-100 transition"
+          className="absolute top-3 -right-3 rounded-full border bg-white p-0.5 text-slate-500 shadow transition hover:cursor-pointer hover:bg-slate-100"
         >
           <ArrowLeftRight size={16} />
         </button>
@@ -42,12 +42,8 @@ const Sidebar = () => {
         {/*-------------------- logo ----------------- */}
 
         <Link
-          href={
-            role === RolesObject.teacher
-              ? "/teacher/courses"
-              : "/user/dashboard"
-          }
-          className="flex items-center gap-2   w-full justify-center py-5"
+          href={role === RolesObject.teacher ? "/teacher/courses" : "/user/dashboard"}
+          className="flex w-full items-center justify-center gap-2 py-5"
         >
           <Logo />
 
@@ -57,7 +53,7 @@ const Sidebar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="font-semibold text-slate-700 whitespace-nowrap"
+              className="font-semibold whitespace-nowrap text-slate-700"
             >
               LMS Platform
             </motion.span>
@@ -65,12 +61,12 @@ const Sidebar = () => {
         </Link>
 
         {/* links  */}
-        <div className="flex flex-col gap-3 w-full p-4">
+        <div className="flex w-full flex-col gap-3 p-4">
           {isLoading ? (
             <>
-              <Skeleton className="w-full h-8" />
-              <Skeleton className="w-full h-8" />
-              <Skeleton className="w-full h-8" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
             </>
           ) : (
             routes.map((link) => {

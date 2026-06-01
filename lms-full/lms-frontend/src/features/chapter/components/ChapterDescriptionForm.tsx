@@ -7,10 +7,7 @@ import { Edit, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import CustomButton from "@/shared/components/custom/CustomButton";
 import SlateEditor from "@/features/editor/SlateEditor";
-import {
-  ChapterDescriptionSchema,
-  ChapterDescriptionSchemaTypes,
-} from "../chapter.validation";
+import { ChapterDescriptionSchema, ChapterDescriptionSchemaTypes } from "../chapter.validation";
 
 import { useUpdateChapter } from "../hooks/useChapter";
 import { useGetCourseForTeacher } from "@/features/courses/hooks/useCourse";
@@ -21,7 +18,7 @@ interface ChapterDescriptionFormProps {
   title: string;
   chapterId: string;
   courseId: string;
-  isPublished:boolean
+  isPublished: boolean;
 }
 
 const isHtmlEmpty = (html: string | null | undefined): boolean => {
@@ -35,7 +32,7 @@ const ChapterDescriptionForm = ({
   title,
   chapterId,
   courseId,
-  isPublished
+  isPublished,
 }: ChapterDescriptionFormProps) => {
   const [isEdit, setIsEdit] = useState(false);
 
@@ -58,22 +55,20 @@ const ChapterDescriptionForm = ({
 
   const savedDescription = description ?? "";
 
-  const { control, handleSubmit, reset, setValue } =
-    useForm<ChapterDescriptionSchemaTypes>({
-      resolver: zodResolver(ChapterDescriptionSchema),
+  const { control, handleSubmit, reset, setValue } = useForm<ChapterDescriptionSchemaTypes>({
+    resolver: zodResolver(ChapterDescriptionSchema),
 
-      defaultValues: {
-        description: savedDescription,
-      },
-    });
+    defaultValues: {
+      description: savedDescription,
+    },
+  });
 
   const watchedDescription = useWatch({
     control,
     name: "description",
   });
 
-  const hasChanged =
-    watchedDescription !== savedDescription && !isHtmlEmpty(watchedDescription);
+  const hasChanged = watchedDescription !== savedDescription && !isHtmlEmpty(watchedDescription);
 
   const onSubmit = async (data: ChapterDescriptionSchemaTypes) => {
     try {
@@ -128,10 +123,7 @@ const ChapterDescriptionForm = ({
       }
 
       //  Convert plain text to proper HTML for Slate Editor
-      const formattedDescription = `<p>${generated.replace(
-        /\n/g,
-        "</p><p>",
-      )}</p>`;
+      const formattedDescription = `<p>${generated.replace(/\n/g, "</p><p>")}</p>`;
 
       // ✅ Update React Hook Form state properly
       setValue("description", formattedDescription, {
@@ -159,23 +151,21 @@ const ChapterDescriptionForm = ({
   };
 
   return (
-    <section className="bg-white border border-slate-200 rounded-lg p-4">
+    <section className="rounded-lg border border-slate-200 bg-white p-4">
       {/* HEADER */}
 
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-sm text-slate-700">
-          Chapter Description
-        </h3>
+        <h3 className="text-sm font-semibold text-slate-700">Chapter Description</h3>
 
         <CustomButton
-        disabled={isPublished}
+          disabled={isPublished}
           leftIcon={!isEdit ? <Edit size={16} /> : undefined}
           size="sm"
           variant={isEdit ? "outline" : "default"}
           className={
             isEdit
-              ? "bg-transparent text-slate-500 border-slate-300"
-              : "bg-blue-500 hover:bg-blue-600 text-white"
+              ? "border-slate-300 bg-transparent text-slate-500"
+              : "bg-blue-500 text-white hover:bg-blue-600"
           }
           onClick={toggleEdit}
         >
@@ -204,9 +194,7 @@ const ChapterDescriptionForm = ({
                   />
 
                   {fieldState.error && (
-                    <p className="text-xs text-red-500">
-                      {fieldState.error.message}
-                    </p>
+                    <p className="text-xs text-red-500">{fieldState.error.message}</p>
                   )}
                 </div>
               )}
@@ -222,7 +210,7 @@ const ChapterDescriptionForm = ({
                 loading={isUpdatingChapter}
                 disabled={isUpdatingChapter || !hasChanged}
                 loadingText="Saving..."
-                className="bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50"
+                className="bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50"
               >
                 Save
               </CustomButton>
@@ -244,27 +232,10 @@ const ChapterDescriptionForm = ({
         ) : (
           <div className="text-sm text-slate-600">
             {isHtmlEmpty(description) ? (
-              <p className="italic text-slate-400">No description provided</p>
+              <p className="text-slate-400 italic">No description provided</p>
             ) : (
               <div
-                className="
-                  text-sm text-slate-600 leading-relaxed
-                  [&_p]:my-0.5
-                  [&_h1]:text-xl [&_h1]:font-bold [&_h1]:my-2
-                  [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:my-2
-                  [&_h3]:text-base [&_h3]:font-semibold [&_h3]:my-1
-                  [&_blockquote]:border-l-4 [&_blockquote]:border-slate-300 [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:text-slate-500 [&_blockquote]:my-1
-                  [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-1
-                  [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-1
-                  [&_li]:my-0.5
-                  [&_strong]:font-semibold
-                  [&_em]:italic
-                  [&_u]:underline
-                  [&_s]:line-through
-                  [&_sub]:text-xs [&_sub]:align-sub
-                  [&_sup]:text-xs [&_sup]:align-super
-                  [&_a]:text-blue-500 [&_a]:underline
-                "
+                className="text-sm leading-relaxed text-slate-600 [&_a]:text-blue-500 [&_a]:underline [&_blockquote]:my-1 [&_blockquote]:border-l-4 [&_blockquote]:border-slate-300 [&_blockquote]:pl-3 [&_blockquote]:text-slate-500 [&_blockquote]:italic [&_em]:italic [&_h1]:my-2 [&_h1]:text-xl [&_h1]:font-bold [&_h2]:my-2 [&_h2]:text-lg [&_h2]:font-semibold [&_h3]:my-1 [&_h3]:text-base [&_h3]:font-semibold [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-0.5 [&_s]:line-through [&_strong]:font-semibold [&_sub]:align-sub [&_sub]:text-xs [&_sup]:align-super [&_sup]:text-xs [&_u]:underline [&_ul]:my-1 [&_ul]:list-disc [&_ul]:pl-5"
                 dangerouslySetInnerHTML={{
                   __html: description!,
                 }}

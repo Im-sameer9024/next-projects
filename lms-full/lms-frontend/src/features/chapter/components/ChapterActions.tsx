@@ -5,7 +5,7 @@ import { Trash } from "lucide-react";
 import { useDeleteChapter } from "../hooks/useChapter";
 import { usePublishChapter, useUnPublishChapter } from "../hooks/useChapter";
 import { useRouter } from "next/navigation";
-import ConfirmModal from "../modals/ConfirmModal";
+import ConfirmModal from "../../../shared/components/modals/ConfirmModal";
 import { Spinner } from "@/shared/components/ui/spinner";
 import { toast } from "sonner";
 
@@ -16,25 +16,17 @@ interface ChapterActionsProps {
   isPublished: boolean;
 }
 
-const ChapterActions = ({
-  disabled,
-  courseId,
-  chapterId,
-  isPublished,
-}: ChapterActionsProps) => {
+const ChapterActions = ({ disabled, courseId, chapterId, isPublished }: ChapterActionsProps) => {
   const router = useRouter();
 
   // ✅ delete
-  const { mutateAsync: deleteChapter, isPending: isDeleting } =
-    useDeleteChapter();
+  const { mutateAsync: deleteChapter, isPending: isDeleting } = useDeleteChapter();
 
   // ✅ publish
-  const { mutateAsync: publishChapter, isPending: isPublishing } =
-    usePublishChapter();
+  const { mutateAsync: publishChapter, isPending: isPublishing } = usePublishChapter();
 
   // ✅ unpublish
-  const { mutateAsync: unPublishChapter, isPending: isUnPublishing } =
-    useUnPublishChapter();
+  const { mutateAsync: unPublishChapter, isPending: isUnPublishing } = useUnPublishChapter();
 
   const isUpdating = isPublishing || isUnPublishing;
 
@@ -44,7 +36,7 @@ const ChapterActions = ({
       await deleteChapter({ courseId, chapterId });
       router.push(`/teacher/courses/${courseId}`);
 
-      toast.success("Chapter deleted successfully")
+      toast.success("Chapter deleted successfully");
     } catch {}
   };
 
@@ -53,10 +45,10 @@ const ChapterActions = ({
     try {
       if (isPublished) {
         await unPublishChapter({ courseId, chapterId });
-        toast.success("Chapter unpublished successfully")
+        toast.success("Chapter unpublished successfully");
       } else {
         await publishChapter({ courseId, chapterId });
-        toast.success("Chapter published successfully")
+        toast.success("Chapter published successfully");
       }
     } catch {}
   };
@@ -77,17 +69,9 @@ const ChapterActions = ({
       {/* ✅ Delete Button */}
       <ConfirmModal onConfirm={onDelete}>
         <div
-          className={`
-            border p-1 rounded cursor-pointer
-            ${isDeleting ? "opacity-50 cursor-not-allowed" : "hover:bg-red-200"}
-            text-red-400 border-red-200 bg-red-50
-          `}
+          className={`cursor-pointer rounded border p-1 ${isDeleting ? "cursor-not-allowed opacity-50" : "hover:bg-red-200"} border-red-200 bg-red-50 text-red-400`}
         >
-          {isDeleting ? (
-              <Spinner />
-          ) : (
-            <Trash size={14} />
-          )}
+          {isDeleting ? <Spinner /> : <Trash size={14} />}
         </div>
       </ConfirmModal>
     </div>

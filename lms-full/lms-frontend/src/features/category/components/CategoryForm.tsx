@@ -43,8 +43,7 @@ const CategoryForm = ({
 
   const categories = data?.data || [];
 
-  const { mutateAsync: UpdateCourse, isPending: isCourseUpdating } =
-    useUpdateCourseByTeacher();
+  const { mutateAsync: UpdateCourse, isPending: isCourseUpdating } = useUpdateCourseByTeacher();
 
   const { handleSubmit, control, reset } = useForm<FormType>({
     defaultValues: {
@@ -63,8 +62,7 @@ const CategoryForm = ({
     value: cat.id,
   }));
 
-  const selectedLabel =
-    options.find((opt) => opt.value === categoryId)?.label || "No category";
+  const selectedLabel = options.find((opt) => opt.value === categoryId)?.label || "No category";
 
   const onSubmit = async (values: FormType) => {
     if (values.categoryId === categoryId) {
@@ -92,7 +90,6 @@ const CategoryForm = ({
     }
   };
 
-
   const toggleEdit = () => {
     if (isEdit) {
       reset({
@@ -104,22 +101,18 @@ const CategoryForm = ({
   };
 
   return (
-    <section className="bg-white border p-4 border-slate-200 rounded">
+    <section className="rounded border border-slate-200 bg-white p-4">
       {/* HEADER */}
 
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-sm text-slate-700">
-          Course Category
-        </h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-slate-700">Course Category</h3>
 
         <CustomButton
           leftIcon={!isEdit && <Edit size={16} />}
           size="sm"
           variant={isEdit ? "outline" : "default"}
           className={`${
-            isEdit
-              ? "bg-transparent text-slate-500"
-              : "bg-blue-500 hover:bg-blue-600"
+            isEdit ? "bg-transparent text-slate-500" : "bg-blue-500 hover:bg-blue-600"
           } transition-all duration-200`}
           onClick={toggleEdit}
         >
@@ -138,9 +131,7 @@ const CategoryForm = ({
               control={control}
               name="categoryId"
               render={({ field }) => {
-                const selected = options.find(
-                  (opt) => opt.value === field.value,
-                );
+                const selected = options.find((opt) => opt.value === field.value);
 
                 return (
                   <Combobox

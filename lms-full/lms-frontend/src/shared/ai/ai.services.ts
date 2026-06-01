@@ -3,9 +3,6 @@
 import puter from "@heyputer/puter.js";
 import { chapterDescriptionPrompt, courseDescriptionPrompt, courseTitlePrompt } from "./prompts";
 
-
-
-
 const PUTER_REQUEST_TIMEOUT_MS = 60_000;
 
 const getTextContent = (content: unknown) => {
@@ -60,9 +57,7 @@ export const generateCourseTitles = async (text: string): Promise<string[]> => {
 /*                         COURSE DESCRIPTION                                 */
 /* -------------------------------------------------------------------------- */
 
-export const generateCourseDescription = async (
-  title: string,
-): Promise<string> => {
+export const generateCourseDescription = async (title: string): Promise<string> => {
   try {
     const response = await withTimeout(
       puter.ai.chat(courseDescriptionPrompt(title), {

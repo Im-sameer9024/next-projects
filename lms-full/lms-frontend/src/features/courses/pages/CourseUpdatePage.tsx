@@ -17,6 +17,7 @@ import { FaIndianRupeeSign } from "react-icons/fa6";
 import PriceForm from "../components/PriceForm";
 import { IoDocumentOutline } from "react-icons/io5";
 import AttachmentForm from "../components/AttachmentForm";
+import CourseActions from "../components/CourseActions";
 
 const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
   const {
@@ -54,12 +55,8 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
     return <ErrorPage message={SingleCourseError.message} />;
   }
 
-  const safeChapters = Array.isArray(courseData?.chapters)
-    ? courseData.chapters
-    : [];
-  const safeAttachments = Array.isArray(courseData?.attachments)
-    ? courseData.attachments
-    : [];
+  const safeChapters = Array.isArray(courseData?.chapters) ? courseData.chapters : [];
+  const safeAttachments = Array.isArray(courseData?.attachments) ? courseData.attachments : [];
 
   return (
     <>
@@ -69,57 +66,49 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
 
       <section aria-label="course-update-page">
         {/*-------------- heading --------- */}
-        <section className=" flex justify-between mt-4">
+        <section className="mt-4 flex justify-between">
           <div>
-            <h2 className="  font-heading font-semibold text-xl text-slate-700">
-              Course Setup
-            </h2>
-            <p className="   font-light text-xs text-slate-500 flex items-center gap-1">
+            <h2 className="font-heading text-xl font-semibold text-slate-700">Course Setup</h2>
+            <p className="flex items-center gap-1 text-xs font-light text-slate-500">
               Complete All Fields {completionText}
               {isComplete && (
-                <span className=" text-green-400 ">
+                <span className="text-green-400">
                   <IoMdCheckmarkCircleOutline size={18} />
                 </span>
               )}
             </p>
           </div>
-          {/* {courseData && (
+          {courseData && (
             <CourseActions
               disabled={!isComplete}
               courseId={courseId}
               isPublished={courseData.isPublished}
             />
-          )} */}
+          )}
         </section>
-        <section className=" grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+        <section className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
           {/*--------------------- Left side  ---------------*/}
-          <div className=" space-y-4">
+          <div className="space-y-4">
             {/*------------- heading -------- */}
-            <div className=" flex  items-center gap-2">
+            <div className="flex items-center gap-2">
               <div>
-                <MdOutlineDashboard className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+                <MdOutlineDashboard className="h-10 w-10 rounded-full bg-blue-100 p-2 text-4xl text-blue-500" />
               </div>
-              <p className=" font-heading font-semibold text-md text-slate-700">
+              <p className="font-heading text-md font-semibold text-slate-700">
                 Customize your course
               </p>
             </div>
 
             {/*------------- forms -------- */}
-            <section className=" space-y-4">
-              <TitleForm
-                courseId={courseData?.id || ""}
-                title={courseData?.title || ""}
-              />
+            <section className="space-y-4">
+              <TitleForm courseId={courseData?.id || ""} title={courseData?.title || ""} />
               <DescriptionForm
                 courseId={courseData?.id || ""}
                 description={courseData?.description || ""}
                 title={courseData?.title || ""}
               />
 
-              <ThumbnailForm
-                courseId={courseData?.id || ""}
-                image={courseData?.image || ""}
-              />
+              <ThumbnailForm courseId={courseData?.id || ""} image={courseData?.image || ""} />
 
               <CategoryForm
                 courseId={courseData?.id || ""}
@@ -129,32 +118,27 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
           </div>
           {/* Right side  */}
 
-          <div className=" space-y-4">
+          <div className="space-y-4">
             {/*---------------- chapter section ---------------- */}
-            <section className=" space-y-4">
+            <section className="space-y-4">
               {/* heading  */}
-              <div className=" flex  items-center gap-2">
+              <div className="flex items-center gap-2">
                 <div>
-                  <VscChecklist className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+                  <VscChecklist className="h-10 w-10 rounded-full bg-blue-100 p-2 text-4xl text-blue-500" />
                 </div>
-                <p className=" font-heading font-semibold text-md text-slate-700">
-                  Course chapter
-                </p>
+                <p className="font-heading text-md font-semibold text-slate-700">Course chapter</p>
               </div>
 
-              <ChapterForm
-                chapters={safeChapters}
-                courseId={(courseData?.id as string) || ""}
-              />
+              <ChapterForm chapters={safeChapters} courseId={(courseData?.id as string) || ""} />
             </section>
 
             {/*---------------------- price section -------------- */}
-            <section className=" space-y-4">
-              <div className=" flex  items-center gap-2">
+            <section className="space-y-4">
+              <div className="flex items-center gap-2">
                 <div>
-                  <FaIndianRupeeSign className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+                  <FaIndianRupeeSign className="h-10 w-10 rounded-full bg-blue-100 p-2 text-4xl text-blue-500" />
                 </div>
-                <p className=" font-heading font-semibold text-md text-slate-700">
+                <p className="font-heading text-md font-semibold text-slate-700">
                   Sell your course
                 </p>
               </div>
@@ -165,19 +149,16 @@ const CourseUpdatePage = ({ courseId }: { courseId: string }) => {
             </section>
 
             {/*-------------------- Attachment section -------------  */}
-            <section className=" space-y-4">
-              <div className=" flex  items-center gap-2">
+            <section className="space-y-4">
+              <div className="flex items-center gap-2">
                 <div>
-                  <IoDocumentOutline className=" text-4xl text-blue-500 bg-blue-100 rounded-full p-2 w-10 h-10" />
+                  <IoDocumentOutline className="h-10 w-10 rounded-full bg-blue-100 p-2 text-4xl text-blue-500" />
                 </div>
-                <p className=" font-heading font-semibold text-md text-slate-700">
+                <p className="font-heading text-md font-semibold text-slate-700">
                   Resources and Attachments
                 </p>
               </div>
-              <AttachmentForm
-                attachments={safeAttachments}
-                courseId={courseData?.id || ""}
-              />
+              <AttachmentForm attachments={safeAttachments} courseId={courseData?.id || ""} />
             </section>
           </div>
         </section>

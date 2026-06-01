@@ -77,20 +77,18 @@ const PriceForm = ({
   };
 
   return (
-    <section className="bg-white border p-4 border-slate-200 rounded">
+    <section className="rounded border border-slate-200 bg-white p-4">
       {/* HEADER */}
 
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-sm text-slate-700">Course Price</h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-slate-700">Course Price</h3>
 
         <CustomButton
           leftIcon={!isEdit && <Edit size={16} />}
           size="sm"
           variant={isEdit ? "outline" : "default"}
           className={`${
-            isEdit
-              ? "bg-transparent text-slate-500"
-              : "bg-blue-500 hover:bg-blue-600"
+            isEdit ? "bg-transparent text-slate-500" : "bg-blue-500 hover:bg-blue-600"
           } transition-all duration-200`}
           onClick={toggleEdit}
         >
@@ -102,7 +100,7 @@ const PriceForm = ({
 
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isEdit ? "max-h-40 mt-3 opacity-100" : "max-h-10 mt-2 opacity-100"
+          isEdit ? "mt-3 max-h-40 opacity-100" : "mt-2 max-h-10 opacity-100"
         }`}
       >
         {isEdit ? (
@@ -130,9 +128,7 @@ const PriceForm = ({
             </CustomButton>
           </form>
         ) : (
-          <p className="text-sm text-slate-600">
-            {price ? `₹${price}` : "Free / Not set"}
-          </p>
+          <p className="text-sm text-slate-600">{price ? `₹${price}` : "Free / Not set"}</p>
         )}
       </div>
     </section>

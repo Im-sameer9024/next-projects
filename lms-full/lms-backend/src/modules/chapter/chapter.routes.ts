@@ -1,13 +1,15 @@
-import { auth, isTeacher } from "../../middlewares/auth.middleware.js";
+import { auth, isTeacher, isUser } from "../../middlewares/auth.middleware.js";
 import { validate } from "../../middlewares/validate.middleware.js";
 import express from "express";
 import { CreateChapterSchema } from "./chapter.validation.js";
 import {
   ChapterVideoWebhook,
+  CompleteChapter,
   CreateChapter,
   DeleteChapter,
   DeleteChapterVideo,
   GetChapterById,
+  GetChapterByIdForUser,
   PublishChapter,
   SaveChapterVideo,
   UnPublishChapter,
@@ -36,6 +38,9 @@ route.post("/mux/delete-video", auth, isTeacher, DeleteChapterVideo);
 route.post("/publish", auth, isTeacher, PublishChapter);
 route.post("/unpublish", auth, isTeacher, UnPublishChapter);
 route.post("/ai/description", auth, isTeacher, AiChapterDescription);
+
+route.get("/user/:chapterId",auth,isUser,GetChapterByIdForUser)
+route.post("/user/complete",auth,isUser,CompleteChapter)
 
 route.post("/", ChapterVideoWebhook);
 

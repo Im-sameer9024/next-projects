@@ -1,8 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import {
-  GenerateCourseDescription,
-  GenerateCourseTitles,
-} from "../apiOperations";
+import { GenerateCourseDescription, GenerateCourseTitles } from "../apiOperations";
 import { toast } from "sonner";
 
 export const useAiCourseTitles = () => {

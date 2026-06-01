@@ -1,14 +1,22 @@
 import { prisma } from "../../config/prisma.js";
 
-export const FindUniqueCourseById = async (courseId: string,teacherId:string) => {
+export const FindUniqueCourseById = async (
+  courseId: string,
+  teacherId: string,
+) => {
   return await prisma.course.findUnique({
     where: {
       id: courseId as string,
       teacherId: teacherId as string,
     },
+
     include: {
       attachments: true,
-      chapters: true,
+      chapters: {
+        orderBy:{
+          createdAt:"asc"
+        }
+      },
       purchases: true,
     },
   });
@@ -34,6 +42,5 @@ export const FindAllCoursesByTeacherId = async (teacherId: string) => {
     orderBy: {
       createdAt: "desc",
     },
-    
-  })
+  });
 };

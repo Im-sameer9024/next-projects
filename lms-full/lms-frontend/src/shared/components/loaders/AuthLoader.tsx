@@ -2,12 +2,12 @@ import { Skeleton } from "../ui/skeleton";
 
 const AuthLoader = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-2xl bg-white shadow-lg p-8 space-y-6">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md space-y-6 rounded-2xl bg-white p-8 shadow-lg">
         <div className="space-y-2">
-          <Skeleton className="h-8 w-48 mx-auto" />
+          <Skeleton className="mx-auto h-8 w-48" />
 
-          <Skeleton className="h-4 w-64 mx-auto" />
+          <Skeleton className="mx-auto h-4 w-64" />
         </div>
 
         <Skeleton className="h-12 w-full rounded-xl" />

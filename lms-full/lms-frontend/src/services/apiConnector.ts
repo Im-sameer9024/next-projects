@@ -106,10 +106,7 @@ axiosInstance.interceptors.response.use(
         try {
           const newAccessToken = await refreshPromise;
 
-          originalRequest.headers.set(
-            "Authorization",
-            `Bearer ${newAccessToken}`,
-          );
+          originalRequest.headers.set("Authorization", `Bearer ${newAccessToken}`);
 
           return axiosInstance(originalRequest);
         } catch (queueError) {
@@ -138,10 +135,7 @@ axiosInstance.interceptors.response.use(
         setToken(newAccessToken);
 
         // Retry original request
-        originalRequest.headers.set(
-          "Authorization",
-          `Bearer ${newAccessToken}`,
-        );
+        originalRequest.headers.set("Authorization", `Bearer ${newAccessToken}`);
 
         return axiosInstance(originalRequest);
       } catch (refreshError) {
@@ -149,10 +143,7 @@ axiosInstance.interceptors.response.use(
         logout();
 
         // Redirect user to login
-        if (
-          typeof window !== "undefined" &&
-          window.location.pathname !== "/login"
-        ) {
+        if (typeof window !== "undefined" && window.location.pathname !== "/login") {
           window.location.replace("/login");
         }
 

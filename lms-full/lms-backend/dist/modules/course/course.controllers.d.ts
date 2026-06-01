@@ -6,5 +6,11 @@ declare const DeleteCourseById: (req: Request, res: Response, next: import("expr
 declare const GetAllCourses: (req: Request, res: Response, next: import("express").NextFunction) => void;
 declare const UploadThumbnail: (req: Request, res: Response, next: import("express").NextFunction) => void;
 declare const PublishedCourse: (req: Request, res: Response, next: import("express").NextFunction) => void;
-export { CreateCourse, UpdateSingleCourse, GetCourseByTeacherId, DeleteCourseById, GetAllCourses, UploadThumbnail, PublishedCourse, };
+declare const UnpublishedCourse: (req: Request, res: Response, next: import("express").NextFunction) => void;
+declare const GetAllCoursesForUser: (req: Request, res: Response, next: import("express").NextFunction) => void;
+declare const GetProgressOfCourse: (req: Request, res: Response, next: import("express").NextFunction) => void;
+declare const GetSingleCourseForUser: (req: Request, res: Response, next: import("express").NextFunction) => void;
+declare const DashboardDataForUser: (req: Request, res: Response, next: import("express").NextFunction) => void;
+declare const GetAnalyticsForTeacher: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export { CreateCourse, UpdateSingleCourse, GetCourseByTeacherId, DeleteCourseById, GetAllCourses, UploadThumbnail, PublishedCourse, UnpublishedCourse, GetAllCoursesForUser, GetProgressOfCourse, GetSingleCourseForUser, DashboardDataForUser, GetAnalyticsForTeacher };
 //# sourceMappingURL=course.controllers.d.ts.map

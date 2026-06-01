@@ -9,4 +9,6 @@ export declare const UploadChapterVideo: (req: Request, res: Response, next: imp
 export declare const DeleteChapterVideo: (req: Request, res: Response, next: import("express").NextFunction) => void;
 export declare const SaveChapterVideo: (req: Request, res: Response, next: import("express").NextFunction) => void;
 export declare const ChapterVideoWebhook: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const GetChapterByIdForUser: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const CompleteChapter: (req: Request, res: Response, next: import("express").NextFunction) => void;
 //# sourceMappingURL=chapter.controllers.d.ts.map

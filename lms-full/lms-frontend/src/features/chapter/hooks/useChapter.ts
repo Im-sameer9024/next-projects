@@ -75,9 +75,7 @@ export const useSaveChapterVideo = () => {
   return useMutation({
     mutationFn: SaveChapterVideo,
 
-    onSuccess: (variables) => {
-
-
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["chapter", "detail", variables.chapterId],
       });
