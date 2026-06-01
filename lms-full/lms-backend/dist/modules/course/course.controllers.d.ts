@@ -12,5 +12,5 @@ declare const GetProgressOfCourse: (req: Request, res: Response, next: import("e
 declare const GetSingleCourseForUser: (req: Request, res: Response, next: import("express").NextFunction) => void;
 declare const DashboardDataForUser: (req: Request, res: Response, next: import("express").NextFunction) => void;
 declare const GetAnalyticsForTeacher: (req: Request, res: Response, next: import("express").NextFunction) => void;
-export { CreateCourse, UpdateSingleCourse, GetCourseByTeacherId, DeleteCourseById, GetAllCourses, UploadThumbnail, PublishedCourse, UnpublishedCourse, GetAllCoursesForUser, GetProgressOfCourse, GetSingleCourseForUser, DashboardDataForUser, GetAnalyticsForTeacher };
+export { CreateCourse, UpdateSingleCourse, GetCourseByTeacherId, DeleteCourseById, GetAllCourses, UploadThumbnail, PublishedCourse, UnpublishedCourse, GetAllCoursesForUser, GetProgressOfCourse, GetSingleCourseForUser, DashboardDataForUser, GetAnalyticsForTeacher, };
 //# sourceMappingURL=course.controllers.d.ts.map

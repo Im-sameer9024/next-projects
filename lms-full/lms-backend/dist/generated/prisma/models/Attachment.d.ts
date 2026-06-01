@@ -99,23 +99,23 @@ export type AttachmentAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Count returned Attachments
-    **/
+     **/
     _count?: true | AttachmentCountAggregateInputType;
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Select which fields to find the minimum value
-    **/
+     **/
     _min?: AttachmentMinAggregateInputType;
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Select which fields to find the maximum value
-    **/
+     **/
     _max?: AttachmentMaxAggregateInputType;
 };
 export type GetAttachmentAggregateType<T extends AttachmentAggregateArgs> = {
-    [P in keyof T & keyof AggregateAttachment]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateAttachment[P]> : Prisma.GetScalarType<T[P], AggregateAttachment[P]>;
+    [P in keyof T & keyof AggregateAttachment]: P extends "_count" | "count" ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateAttachment[P]> : Prisma.GetScalarType<T[P], AggregateAttachment[P]>;
 };
 export type AttachmentGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.AttachmentWhereInput;
@@ -140,8 +140,8 @@ export type AttachmentGroupByOutputType = {
     _min: AttachmentMinAggregateOutputType | null;
     _max: AttachmentMaxAggregateOutputType | null;
 };
-export type GetAttachmentGroupByPayload<T extends AttachmentGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<AttachmentGroupByOutputType, T['by']> & {
-    [P in ((keyof T) & (keyof AttachmentGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], AttachmentGroupByOutputType[P]> : Prisma.GetScalarType<T[P], AttachmentGroupByOutputType[P]>;
+export type GetAttachmentGroupByPayload<T extends AttachmentGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<AttachmentGroupByOutputType, T["by"]> & {
+    [P in keyof T & keyof AttachmentGroupByOutputType]: P extends "_count" ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], AttachmentGroupByOutputType[P]> : Prisma.GetScalarType<T[P], AttachmentGroupByOutputType[P]>;
 }>>;
 export type AttachmentWhereInput = {
     AND?: Prisma.AttachmentWhereInput | Prisma.AttachmentWhereInput[];
@@ -485,14 +485,14 @@ export type $AttachmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     composites: {};
 };
 export type AttachmentGetPayload<S extends boolean | null | undefined | AttachmentDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$AttachmentPayload, S>;
-export type AttachmentCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<AttachmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+export type AttachmentCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<AttachmentFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: AttachmentCountAggregateInputType | true;
 };
 export interface AttachmentDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: {
-        types: Prisma.TypeMap<ExtArgs>['model']['Attachment'];
+        types: Prisma.TypeMap<ExtArgs>["model"]["Attachment"];
         meta: {
-            name: 'Attachment';
+            name: "Attachment";
         };
     };
     /**
@@ -734,8 +734,8 @@ export interface AttachmentDelegate<ExtArgs extends runtime.Types.Extensions.Int
      *     // ... the filter for the Attachments we want to count
      *   }
      * })
-    **/
-    count<T extends AttachmentCountArgs>(args?: Prisma.Subset<T, AttachmentCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], AttachmentCountAggregateOutputType> : number>;
+     **/
+    count<T extends AttachmentCountArgs>(args?: Prisma.Subset<T, AttachmentCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<"select", any> ? T["select"] extends true ? number : Prisma.GetScalarType<T["select"], AttachmentCountAggregateOutputType> : number>;
     /**
      * Allows you to perform aggregations operations on a Attachment.
      * Note, that providing `undefined` is treated as the value not being there.
@@ -759,7 +759,7 @@ export interface AttachmentDelegate<ExtArgs extends runtime.Types.Extensions.Int
      *   },
      *   take: 10,
      * })
-    **/
+     **/
     aggregate<T extends AttachmentAggregateArgs>(args: Prisma.Subset<T, AttachmentAggregateArgs>): Prisma.PrismaPromise<GetAttachmentAggregateType<T>>;
     /**
      * Group by Attachment.
@@ -778,21 +778,21 @@ export interface AttachmentDelegate<ExtArgs extends runtime.Types.Extensions.Int
      *   },
      * })
      *
-    **/
-    groupBy<T extends AttachmentGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
-        orderBy: AttachmentGroupByArgs['orderBy'];
+     **/
+    groupBy<T extends AttachmentGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<"skip", Prisma.Keys<T>>, Prisma.Extends<"take", Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: AttachmentGroupByArgs["orderBy"];
     } : {
-        orderBy?: AttachmentGroupByArgs['orderBy'];
-    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        orderBy?: AttachmentGroupByArgs["orderBy"];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T["orderBy"]>>>, ByFields extends Prisma.MaybeTupleToUnion<T["by"]>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T["having"]>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T["by"] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
         [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
             Error,
-            'Field ',
+            "Field ",
             P,
             ` in "having" needs to be provided in "by"`
         ];
-    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+    }[HavingFields] : "take" extends Prisma.Keys<T> ? "orderBy" extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
-    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : "skip" extends Prisma.Keys<T> ? "orderBy" extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
     }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
@@ -836,13 +836,13 @@ export interface Prisma__AttachmentClient<T, Null = never, ExtArgs extends runti
  * Fields of the Attachment model
  */
 export interface AttachmentFieldRefs {
-    readonly id: Prisma.FieldRef<"Attachment", 'String'>;
-    readonly name: Prisma.FieldRef<"Attachment", 'String'>;
-    readonly attachment_doc: Prisma.FieldRef<"Attachment", 'String'>;
-    readonly attachment_public_id: Prisma.FieldRef<"Attachment", 'String'>;
-    readonly courseId: Prisma.FieldRef<"Attachment", 'String'>;
-    readonly createdAt: Prisma.FieldRef<"Attachment", 'DateTime'>;
-    readonly updatedAt: Prisma.FieldRef<"Attachment", 'DateTime'>;
+    readonly id: Prisma.FieldRef<"Attachment", "String">;
+    readonly name: Prisma.FieldRef<"Attachment", "String">;
+    readonly attachment_doc: Prisma.FieldRef<"Attachment", "String">;
+    readonly attachment_public_id: Prisma.FieldRef<"Attachment", "String">;
+    readonly courseId: Prisma.FieldRef<"Attachment", "String">;
+    readonly createdAt: Prisma.FieldRef<"Attachment", "DateTime">;
+    readonly updatedAt: Prisma.FieldRef<"Attachment", "DateTime">;
 }
 /**
  * Attachment findUnique

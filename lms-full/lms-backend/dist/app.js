@@ -14,15 +14,15 @@ app.use("/api/webhook/mux", express.raw({
     type: "application/json",
 }), muxWebhookRoutes);
 app.use("/api", stripeWebhookRoutes);
+app.use(cors({
+    origin: ["http://localhost:3000", "https://next-projects-8oog.vercel.app"],
+    credentials: true,
+}));
 app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(httpLogger);
-app.use(cors({
-    origin: ["http://localhost:3000", "https://next-projects-8oog.vercel.app"],
-    credentials: true,
-}));
 //------------------------- mux webhook --------------------------
 //--------------- health check -------------------
 app.get("/", (req, res) => {

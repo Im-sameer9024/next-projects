@@ -87,23 +87,23 @@ export type StripeCustomerAggregateArgs<ExtArgs extends runtime.Types.Extensions
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Count returned StripeCustomers
-    **/
+     **/
     _count?: true | StripeCustomerCountAggregateInputType;
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Select which fields to find the minimum value
-    **/
+     **/
     _min?: StripeCustomerMinAggregateInputType;
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Select which fields to find the maximum value
-    **/
+     **/
     _max?: StripeCustomerMaxAggregateInputType;
 };
 export type GetStripeCustomerAggregateType<T extends StripeCustomerAggregateArgs> = {
-    [P in keyof T & keyof AggregateStripeCustomer]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateStripeCustomer[P]> : Prisma.GetScalarType<T[P], AggregateStripeCustomer[P]>;
+    [P in keyof T & keyof AggregateStripeCustomer]: P extends "_count" | "count" ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateStripeCustomer[P]> : Prisma.GetScalarType<T[P], AggregateStripeCustomer[P]>;
 };
 export type StripeCustomerGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.StripeCustomerWhereInput;
@@ -126,8 +126,8 @@ export type StripeCustomerGroupByOutputType = {
     _min: StripeCustomerMinAggregateOutputType | null;
     _max: StripeCustomerMaxAggregateOutputType | null;
 };
-export type GetStripeCustomerGroupByPayload<T extends StripeCustomerGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<StripeCustomerGroupByOutputType, T['by']> & {
-    [P in ((keyof T) & (keyof StripeCustomerGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], StripeCustomerGroupByOutputType[P]> : Prisma.GetScalarType<T[P], StripeCustomerGroupByOutputType[P]>;
+export type GetStripeCustomerGroupByPayload<T extends StripeCustomerGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<StripeCustomerGroupByOutputType, T["by"]> & {
+    [P in keyof T & keyof StripeCustomerGroupByOutputType]: P extends "_count" ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], StripeCustomerGroupByOutputType[P]> : Prisma.GetScalarType<T[P], StripeCustomerGroupByOutputType[P]>;
 }>>;
 export type StripeCustomerWhereInput = {
     AND?: Prisma.StripeCustomerWhereInput | Prisma.StripeCustomerWhereInput[];
@@ -288,14 +288,14 @@ export type $StripeCustomerPayload<ExtArgs extends runtime.Types.Extensions.Inte
     composites: {};
 };
 export type StripeCustomerGetPayload<S extends boolean | null | undefined | StripeCustomerDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$StripeCustomerPayload, S>;
-export type StripeCustomerCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<StripeCustomerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+export type StripeCustomerCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<StripeCustomerFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: StripeCustomerCountAggregateInputType | true;
 };
 export interface StripeCustomerDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: {
-        types: Prisma.TypeMap<ExtArgs>['model']['StripeCustomer'];
+        types: Prisma.TypeMap<ExtArgs>["model"]["StripeCustomer"];
         meta: {
-            name: 'StripeCustomer';
+            name: "StripeCustomer";
         };
     };
     /**
@@ -537,8 +537,8 @@ export interface StripeCustomerDelegate<ExtArgs extends runtime.Types.Extensions
      *     // ... the filter for the StripeCustomers we want to count
      *   }
      * })
-    **/
-    count<T extends StripeCustomerCountArgs>(args?: Prisma.Subset<T, StripeCustomerCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], StripeCustomerCountAggregateOutputType> : number>;
+     **/
+    count<T extends StripeCustomerCountArgs>(args?: Prisma.Subset<T, StripeCustomerCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<"select", any> ? T["select"] extends true ? number : Prisma.GetScalarType<T["select"], StripeCustomerCountAggregateOutputType> : number>;
     /**
      * Allows you to perform aggregations operations on a StripeCustomer.
      * Note, that providing `undefined` is treated as the value not being there.
@@ -562,7 +562,7 @@ export interface StripeCustomerDelegate<ExtArgs extends runtime.Types.Extensions
      *   },
      *   take: 10,
      * })
-    **/
+     **/
     aggregate<T extends StripeCustomerAggregateArgs>(args: Prisma.Subset<T, StripeCustomerAggregateArgs>): Prisma.PrismaPromise<GetStripeCustomerAggregateType<T>>;
     /**
      * Group by StripeCustomer.
@@ -581,21 +581,21 @@ export interface StripeCustomerDelegate<ExtArgs extends runtime.Types.Extensions
      *   },
      * })
      *
-    **/
-    groupBy<T extends StripeCustomerGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
-        orderBy: StripeCustomerGroupByArgs['orderBy'];
+     **/
+    groupBy<T extends StripeCustomerGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<"skip", Prisma.Keys<T>>, Prisma.Extends<"take", Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: StripeCustomerGroupByArgs["orderBy"];
     } : {
-        orderBy?: StripeCustomerGroupByArgs['orderBy'];
-    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        orderBy?: StripeCustomerGroupByArgs["orderBy"];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T["orderBy"]>>>, ByFields extends Prisma.MaybeTupleToUnion<T["by"]>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T["having"]>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T["by"] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
         [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
             Error,
-            'Field ',
+            "Field ",
             P,
             ` in "having" needs to be provided in "by"`
         ];
-    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+    }[HavingFields] : "take" extends Prisma.Keys<T> ? "orderBy" extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
-    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : "skip" extends Prisma.Keys<T> ? "orderBy" extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
     }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
@@ -638,11 +638,11 @@ export interface Prisma__StripeCustomerClient<T, Null = never, ExtArgs extends r
  * Fields of the StripeCustomer model
  */
 export interface StripeCustomerFieldRefs {
-    readonly id: Prisma.FieldRef<"StripeCustomer", 'String'>;
-    readonly userId: Prisma.FieldRef<"StripeCustomer", 'String'>;
-    readonly stripeCustomerId: Prisma.FieldRef<"StripeCustomer", 'String'>;
-    readonly createdAt: Prisma.FieldRef<"StripeCustomer", 'DateTime'>;
-    readonly updatedAt: Prisma.FieldRef<"StripeCustomer", 'DateTime'>;
+    readonly id: Prisma.FieldRef<"StripeCustomer", "String">;
+    readonly userId: Prisma.FieldRef<"StripeCustomer", "String">;
+    readonly stripeCustomerId: Prisma.FieldRef<"StripeCustomer", "String">;
+    readonly createdAt: Prisma.FieldRef<"StripeCustomer", "DateTime">;
+    readonly updatedAt: Prisma.FieldRef<"StripeCustomer", "DateTime">;
 }
 /**
  * StripeCustomer findUnique

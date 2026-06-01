@@ -135,7 +135,7 @@ const RefreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
   }
 
   let decode;
-  const secretKey = process.env.REFRESH_TOKEN_SECRET as string;
+  const secretKey = process.env.REFRESH_TOKEN_SECRET! as string;
 
   try {
     decode = await DecodeToken({

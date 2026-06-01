@@ -123,23 +123,23 @@ export type CourseAggregateArgs<ExtArgs extends runtime.Types.Extensions.Interna
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Count returned Courses
-    **/
+     **/
     _count?: true | CourseCountAggregateInputType;
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Select which fields to find the minimum value
-    **/
+     **/
     _min?: CourseMinAggregateInputType;
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Select which fields to find the maximum value
-    **/
+     **/
     _max?: CourseMaxAggregateInputType;
 };
 export type GetCourseAggregateType<T extends CourseAggregateArgs> = {
-    [P in keyof T & keyof AggregateCourse]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateCourse[P]> : Prisma.GetScalarType<T[P], AggregateCourse[P]>;
+    [P in keyof T & keyof AggregateCourse]: P extends "_count" | "count" ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateCourse[P]> : Prisma.GetScalarType<T[P], AggregateCourse[P]>;
 };
 export type CourseGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.CourseWhereInput;
@@ -168,8 +168,8 @@ export type CourseGroupByOutputType = {
     _min: CourseMinAggregateOutputType | null;
     _max: CourseMaxAggregateOutputType | null;
 };
-export type GetCourseGroupByPayload<T extends CourseGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<CourseGroupByOutputType, T['by']> & {
-    [P in ((keyof T) & (keyof CourseGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], CourseGroupByOutputType[P]> : Prisma.GetScalarType<T[P], CourseGroupByOutputType[P]>;
+export type GetCourseGroupByPayload<T extends CourseGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<CourseGroupByOutputType, T["by"]> & {
+    [P in keyof T & keyof CourseGroupByOutputType]: P extends "_count" ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], CourseGroupByOutputType[P]> : Prisma.GetScalarType<T[P], CourseGroupByOutputType[P]>;
 }>>;
 export type CourseWhereInput = {
     AND?: Prisma.CourseWhereInput | Prisma.CourseWhereInput[];
@@ -1116,14 +1116,14 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     composites: {};
 };
 export type CourseGetPayload<S extends boolean | null | undefined | CourseDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$CoursePayload, S>;
-export type CourseCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<CourseFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+export type CourseCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<CourseFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: CourseCountAggregateInputType | true;
 };
 export interface CourseDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: {
-        types: Prisma.TypeMap<ExtArgs>['model']['Course'];
+        types: Prisma.TypeMap<ExtArgs>["model"]["Course"];
         meta: {
-            name: 'Course';
+            name: "Course";
         };
     };
     /**
@@ -1365,8 +1365,8 @@ export interface CourseDelegate<ExtArgs extends runtime.Types.Extensions.Interna
      *     // ... the filter for the Courses we want to count
      *   }
      * })
-    **/
-    count<T extends CourseCountArgs>(args?: Prisma.Subset<T, CourseCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], CourseCountAggregateOutputType> : number>;
+     **/
+    count<T extends CourseCountArgs>(args?: Prisma.Subset<T, CourseCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<"select", any> ? T["select"] extends true ? number : Prisma.GetScalarType<T["select"], CourseCountAggregateOutputType> : number>;
     /**
      * Allows you to perform aggregations operations on a Course.
      * Note, that providing `undefined` is treated as the value not being there.
@@ -1390,7 +1390,7 @@ export interface CourseDelegate<ExtArgs extends runtime.Types.Extensions.Interna
      *   },
      *   take: 10,
      * })
-    **/
+     **/
     aggregate<T extends CourseAggregateArgs>(args: Prisma.Subset<T, CourseAggregateArgs>): Prisma.PrismaPromise<GetCourseAggregateType<T>>;
     /**
      * Group by Course.
@@ -1409,21 +1409,21 @@ export interface CourseDelegate<ExtArgs extends runtime.Types.Extensions.Interna
      *   },
      * })
      *
-    **/
-    groupBy<T extends CourseGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
-        orderBy: CourseGroupByArgs['orderBy'];
+     **/
+    groupBy<T extends CourseGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<"skip", Prisma.Keys<T>>, Prisma.Extends<"take", Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: CourseGroupByArgs["orderBy"];
     } : {
-        orderBy?: CourseGroupByArgs['orderBy'];
-    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        orderBy?: CourseGroupByArgs["orderBy"];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T["orderBy"]>>>, ByFields extends Prisma.MaybeTupleToUnion<T["by"]>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T["having"]>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T["by"] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
         [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
             Error,
-            'Field ',
+            "Field ",
             P,
             ` in "having" needs to be provided in "by"`
         ];
-    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+    }[HavingFields] : "take" extends Prisma.Keys<T> ? "orderBy" extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
-    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : "skip" extends Prisma.Keys<T> ? "orderBy" extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
     }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
@@ -1471,17 +1471,17 @@ export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.T
  * Fields of the Course model
  */
 export interface CourseFieldRefs {
-    readonly id: Prisma.FieldRef<"Course", 'String'>;
-    readonly title: Prisma.FieldRef<"Course", 'String'>;
-    readonly description: Prisma.FieldRef<"Course", 'String'>;
-    readonly image: Prisma.FieldRef<"Course", 'String'>;
-    readonly image_public_id: Prisma.FieldRef<"Course", 'String'>;
-    readonly price: Prisma.FieldRef<"Course", 'String'>;
-    readonly isPublished: Prisma.FieldRef<"Course", 'Boolean'>;
-    readonly teacherId: Prisma.FieldRef<"Course", 'String'>;
-    readonly categoryId: Prisma.FieldRef<"Course", 'String'>;
-    readonly createdAt: Prisma.FieldRef<"Course", 'DateTime'>;
-    readonly updatedAt: Prisma.FieldRef<"Course", 'DateTime'>;
+    readonly id: Prisma.FieldRef<"Course", "String">;
+    readonly title: Prisma.FieldRef<"Course", "String">;
+    readonly description: Prisma.FieldRef<"Course", "String">;
+    readonly image: Prisma.FieldRef<"Course", "String">;
+    readonly image_public_id: Prisma.FieldRef<"Course", "String">;
+    readonly price: Prisma.FieldRef<"Course", "String">;
+    readonly isPublished: Prisma.FieldRef<"Course", "Boolean">;
+    readonly teacherId: Prisma.FieldRef<"Course", "String">;
+    readonly categoryId: Prisma.FieldRef<"Course", "String">;
+    readonly createdAt: Prisma.FieldRef<"Course", "DateTime">;
+    readonly updatedAt: Prisma.FieldRef<"Course", "DateTime">;
 }
 /**
  * Course findUnique

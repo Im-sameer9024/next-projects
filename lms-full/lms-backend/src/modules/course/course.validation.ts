@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 export const CreateCourseSchema = z.object({
@@ -11,5 +10,3 @@ export const CreateCourseSchema = z.object({
       message: "title should be at most 80 char",
     }),
 });
-
-

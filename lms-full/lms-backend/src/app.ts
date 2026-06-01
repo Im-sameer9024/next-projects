@@ -10,9 +10,7 @@ import passport from "passport";
 import muxWebhookRoutes from "./modules/chapter/mux.routes.js";
 import stripeWebhookRoutes from "./modules/stripe/stripe.webhook.route.js";
 
-
 const app = express();
-
 
 app.use(
   "/api/webhook/mux",
@@ -22,19 +20,18 @@ app.use(
   muxWebhookRoutes,
 );
 
-app.use("/api",stripeWebhookRoutes)
-
+app.use("/api", stripeWebhookRoutes);
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://next-projects-8oog.vercel.app"],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(httpLogger);
-app.use(
-  cors({
-    origin: ["http://localhost:3000","https://next-projects-8oog.vercel.app"],
-    credentials: true,
-  }),
-);
 
 //------------------------- mux webhook --------------------------
 

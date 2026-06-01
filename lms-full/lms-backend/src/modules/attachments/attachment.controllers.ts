@@ -46,7 +46,7 @@ export const DeleteAttachment = asyncHandler(
   async (req: Request, res: Response) => {
     const { courseId, attachmentId } = req.body;
 
-    console.log(req.body ,"in controller")
+    console.log(req.body, "in controller");
 
     const attachment = await prisma.attachment.findUnique({
       where: {

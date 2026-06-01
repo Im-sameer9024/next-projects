@@ -87,23 +87,23 @@ export type PurchaseAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Count returned Purchases
-    **/
+     **/
     _count?: true | PurchaseCountAggregateInputType;
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Select which fields to find the minimum value
-    **/
+     **/
     _min?: PurchaseMinAggregateInputType;
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      *
      * Select which fields to find the maximum value
-    **/
+     **/
     _max?: PurchaseMaxAggregateInputType;
 };
 export type GetPurchaseAggregateType<T extends PurchaseAggregateArgs> = {
-    [P in keyof T & keyof AggregatePurchase]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregatePurchase[P]> : Prisma.GetScalarType<T[P], AggregatePurchase[P]>;
+    [P in keyof T & keyof AggregatePurchase]: P extends "_count" | "count" ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregatePurchase[P]> : Prisma.GetScalarType<T[P], AggregatePurchase[P]>;
 };
 export type PurchaseGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.PurchaseWhereInput;
@@ -126,8 +126,8 @@ export type PurchaseGroupByOutputType = {
     _min: PurchaseMinAggregateOutputType | null;
     _max: PurchaseMaxAggregateOutputType | null;
 };
-export type GetPurchaseGroupByPayload<T extends PurchaseGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<PurchaseGroupByOutputType, T['by']> & {
-    [P in ((keyof T) & (keyof PurchaseGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], PurchaseGroupByOutputType[P]> : Prisma.GetScalarType<T[P], PurchaseGroupByOutputType[P]>;
+export type GetPurchaseGroupByPayload<T extends PurchaseGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<PurchaseGroupByOutputType, T["by"]> & {
+    [P in keyof T & keyof PurchaseGroupByOutputType]: P extends "_count" ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], PurchaseGroupByOutputType[P]> : Prisma.GetScalarType<T[P], PurchaseGroupByOutputType[P]>;
 }>>;
 export type PurchaseWhereInput = {
     AND?: Prisma.PurchaseWhereInput | Prisma.PurchaseWhereInput[];
@@ -422,14 +422,14 @@ export type $PurchasePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     composites: {};
 };
 export type PurchaseGetPayload<S extends boolean | null | undefined | PurchaseDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$PurchasePayload, S>;
-export type PurchaseCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<PurchaseFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+export type PurchaseCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<PurchaseFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: PurchaseCountAggregateInputType | true;
 };
 export interface PurchaseDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: {
-        types: Prisma.TypeMap<ExtArgs>['model']['Purchase'];
+        types: Prisma.TypeMap<ExtArgs>["model"]["Purchase"];
         meta: {
-            name: 'Purchase';
+            name: "Purchase";
         };
     };
     /**
@@ -671,8 +671,8 @@ export interface PurchaseDelegate<ExtArgs extends runtime.Types.Extensions.Inter
      *     // ... the filter for the Purchases we want to count
      *   }
      * })
-    **/
-    count<T extends PurchaseCountArgs>(args?: Prisma.Subset<T, PurchaseCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], PurchaseCountAggregateOutputType> : number>;
+     **/
+    count<T extends PurchaseCountArgs>(args?: Prisma.Subset<T, PurchaseCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<"select", any> ? T["select"] extends true ? number : Prisma.GetScalarType<T["select"], PurchaseCountAggregateOutputType> : number>;
     /**
      * Allows you to perform aggregations operations on a Purchase.
      * Note, that providing `undefined` is treated as the value not being there.
@@ -696,7 +696,7 @@ export interface PurchaseDelegate<ExtArgs extends runtime.Types.Extensions.Inter
      *   },
      *   take: 10,
      * })
-    **/
+     **/
     aggregate<T extends PurchaseAggregateArgs>(args: Prisma.Subset<T, PurchaseAggregateArgs>): Prisma.PrismaPromise<GetPurchaseAggregateType<T>>;
     /**
      * Group by Purchase.
@@ -715,21 +715,21 @@ export interface PurchaseDelegate<ExtArgs extends runtime.Types.Extensions.Inter
      *   },
      * })
      *
-    **/
-    groupBy<T extends PurchaseGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
-        orderBy: PurchaseGroupByArgs['orderBy'];
+     **/
+    groupBy<T extends PurchaseGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<"skip", Prisma.Keys<T>>, Prisma.Extends<"take", Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: PurchaseGroupByArgs["orderBy"];
     } : {
-        orderBy?: PurchaseGroupByArgs['orderBy'];
-    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        orderBy?: PurchaseGroupByArgs["orderBy"];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T["orderBy"]>>>, ByFields extends Prisma.MaybeTupleToUnion<T["by"]>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T["having"]>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T["by"] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
         [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
             Error,
-            'Field ',
+            "Field ",
             P,
             ` in "having" needs to be provided in "by"`
         ];
-    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+    }[HavingFields] : "take" extends Prisma.Keys<T> ? "orderBy" extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
-    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : "skip" extends Prisma.Keys<T> ? "orderBy" extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
     }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
         [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
@@ -773,11 +773,11 @@ export interface Prisma__PurchaseClient<T, Null = never, ExtArgs extends runtime
  * Fields of the Purchase model
  */
 export interface PurchaseFieldRefs {
-    readonly id: Prisma.FieldRef<"Purchase", 'String'>;
-    readonly userId: Prisma.FieldRef<"Purchase", 'String'>;
-    readonly courseId: Prisma.FieldRef<"Purchase", 'String'>;
-    readonly createdAt: Prisma.FieldRef<"Purchase", 'DateTime'>;
-    readonly updatedAt: Prisma.FieldRef<"Purchase", 'DateTime'>;
+    readonly id: Prisma.FieldRef<"Purchase", "String">;
+    readonly userId: Prisma.FieldRef<"Purchase", "String">;
+    readonly courseId: Prisma.FieldRef<"Purchase", "String">;
+    readonly createdAt: Prisma.FieldRef<"Purchase", "DateTime">;
+    readonly updatedAt: Prisma.FieldRef<"Purchase", "DateTime">;
 }
 /**
  * Purchase findUnique

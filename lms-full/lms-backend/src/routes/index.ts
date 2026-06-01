@@ -10,8 +10,8 @@ const routes = Router();
 routes.use("/auth", authRoutes);
 routes.use("/course", courseRoutes);
 routes.use("/category", categoryRoutes);
-routes.use("/attachment",attachmentRoutes)
-routes.use("/chapter",chapterRoutes)
-routes.use("/stripe",stripeRoutes)
+routes.use("/attachment", attachmentRoutes);
+routes.use("/chapter", chapterRoutes);
+routes.use("/stripe", stripeRoutes);
 
 export default routes;

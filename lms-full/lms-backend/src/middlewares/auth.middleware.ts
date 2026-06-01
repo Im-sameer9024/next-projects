@@ -34,7 +34,6 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
       secret: accessTokenSecret,
     });
 
-
     req.user = decoded;
 
     next();
@@ -99,7 +98,8 @@ const isTeacher = async (req: Request, res: Response, next: NextFunction) => {
       return SendResponse(res, {
         statusCode: 401,
         success: false,
-        message: "You are not authorized to access this route , It is only for Teacher",
+        message:
+          "You are not authorized to access this route , It is only for Teacher",
       });
     }
     next();

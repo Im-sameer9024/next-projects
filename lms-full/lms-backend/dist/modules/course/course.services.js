@@ -9,8 +9,8 @@ export const FindUniqueCourseById = async (courseId, teacherId) => {
             attachments: true,
             chapters: {
                 orderBy: {
-                    createdAt: "asc"
-                }
+                    createdAt: "asc",
+                },
             },
             purchases: true,
         },

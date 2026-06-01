@@ -8,8 +8,8 @@ import {
   FindUniqueCourseById,
 } from "./course.services.js";
 import { UploadFileToCloudinary } from "../../shared/utils/upload.js";
-import mux from "@/config/mux.config.js";
-import { logger } from "@/middlewares/logger.middleware.js";
+import mux from "../../config/mux.config.js";
+import { logger } from "../../middlewares/logger.middleware.js";
 
 //------------------------------- TEACHER ROLE CONTROLLERS -------------------------------------------------
 
@@ -496,10 +496,7 @@ const GetSingleCourseForUser = asyncHandler(
 
 const DashboardDataForUser = asyncHandler(
   async (req: Request, res: Response) => {
-    console.log("Dashboard route hit");
     const { id } = req.user as PayloadProps;
-
-    console.log("id is dashboard api", id);
 
     const purchasedCourses = await prisma.course.findMany({
       where: {
@@ -584,8 +581,6 @@ const GetAnalyticsForTeacher = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.user as PayloadProps;
 
-    console.log("id",id)
-
     const purchases = await prisma.purchase.findMany({
       where: {
         course: {
@@ -669,5 +664,5 @@ export {
   GetProgressOfCourse,
   GetSingleCourseForUser,
   DashboardDataForUser,
-  GetAnalyticsForTeacher
+  GetAnalyticsForTeacher,
 };

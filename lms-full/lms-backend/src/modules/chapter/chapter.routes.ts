@@ -39,8 +39,8 @@ route.post("/publish", auth, isTeacher, PublishChapter);
 route.post("/unpublish", auth, isTeacher, UnPublishChapter);
 route.post("/ai/description", auth, isTeacher, AiChapterDescription);
 
-route.get("/user/:chapterId",auth,isUser,GetChapterByIdForUser)
-route.post("/user/complete",auth,isUser,CompleteChapter)
+route.get("/user/:chapterId", auth, isUser, GetChapterByIdForUser);
+route.post("/user/complete", auth, isUser, CompleteChapter);
 
 route.post("/", ChapterVideoWebhook);
 

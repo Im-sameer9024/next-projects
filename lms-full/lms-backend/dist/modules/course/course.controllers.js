@@ -399,9 +399,7 @@ const GetSingleCourseForUser = asyncHandler(async (req, res) => {
     });
 });
 const DashboardDataForUser = asyncHandler(async (req, res) => {
-    console.log("Dashboard route hit");
     const { id } = req.user;
-    console.log("id is dashboard api", id);
     const purchasedCourses = await prisma.course.findMany({
         where: {
             purchases: {
@@ -465,7 +463,6 @@ const DashboardDataForUser = asyncHandler(async (req, res) => {
 });
 const GetAnalyticsForTeacher = asyncHandler(async (req, res) => {
     const { id } = req.user;
-    console.log("id", id);
     const purchases = await prisma.purchase.findMany({
         where: {
             course: {
@@ -517,5 +514,5 @@ const GetAnalyticsForTeacher = asyncHandler(async (req, res) => {
         },
     });
 });
-export { CreateCourse, UpdateSingleCourse, GetCourseByTeacherId, DeleteCourseById, GetAllCourses, UploadThumbnail, PublishedCourse, UnpublishedCourse, GetAllCoursesForUser, GetProgressOfCourse, GetSingleCourseForUser, DashboardDataForUser, GetAnalyticsForTeacher };
+export { CreateCourse, UpdateSingleCourse, GetCourseByTeacherId, DeleteCourseById, GetAllCourses, UploadThumbnail, PublishedCourse, UnpublishedCourse, GetAllCoursesForUser, GetProgressOfCourse, GetSingleCourseForUser, DashboardDataForUser, GetAnalyticsForTeacher, };
 //# sourceMappingURL=course.controllers.js.map

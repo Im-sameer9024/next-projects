@@ -426,9 +426,9 @@ export const GetChapterByIdForUser = asyncHandler(async (req, res) => {
                     purchases: {
                         where: {
                             userId: id,
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             },
             muxData: true,
             userProgresses: {
@@ -485,7 +485,7 @@ export const CompleteChapter = asyncHandler(async (req, res) => {
         include: {
             muxData: true,
             userProgresses: true,
-        }
+        },
     });
     return SendResponse(res, {
         statusCode: 200,

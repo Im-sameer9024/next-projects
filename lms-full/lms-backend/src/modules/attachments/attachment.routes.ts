@@ -1,7 +1,10 @@
 import { auth, isTeacher } from "../../middlewares/auth.middleware.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 import express from "express";
-import { CreateAttachment, DeleteAttachment } from "./attachment.controllers.js";
+import {
+  CreateAttachment,
+  DeleteAttachment,
+} from "./attachment.controllers.js";
 import { validate } from "../../middlewares/validate.middleware.js";
 import {
   CreateAttachmentSchema,

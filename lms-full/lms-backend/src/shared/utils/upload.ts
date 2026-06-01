@@ -25,7 +25,6 @@ export const UploadFileToCloudinary = async (
       throw new Error("File size exceeds 5MB");
     }
 
-
     const allowedMimeTypes = [
       "image/png",
       "image/jpeg",

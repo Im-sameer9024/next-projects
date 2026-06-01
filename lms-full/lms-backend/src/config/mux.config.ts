@@ -9,5 +9,4 @@ const mux = new Mux({
   tokenSecret: process.env.MUX_TOKEN_SECRET!,
 });
 
-
 export default mux;

@@ -1,10 +1,10 @@
-import { prisma } from "@/config/prisma.js";
-import { asyncHandler } from "@/shared/utils/async-handler.js";
+import { prisma } from "../../config/prisma.js";
+import { asyncHandler } from "../../shared/utils/async-handler.js";
 import type { Request, Response } from "express";
 import type { PayloadProps } from "../auth/auth.js";
-import { SendResponse } from "@/shared/utils/response.js";
+import { SendResponse } from "../../shared/utils/response.js";
 import type Stripe from "stripe";
-import { stripe } from "@/config/stripe.js";
+import { stripe } from "../../config/stripe.js";
 
 export const CreateOrder = asyncHandler(async (req: Request, res: Response) => {
   const { courseId } = req.params;

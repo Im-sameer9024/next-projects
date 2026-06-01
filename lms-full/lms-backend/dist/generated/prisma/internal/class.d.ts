@@ -1,25 +1,25 @@
 import * as runtime from "@prisma/client/runtime/client";
 import type * as Prisma from "./prismaNamespace.js";
-export type LogOptions<ClientOptions extends Prisma.PrismaClientOptions> = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never;
+export type LogOptions<ClientOptions extends Prisma.PrismaClientOptions> = "log" extends keyof ClientOptions ? ClientOptions["log"] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions["log"]> : never : never;
 export interface PrismaClientConstructor {
     /**
-   * ## Prisma Client
-   *
-   * Type-safe database client for TypeScript
-   * @example
-   * ```
-   * const prisma = new PrismaClient({
-   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
-   * })
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
-   * ```
-   *
-   * Read more in our [docs](https://pris.ly/d/client).
-   */
-    new <Options extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions, LogOpts extends LogOptions<Options> = LogOptions<Options>, OmitOpts extends Prisma.PrismaClientOptions['omit'] = Options extends {
+     * ## Prisma Client
+     *
+     * Type-safe database client for TypeScript
+     * @example
+     * ```
+     * const prisma = new PrismaClient({
+     *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+     * })
+     * // Fetch zero or more Users
+     * const users = await prisma.user.findMany()
+     * ```
+     *
+     * Read more in our [docs](https://pris.ly/d/client).
+     */
+    new <Options extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions, LogOpts extends LogOptions<Options> = LogOptions<Options>, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Options extends {
         omit: infer U;
-    } ? U : Prisma.PrismaClientOptions['omit'], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs>(options: Prisma.Subset<Options, Prisma.PrismaClientOptions>): PrismaClient<LogOpts, OmitOpts, ExtArgs>;
+    } ? U : Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs>(options: Prisma.Subset<Options, Prisma.PrismaClientOptions>): PrismaClient<LogOpts, OmitOpts, ExtArgs>;
 }
 /**
  * ## Prisma Client
@@ -36,11 +36,11 @@ export interface PrismaClientConstructor {
  *
  * Read more in our [docs](https://pris.ly/d/client).
  */
-export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out OmitOpts extends Prisma.PrismaClientOptions['omit'] = undefined, in out ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> {
+export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out OmitOpts extends Prisma.PrismaClientOptions["omit"] = undefined, in out ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> {
     [K: symbol]: {
-        types: Prisma.TypeMap<ExtArgs>['other'];
+        types: Prisma.TypeMap<ExtArgs>["other"];
     };
-    $on<V extends LogOpts>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): PrismaClient;
+    $on<V extends LogOpts>(eventType: V, callback: (event: V extends "query" ? Prisma.QueryEvent : Prisma.LogEvent) => void): PrismaClient;
     /**
      * Connect with the database
      */
@@ -50,14 +50,14 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
      */
     $disconnect(): runtime.Types.Utils.JsPromise<void>;
     /**
-       * Executes a prepared raw query and returns the number of affected rows.
-       * @example
-       * ```
-       * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
-       * ```
-       *
-       * Read more in our [docs](https://pris.ly/d/raw-queries).
-       */
+     * Executes a prepared raw query and returns the number of affected rows.
+     * @example
+     * ```
+     * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
+     * ```
+     *
+     * Read more in our [docs](https://pris.ly/d/raw-queries).
+     */
     $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
     /**
      * Executes a raw query and returns the number of affected rows.
@@ -118,101 +118,101 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         extArgs: ExtArgs;
     }>>;
     /**
- * `prisma.user`: Exposes CRUD operations for the **User** model.
-  * Example usage:
-  * ```ts
-  * // Fetch zero or more Users
-  * const users = await prisma.user.findMany()
-  * ```
-  */
+     * `prisma.user`: Exposes CRUD operations for the **User** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more Users
+     * const users = await prisma.user.findMany()
+     * ```
+     */
     get user(): Prisma.UserDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**
      * `prisma.course`: Exposes CRUD operations for the **Course** model.
-      * Example usage:
-      * ```ts
-      * // Fetch zero or more Courses
-      * const courses = await prisma.course.findMany()
-      * ```
-      */
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more Courses
+     * const courses = await prisma.course.findMany()
+     * ```
+     */
     get course(): Prisma.CourseDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**
      * `prisma.category`: Exposes CRUD operations for the **Category** model.
-      * Example usage:
-      * ```ts
-      * // Fetch zero or more Categories
-      * const categories = await prisma.category.findMany()
-      * ```
-      */
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more Categories
+     * const categories = await prisma.category.findMany()
+     * ```
+     */
     get category(): Prisma.CategoryDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**
      * `prisma.attachment`: Exposes CRUD operations for the **Attachment** model.
-      * Example usage:
-      * ```ts
-      * // Fetch zero or more Attachments
-      * const attachments = await prisma.attachment.findMany()
-      * ```
-      */
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more Attachments
+     * const attachments = await prisma.attachment.findMany()
+     * ```
+     */
     get attachment(): Prisma.AttachmentDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**
      * `prisma.chapter`: Exposes CRUD operations for the **Chapter** model.
-      * Example usage:
-      * ```ts
-      * // Fetch zero or more Chapters
-      * const chapters = await prisma.chapter.findMany()
-      * ```
-      */
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more Chapters
+     * const chapters = await prisma.chapter.findMany()
+     * ```
+     */
     get chapter(): Prisma.ChapterDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**
      * `prisma.muxData`: Exposes CRUD operations for the **MuxData** model.
-      * Example usage:
-      * ```ts
-      * // Fetch zero or more MuxData
-      * const muxData = await prisma.muxData.findMany()
-      * ```
-      */
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more MuxData
+     * const muxData = await prisma.muxData.findMany()
+     * ```
+     */
     get muxData(): Prisma.MuxDataDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**
      * `prisma.purchase`: Exposes CRUD operations for the **Purchase** model.
-      * Example usage:
-      * ```ts
-      * // Fetch zero or more Purchases
-      * const purchases = await prisma.purchase.findMany()
-      * ```
-      */
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more Purchases
+     * const purchases = await prisma.purchase.findMany()
+     * ```
+     */
     get purchase(): Prisma.PurchaseDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**
      * `prisma.stripeCustomer`: Exposes CRUD operations for the **StripeCustomer** model.
-      * Example usage:
-      * ```ts
-      * // Fetch zero or more StripeCustomers
-      * const stripeCustomers = await prisma.stripeCustomer.findMany()
-      * ```
-      */
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more StripeCustomers
+     * const stripeCustomers = await prisma.stripeCustomer.findMany()
+     * ```
+     */
     get stripeCustomer(): Prisma.StripeCustomerDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     /**
      * `prisma.userProgress`: Exposes CRUD operations for the **UserProgress** model.
-      * Example usage:
-      * ```ts
-      * // Fetch zero or more UserProgresses
-      * const userProgresses = await prisma.userProgress.findMany()
-      * ```
-      */
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more UserProgresses
+     * const userProgresses = await prisma.userProgress.findMany()
+     * ```
+     */
     get userProgress(): Prisma.UserProgressDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;

@@ -522,19 +522,18 @@ export const GetChapterByIdForUser = asyncHandler(
       },
       include: {
         course: {
-          include:{
-            purchases:{
-              where:{
-                userId:id as string,
-              }
-            }
-          }
+          include: {
+            purchases: {
+              where: {
+                userId: id as string,
+              },
+            },
+          },
         },
         muxData: true,
         userProgresses: {
           where: {
             userId: id as string,
-          
           },
         },
       },
@@ -589,14 +588,14 @@ export const CompleteChapter = asyncHandler(
     });
 
     const updateChapter = await prisma.chapter.findUnique({
-      where:{
+      where: {
         id: chapterId as string,
       },
-      include:{
-        muxData:true,
-        userProgresses:true,
-      }
-    })
+      include: {
+        muxData: true,
+        userProgresses: true,
+      },
+    });
 
     return SendResponse(res, {
       statusCode: 200,
