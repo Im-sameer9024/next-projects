@@ -91,7 +91,7 @@ const CourseSidebar = ({ courseId }: { courseId: string }) => {
   console.log("purchases", isPurchased);
 
   return (
-    <aside className="flex h-full flex-col border-r border-slate-200 bg-white">
+    <aside className="flex h-full w-full flex-col border-r border-slate-200 bg-white">
       {/* Header */}
       <div className="sticky top-0 z-20 border-b border-slate-200 bg-white px-5 py-6">
         <h2 className="line-clamp-2 text-xl leading-snug font-semibold text-slate-800">

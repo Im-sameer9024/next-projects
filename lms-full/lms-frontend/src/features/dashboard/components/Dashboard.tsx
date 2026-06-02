@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import Image from "next/image";
 
-import { BookOpen, CheckCircle2, Clock3 } from "lucide-react";
+import { CheckCircle2, Clock3 } from "lucide-react";
 
 import ErrorPage from "@/shared/components/common/ErrorPage";
-import { Progress } from "@/shared/components/ui/progress";
 import { useDashboardData } from "@/features/search/hooks/useCourse";
-import { Course } from "@/features/courses/course";
 import CourseCard from "@/features/search/components/CourseCard";
 
 
@@ -20,7 +17,6 @@ const Dashboard = () => {
     error,
   } = useDashboardData();
 
-  console.log(data)
 
   if (isPending) {
     return (
